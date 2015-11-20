@@ -4,7 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/iZettle/ninetails/badges/gpa.svg)](https://codeclimate.com/github/iZettle/ninetails)
 [![Test Coverage](https://codeclimate.com/github/iZettle/ninetails/badges/coverage.svg)](https://codeclimate.com/github/iZettle/ninetails/coverage)
 
-Ninetails is a simple CMS API engine. It is designed on the idea of a CMS which is limited in scope in that not all aspects of a page should be editable. Instead, you can define Sections, Elements, and Properties which are editable and can then be loaded in and styled in a reliable manner. It gives you the control to decide exactly what should and what should not be editable in your project.
+Ninetails is a simple Rails engine to create an API for a content management system to run on. It is designed on the idea of a CMS which is limited in scope in that not all aspects of a page should be editable. Instead, you can define Sections, Elements, and Properties which are editable and can then be loaded in and styled in a reliable manner. It gives you the control to decide exactly what should and what should not be editable in your project.
 
 # Getting started
 
@@ -127,7 +127,51 @@ end
 
 Assuming you have Ninetails mounted at "/api" on your application, you can now list the templates which you have configured at "/api/section_templates". You you load up "/api/section_templates/Billboard", you should now be able to see an empty JSON structure for the template you just setup. It should look something like this:
 
-<script src="https://gist.github.com/idlefingers/c4dad36ce74861fb87c0.js"></script>
+```json
+{
+  "name": "",
+  "type": "Billboard",
+  "tags": {
+    "position": "body"
+  },
+  "elements": {
+    "title": {
+      "type": "Text",
+      "reference": "a3087414-b1d3-459a-8cd1-bb1d502e9345",
+      "content": {
+        "text": ""
+      }
+    },
+    "background_image": {
+      "type": "Figure",
+      "reference": "85556d83-6212-453f-8e5b-6fbcd8f72237",
+      "image": {
+        "src": "",
+        "alt": ""
+      }
+    },
+    "signup_button": {
+      "type": "Button",
+      "reference": "c9557fa1-5dc9-462f-9dc7-8ff05c65db2b",
+      "link": {
+        "url": "",
+        "title": "",
+        "text": ""
+      }
+    },
+    "supported_card_icons": [
+      {
+        "type": "Figure",
+        "reference": "33c01aab-94f9-4217-8f57-aa9add7ed73f",
+        "image": {
+          "src": "",
+          "alt": ""
+        }
+      }
+    ]
+  }
+}
+```
 
 # Creating pages
 
