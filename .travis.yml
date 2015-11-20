@@ -12,7 +12,7 @@ before_script:
 addons:
   postgresql: "9.4"
   code_climate:
-    repo_token: 351baf68ec941cc75a3886349ef4fa0f48edf0f43faa4000447014be31dbed5f
+    repo_token: 23114c8dd28080bf13ed2d6e4aad43b5f7b23cceee0f4a7b40d3cdd3384b179f
 
 services:
   - postgresql

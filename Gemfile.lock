@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ninetails (0.0.1)
+    ninetails (0.0.2)
       hash-pipe (~> 0.3)
       jbuilder (~> 2.3)
       pg (~> 0.18)
