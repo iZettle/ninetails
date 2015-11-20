@@ -2,12 +2,12 @@ PATH
   remote: .
   specs:
     ninetails (0.0.1)
-      hash-pipe (~> 0.3.0)
-      jbuilder (~> 2.3.2)
-      pg (~> 0.18.4)
-      rails (~> 4.2.5)
-      rails-api (~> 0.4.0)
-      virtus (~> 1.0.5)
+      hash-pipe (~> 0.3)
+      jbuilder (~> 2.3)
+      pg (~> 0.18)
+      rails (~> 4.2)
+      rails-api (~> 0.4)
+      virtus (~> 1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -202,14 +202,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  factory_girl
-  factory_girl_rails
-  guard-rspec
+  factory_girl (~> 4.5)
+  factory_girl_rails (~> 4.5)
+  guard-rspec (~> 4.6)
   ninetails!
-  pry
-  rspec-rails
-  spring
-  web-console
+  pry (~> 0.10)
+  rspec-rails (~> 3.3)
+  spring (~> 1.4)
+  web-console (~> 2.2)
 
 BUNDLED WITH
    1.10.6

@@ -9,27 +9,30 @@ Gem::Specification.new do |s|
   s.version     = Ninetails::VERSION
   s.authors     = ["Damien Timewell"]
   s.email       = ["damien@izettle.com"]
-  s.homepage    = "https://www.izettle.com"
-  s.summary     = "Summary of Ninetails."
-  s.description = "Description of Ninetails."
+  s.homepage    = "https://github.com/iZettle/ninetails"
+  s.summary     = "Structured CMS API for Rails"
+  s.description = %{
+    Ninetails is a structured API for building a CMS API in Rails.
+    It lets you define Sections, Elements, and Properties which control what can and cannot be edited.
+  }
   s.license     = "MIT"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", "~> 4.2.5"
-  s.add_dependency "rails-api", "~> 0.4.0"
-  s.add_dependency "pg", "~> 0.18.4"
-  s.add_dependency "jbuilder", "~> 2.3.2"
-  s.add_dependency "hash-pipe", "~> 0.3.0"
-  s.add_dependency "virtus", "~> 1.0.5"
+  s.add_dependency "rails", "~> 4.2"
+  s.add_dependency "rails-api", "~> 0.4"
+  s.add_dependency "pg", "~> 0.18"
+  s.add_dependency "jbuilder", "~> 2.3"
+  s.add_dependency "hash-pipe", "~> 0.3"
+  s.add_dependency "virtus", "~> 1.0"
 
-  s.add_development_dependency "pry"
-  s.add_development_dependency "web-console"
-  s.add_development_dependency "spring"
-  s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "guard-rspec"
-  s.add_development_dependency "factory_girl"
-  s.add_development_dependency "factory_girl_rails"
+  s.add_development_dependency "pry", "~> 0.10"
+  s.add_development_dependency "web-console", "~> 2.2"
+  s.add_development_dependency "spring", "~> 1.4"
+  s.add_development_dependency "rspec-rails", "~> 3.3"
+  s.add_development_dependency "guard-rspec", "~> 4.6"
+  s.add_development_dependency "factory_girl", "~> 4.5"
+  s.add_development_dependency "factory_girl_rails", "~> 4.5"
 
   s.test_files = Dir["spec/**/*"]
 end
