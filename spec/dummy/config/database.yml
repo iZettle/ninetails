@@ -1,0 +1,12 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: ninetails_dummy_development
+
+test:
+  <<: *default
+  database: ninetails_dummy_test

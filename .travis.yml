@@ -1,0 +1,18 @@
+language: ruby
+cache: bundler
+
+rvm:
+  - 2.2.3
+
+before_script:
+  - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
+  - psql -c 'drop database if exists ninetails_dummy_test;' -U postgres
+  - psql -c 'create database ninetails_dummy_test;' -U postgres
+
+addons:
+  postgresql: "9.4"
+  code_climate:
+    repo_token: 351baf68ec941cc75a3886349ef4fa0f48edf0f43faa4000447014be31dbed5f
+
+services:
+  - postgresql
