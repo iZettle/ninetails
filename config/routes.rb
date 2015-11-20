@@ -5,5 +5,5 @@ Ninetails::Engine.routes.draw do
     resources :page_revisions, only: [:create, :show, :index], path: "revisions"
   end
 
-  resources :section_templates, only: [:show, :index]
+  resources :sections, only: [:show, :index]
 end

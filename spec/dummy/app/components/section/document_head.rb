@@ -1,5 +1,5 @@
-module SectionTemplate
-  class DocumentHead < Ninetails::SectionTemplate
+module Section
+  class DocumentHead < Ninetails::Section
 
     located_in :head
 

@@ -10,20 +10,20 @@ module Ninetails
       end
     end
 
-    def template
-      @template ||= "SectionTemplate::#{type}".safe_constantize.new
+    def section
+      @section ||= "Section::#{type}".safe_constantize.new
     end
 
     def deserialize
-      template.elements_instances = []
+      section.elements_instances = []
 
       elements.each do |name, element_json|
-        element = template.class.find_element name
+        element = section.class.find_element name
         element.deserialize element_json
-        template.elements_instances << element
+        section.elements_instances << element
       end
 
-      template
+      section
     end
 
   end

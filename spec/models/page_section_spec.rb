@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-module SectionTemplate
-  class TestSection < Ninetails::SectionTemplate
+module Section
+  class TestSection < Ninetails::Section
     located_in :body
     has_element :headline, Element::Text
     has_element :button, Element::Button
@@ -50,40 +50,40 @@ RSpec.describe Ninetails::PageSection, type: :model do
 
     let(:section) { Ninetails::PageSection.new(json) }
 
-    it "should create a SectionTemplate instance" do
+    it "should create a Section instance" do
       section.deserialize
-      expect(section.template).to be_a SectionTemplate::TestSection
+      expect(section.section).to be_a Section::TestSection
     end
 
     it "should have an array of elements_instances" do
       section.deserialize
-      expect(section.template.elements_instances.size).to eq 3
+      expect(section.section.elements_instances.size).to eq 3
     end
 
     it "should include an element for 'text', 'button', and 'link'" do
       section.deserialize
-      expect(section.template.elements_instances[0].name).to eq :headline
-      expect(section.template.elements_instances[1].name).to eq :button
-      expect(section.template.elements_instances[2].name).to eq :messages
+      expect(section.section.elements_instances[0].name).to eq :headline
+      expect(section.section.elements_instances[1].name).to eq :button
+      expect(section.section.elements_instances[2].name).to eq :messages
     end
 
     it "should be the correct type for 'text', 'button', and 'link'" do
       section.deserialize
-      expect(section.template.elements_instances[0].type).to eq Element::Text
-      expect(section.template.elements_instances[1].type).to eq Element::Button
-      expect(section.template.elements_instances[2].type).to eq Element::Text
+      expect(section.section.elements_instances[0].type).to eq Element::Text
+      expect(section.section.elements_instances[1].type).to eq Element::Button
+      expect(section.section.elements_instances[2].type).to eq Element::Text
     end
 
     it "should call deserialize on each element" do
-      expect(SectionTemplate::TestSection.find_element("headline")).to receive(:deserialize).with(json["elements"]["headline"])
-      expect(SectionTemplate::TestSection.find_element("button")).to receive(:deserialize).with(json["elements"]["button"])
-      expect(SectionTemplate::TestSection.find_element("messages")).to receive(:deserialize).with(json["elements"]["messages"])
+      expect(Section::TestSection.find_element("headline")).to receive(:deserialize).with(json["elements"]["headline"])
+      expect(Section::TestSection.find_element("button")).to receive(:deserialize).with(json["elements"]["button"])
+      expect(Section::TestSection.find_element("messages")).to receive(:deserialize).with(json["elements"]["messages"])
       section.deserialize
     end
 
     it "should be possible to reserialize into json" do
       section.deserialize
-      serialized = section.template.serialize.with_indifferent_access
+      serialized = section.section.serialize.with_indifferent_access
       expect(serialized[:elements][:headline][:content][:text]).to eq headline
       expect(serialized[:elements][:messages][0][:content][:text]).to eq first_message
       expect(serialized[:elements][:messages][1][:content][:text]).to eq second_message

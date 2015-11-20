@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-class ExampleSection < Ninetails::SectionTemplate
+class ExampleSection < Ninetails::Section
   located_in :body
   has_element :foo, Element::Text
   has_element :bar, Element::Button
 end
 
-RSpec.describe Ninetails::SectionTemplate do
+RSpec.describe Ninetails::Section do
 
   describe "position" do
     it "should be possible to set" do

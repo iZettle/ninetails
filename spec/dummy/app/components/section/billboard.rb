@@ -1,5 +1,5 @@
-module SectionTemplate
-  class Billboard < Ninetails::SectionTemplate
+module Section
+  class Billboard < Ninetails::Section
 
     located_in :body
 

@@ -1,5 +1,5 @@
 module Ninetails
-  class SectionTemplate
+  class Section
     ALLOWED_POSITIONS = [:head, :body]
 
     attr_accessor :elements_instances

@@ -44,7 +44,7 @@ Each of those elements has properties. The Headline element can use a very simpl
 
 ## Setting up Sections, Elements, and Properties
 
-Let's build up the Section, Elements, and Properties from the examples above from the bottom up. These will live in `app/components/section_templates`, `app/components/elements`, and `app/components/properties`.
+Let's build up the Section, Elements, and Properties from the examples above from the bottom up. These will live in `app/components/section`, `app/components/elements`, and `app/components/properties`.
 
 ### Properties
 
@@ -107,13 +107,13 @@ module Element
 end
 ```
 
-### Section Templates
+### Sections
 
-The section template pulls it all together:
+The sections pull it all together:
 
 ```ruby
-module SectionTemplate
-  class Billboard < Ninetails::SectionTemplate
+module Section
+  class Billboard < Ninetails::Section
     located_in :body
 
     has_element :title, Element::Text
@@ -125,9 +125,9 @@ module SectionTemplate
 end
 ```
 
-## Looking at the result of your SectionTemplate
+## Looking at the result of your Section
 
-Assuming you have Ninetails mounted at "/api" on your application, you can now list the templates which you have configured at "/api/section_templates". You you load up "/api/section_templates/Billboard", you should now be able to see an empty JSON structure for the template you just setup. It should look something like this:
+Assuming you have Ninetails mounted at "/api" on your application, you can now list the sections which you have configured at "/api/sections". You you load up "/api/sections/Billboard", you should now be able to see an empty JSON structure for the section you just setup. It should look something like this:
 
 ```json
 {

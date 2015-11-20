@@ -21,15 +21,5 @@ module Dummy
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
-
-    config.autoload_paths += [
-      "#{config.root}/app/components"
-    ]
-
-    config.eager_load_paths = [
-      Rails.root.join("app/controllers").to_s,
-      Rails.root.join("app/components").to_s,
-      Rails.root.join("app/models").to_s
-    ]
   end
 end
