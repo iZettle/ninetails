@@ -1,3 +1,5 @@
 = Ninetails
 
+[![Build Status](https://travis-ci.org/iZettle/ninetails.svg)](https://travis-ci.org/iZettle/ninetails)
+
 This project rocks and uses MIT-LICENSE.
