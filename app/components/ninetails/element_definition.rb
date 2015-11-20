@@ -36,7 +36,7 @@ module Ninetails
     end
 
     def all_elements_valid?
-      elements.all? &:valid?
+      elements.all?(&:valid?)
     end
 
     private
@@ -51,7 +51,7 @@ module Ninetails
 
     def multiple_element_structure
       if elements.present?
-        elements.collect &:properties_structure
+        elements.collect(&:properties_structure)
       else
         [properties_structure]
       end

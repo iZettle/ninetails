@@ -16,6 +16,11 @@ module Ninetails
       @position
     end
 
+    def self.define_element(name, type, count)
+      @elements ||= []
+      @elements << Ninetails::ElementDefinition.new(name, type, count)
+    end
+
     def self.has_element(name, type)
       define_element name, type, :single
     end
@@ -53,13 +58,6 @@ module Ninetails
       elements.each_with_object({}) do |element, hash|
         element.add_to_hash hash
       end
-    end
-
-    private
-
-    def self.define_element(name, type, count)
-      @elements ||= []
-      @elements << Ninetails::ElementDefinition.new(name, type, count)
     end
 
   end

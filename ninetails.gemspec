@@ -1,21 +1,21 @@
-$:.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
 require "ninetails/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "ninetails"
-  s.version     = Ninetails::VERSION
-  s.authors     = ["Damien Timewell"]
-  s.email       = ["damien@izettle.com"]
-  s.homepage    = "https://github.com/iZettle/ninetails"
-  s.summary     = "Structured CMS API for Rails"
-  s.description = %{
+  s.name = "ninetails"
+  s.version = Ninetails::VERSION
+  s.authors = ["Damien Timewell"]
+  s.email = ["damien@izettle.com"]
+  s.homepage = "https://github.com/iZettle/ninetails"
+  s.summary = "Structured CMS API for Rails"
+  s.description = %(
     Ninetails is a structured API for building a CMS API in Rails.
     It lets you define Sections, Elements, and Properties which control what can and cannot be edited.
-  }
-  s.license     = "MIT"
+  )
+  s.license = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
