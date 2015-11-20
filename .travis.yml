@@ -6,8 +6,6 @@ rvm:
 
 before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
-  - psql -c 'drop database if exists ninetails_dummy_test;' -U postgres
-  - psql -c 'create database ninetails_dummy_test;' -U postgres
 
 addons:
   postgresql: "9.4"
