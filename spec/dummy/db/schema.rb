@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111085201) do
+ActiveRecord::Schema.define(version: 20151120120538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(version: 20151111085201) do
     t.string   "message"
   end
 
+  create_table "ninetails_page_sections", force: :cascade do |t|
+    t.string   "name"
+    t.string   "type"
+    t.json     "elements"
+    t.json     "tags"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "ninetails_pages", force: :cascade do |t|
     t.integer  "current_revision_id"
     t.string   "name"
@@ -40,14 +49,5 @@ ActiveRecord::Schema.define(version: 20151111085201) do
   end
 
   add_index "ninetails_pages", ["current_revision_id"], name: "index_ninetails_pages_on_current_revision_id", using: :btree
-
-  create_table "ninetails_sections", force: :cascade do |t|
-    t.string   "name"
-    t.string   "type"
-    t.json     "elements"
-    t.json     "tags"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
 end

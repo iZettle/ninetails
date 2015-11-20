@@ -1,5 +1,5 @@
 module Ninetails
-  class Section < ActiveRecord::Base
+  class PageSection < ActiveRecord::Base
     self.inheritance_column = nil
     has_many :page_revision_sections
     has_many :page_revisions, through: :page_revision_sections

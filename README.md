@@ -6,6 +6,8 @@
 
 Ninetails is a simple Rails engine to create an API for a content management system to run on. It is designed on the idea of a CMS which is limited in scope in that not all aspects of a page should be editable. Instead, you can define Sections, Elements, and Properties which are editable and can then be loaded in and styled in a reliable manner. It gives you the control to decide exactly what should and what should not be editable in your project.
 
+*WARNING: Ninetails is very much a work in progress and is not ready to be fully used yet!*
+
 # Getting started
 
 Ninetails is a mountable Rails engine, so it needs to be loaded into your app. You app is also where you will define your components which Ninetails should expose. Start by adding it to your Gemfile:

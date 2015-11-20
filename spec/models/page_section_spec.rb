@@ -9,7 +9,7 @@ module SectionTemplate
   end
 end
 
-RSpec.describe Ninetails::Section, type: :model do
+RSpec.describe Ninetails::PageSection, type: :model do
 
   describe "deserializing a json blob" do
     let(:headline) { "Hello world!" }
@@ -48,7 +48,7 @@ RSpec.describe Ninetails::Section, type: :model do
       }
     end
 
-    let(:section) { Ninetails::Section.new(json) }
+    let(:section) { Ninetails::PageSection.new(json) }
 
     it "should create a SectionTemplate instance" do
       section.deserialize
