@@ -3,6 +3,8 @@ module Ninetails
     has_many :revisions, class_name: "PageRevision"
     has_one :current_revision, class_name: "PageRevision"
 
+    validates :url, presence: true, uniqueness: true
+
     attr_writer :revision
 
     def revision
@@ -13,8 +15,15 @@ module Ninetails
       Jbuilder.new do |json|
         json.page do
           json.call(self, :id, :name, :url)
-          json.revision_id revision.id
-          json.sections sections_to_builder
+
+          if revision.present?
+            json.revision_id revision.id
+            json.sections sections_to_builder
+          end
+
+          if errors.present?
+            json.errors errors
+          end
         end
       end
     end

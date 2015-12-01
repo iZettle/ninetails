@@ -9,6 +9,11 @@ require "jbuilder"
 require "hash-pipe"
 require "virtus"
 
+begin
+  require "pry"
+rescue LoadError
+end
+
 module Ninetails
   class Engine < ::Rails::Engine
     isolate_namespace Ninetails
