@@ -114,4 +114,43 @@ describe "Page Revisions API" do
     end
   end
 
+  describe "handling hash keys in camelcase" do
+
+    let(:camelcased_revision) do
+      {
+        page_revision: {
+          message: "",
+          sections: [
+            {
+              "name": "",
+              "type": "MinimalBillboard",
+              "tags": {
+                "position": "body"
+              },
+              "elements": {
+                "backgroundImage": {
+                  "type": "Figure",
+                  "image": {
+                    "src": "/foobar.jpg",
+                    "alt": "Hello world"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    end
+
+    it "should not cause problems" do
+      expect {
+        post "/pages/#{page.id}/revisions", camelcased_revision
+      }.to change { page.revisions.count }.by(1)
+
+      expect(response).to be_success
+      expect(json["page"]["revisionId"]).to_not be_nil
+    end
+
+  end
+
 end

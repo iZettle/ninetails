@@ -35,6 +35,7 @@ module Ninetails
     end
 
     def build_revision_from_params(page_revision)
+      page_revision = page_revision.convert_keys(:underscore).with_indifferent_access
       self.revision = revisions.build message: page_revision[:message]
 
       page_revision[:sections].each do |section_json|
