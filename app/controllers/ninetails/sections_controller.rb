@@ -2,8 +2,8 @@ module Ninetails
   class SectionsController < ApplicationController
 
     def index
-      sections = Rails.root.join("app", "components", "section").children.collect do |entry|
-        empty_section_from_name entry.basename.to_s.sub(/(\..*)$/, '')
+      sections = Dir.glob(Rails.root.join("app", "components", "section", "*.rb")).collect do |entry|
+        empty_section_from_name File.basename(entry, ".rb")
       end
 
       render json: { sections: sections }
