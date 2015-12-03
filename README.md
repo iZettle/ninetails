@@ -30,3 +30,11 @@ end
 * [Creating pages](https://github.com/iZettle/ninetails/wiki/Creating-pages)
 * [Publishing pages](https://github.com/iZettle/ninetails/wiki/Publishing-pages)
 * [Validating properties](https://github.com/iZettle/ninetails/wiki/Validating-properties)
+
+## Configuration
+
+By default, Ninetails will force all keys in JSON responses to be camelcase with the first letter lowercase, to conform with JSON standards. If you would prefer the output to be as underscored, you can set this in an initializer:
+
+```ruby
+Ninetails::Config.key_style = :underscore
+```
