@@ -9,6 +9,9 @@ require "jbuilder"
 require "hash-pipe"
 require "virtus"
 
+require "ninetails/config"
+require "ninetails/key_conversion"
+
 begin
   require "pry"
 rescue LoadError
@@ -17,6 +20,8 @@ end
 module Ninetails
   class Engine < ::Rails::Engine
     isolate_namespace Ninetails
+
+    middleware.use "Ninetails::KeyConversion"
 
     config.generators do |g|
       g.test_framework :rspec, fixture: false
