@@ -60,9 +60,9 @@ RSpec.describe Ninetails::Element do
       expect(structure[:type]).to eq "ExampleElement"
     end
 
-    it "should have a key for each property with a blank string as the value" do
-      expect(structure[:foo]).to eq ""
-      expect(structure[:bar]).to eq ""
+    it "should have a key for each property with nil as the value" do
+      expect(structure[:foo]).to eq nil
+      expect(structure[:bar]).to eq nil
     end
   end
 

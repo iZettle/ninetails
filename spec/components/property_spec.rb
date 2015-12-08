@@ -23,11 +23,11 @@ RSpec.describe Ninetails::Property do
     end
 
     it "should represent single-level structure correctly" do
-      expect(SecondProperty.serialize).to eq({ finally: "" })
+      expect(SecondProperty.serialize).to eq({ finally: nil })
     end
 
     it "should represent nested properties with nested structure" do
-      expect(FirstProperty.serialize).to eq({ first: "", second: { finally: "" }})
+      expect(FirstProperty.serialize).to eq({ first: nil, second: { finally: nil }})
     end
   end
 

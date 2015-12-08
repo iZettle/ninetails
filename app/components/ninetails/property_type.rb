@@ -18,8 +18,6 @@ module Ninetails
         serialized_values
       elsif type.respond_to? :serialize
         type.serialize
-      else
-        type.new
       end
     end
 

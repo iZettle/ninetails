@@ -16,11 +16,11 @@ describe Ninetails::PropertyType do
   end
 
   describe "serializing" do
-    it "should be a new instance of the type when the type does not respond to #structure" do
-      expect(string_property.serialize).to eq ""
+    it "should be nil when the type does not respond to #structure" do
+      expect(string_property.serialize).to eq nil
     end
 
-    it "should use the structure when the type responds to #structure" do
+    it "should use the structure when the type responds to #serialize" do
       allow(String).to receive(:respond_to?) { true }
       allow(String).to receive(:serialize) { "HELLO" }
       expect(string_property.serialize).to eq "HELLO"
