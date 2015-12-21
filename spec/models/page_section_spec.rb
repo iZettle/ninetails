@@ -91,23 +91,4 @@ RSpec.describe Ninetails::PageSection, type: :model do
 
   end
 
-  describe "building json" do
-
-    let(:section) { build :document_head_section }
-    let(:json) do
-      {
-        id: section.id,
-        name: section.name,
-        type: section.type,
-        tags: section.tags,
-        elements: section.elements
-      }.to_json
-    end
-
-    it "should build the section into json" do
-      expect(section.to_builder.target!).to eq json
-    end
-
-  end
-
 end

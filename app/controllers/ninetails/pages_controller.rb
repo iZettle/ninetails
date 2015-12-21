@@ -1,11 +1,14 @@
 module Ninetails
   class PagesController < ApplicationController
 
+    def index
+      @pages = Page.all
+    end
+
     def show
       @page = Page.find_by! url: params[:id]
       @page.revision = @page.revisions.find params[:revision_id] if params[:revision_id]
 
-      render json: @page.to_builder.target!
     rescue ActiveRecord::RecordNotFound
       render json: {}, status: :not_found
     end
@@ -14,9 +17,9 @@ module Ninetails
       @page = Page.new page_params
 
       if @page.save
-        render json: @page.to_builder.target!, status: :created
+        render :show, status: :created
       else
-        render json: @page.to_builder.target!, status: :bad_request
+        render :show, status: :bad_request
       end
     end
 

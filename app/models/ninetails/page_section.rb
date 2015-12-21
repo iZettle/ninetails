@@ -4,12 +4,6 @@ module Ninetails
     has_many :page_revision_sections
     has_many :page_revisions, through: :page_revision_sections
 
-    def to_builder
-      Jbuilder.new do |json|
-        json.call(self, :id, :name, :type, :tags, :elements)
-      end
-    end
-
     def section
       @section ||= "Section::#{type}".safe_constantize.new
     end
