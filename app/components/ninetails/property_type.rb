@@ -4,13 +4,23 @@ module Ninetails
 
     def initialize(name, type)
       @name = name
-      @type = type
-      @property = type.new
+
+      if type.is_a? Hash
+        @type = PropertyLink
+        @property = PropertyLink.new name, type
+      else
+        @type = type
+        @property = type.new
+      end
     end
 
-    def serialized_values=(hash)
-      @serialized_values = hash
-      @property = type.new serialized_values
+    def serialized_values=(values)
+      if property.is_a? PropertyLink
+        @serialized_values = property.deconstruct(name => values)
+      else
+        @serialized_values = values
+        @property = type.new values
+      end
     end
 
     def serialize

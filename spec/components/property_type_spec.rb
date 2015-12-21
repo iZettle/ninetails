@@ -9,6 +9,8 @@ describe Ninetails::PropertyType do
 
   let(:string_property) { Ninetails::PropertyType.new :foo, String }
   let(:text_property) { Ninetails::PropertyType.new :foo, TextProperty }
+  let(:linking_property) { Ninetails::PropertyType.new :page_id, serialize_as: :url, from: Ninetails::Page, where: { id: :page_id }}
+  let(:page) { create :page }
 
   it "should be initializable with name and type" do
     expect(string_property.name).to eq :foo
@@ -16,19 +18,32 @@ describe Ninetails::PropertyType do
   end
 
   describe "serializing" do
-    it "should be nil when the type does not respond to #structure" do
-      expect(string_property.serialize).to eq nil
+    describe "simple types" do
+      it "should be nil when the type does not respond to #structure" do
+        expect(string_property.serialize).to eq nil
+      end
+
+      it "should use the structure when the type responds to #serialize" do
+        allow(String).to receive(:respond_to?) { true }
+        allow(String).to receive(:serialize) { "HELLO" }
+        expect(string_property.serialize).to eq "HELLO"
+      end
+
+      it "should initialize a new instance of the type with the serialized_values attribute as an argument" do
+        string_property.serialized_values = "123"
+        expect(string_property.serialize).to eq "123"
+      end
     end
 
-    it "should use the structure when the type responds to #serialize" do
-      allow(String).to receive(:respond_to?) { true }
-      allow(String).to receive(:serialize) { "HELLO" }
-      expect(string_property.serialize).to eq "HELLO"
-    end
+    describe "property links" do
+      it "should serialize to nil normally when there are no serialized_values" do
+        expect(linking_property.serialize).to eq nil
+      end
 
-    it "should initialize a new instance of the type with the serialized_values attribute as an argument" do
-      string_property.serialized_values = "123"
-      expect(string_property.serialize).to eq "123"
+      it "should use the property link when setting serialized_values" do
+        linking_property.serialized_values = page.id
+        expect(linking_property.serialized_values).to eq page.url
+      end
     end
   end
 

@@ -38,3 +38,9 @@ By default, Ninetails will force all keys in JSON responses to be camelcase with
 ```ruby
 Ninetails::Config.key_style = :underscore
 ```
+
+## Testing
+
+Tests use rspec which run against a dummy application (spec/dummy) which is configured to use the ninetails engine and defines a small collection of custom Element, Section, and Property classes to test against. To run the entire suite, run:
+
+    rake spec

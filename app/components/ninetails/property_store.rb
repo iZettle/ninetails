@@ -8,9 +8,14 @@ module Ninetails
     end
 
     class_methods do
-      def property(name, type)
-        attribute name, type
-        properties << Ninetails::PropertyType.new(name, type)
+      def property(name, options)
+        if options.is_a? Hash
+          attribute name, Object
+        else
+          attribute name, options
+        end
+
+        properties << Ninetails::PropertyType.new(name, options)
       end
 
       def properties
