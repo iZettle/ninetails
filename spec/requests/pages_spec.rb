@@ -5,6 +5,27 @@ describe "Pages API" do
   let(:page) { create :page }
   let(:page_url) { "/pages/#{CGI.escape(page.url)}" }
 
+  describe "listing pages" do
+    before do
+      create_list :page, 5
+    end
+
+    it "should return the correct number of pages" do
+      get "/pages"
+      expect(response).to be_success
+      expect(json["pages"].size).to eq Ninetails::Page.count
+    end
+
+    it "should include the id and url for each page" do
+      get "/pages"
+
+      json["pages"].each do |page|
+        expect(page).to have_key "id"
+        expect(page).to have_key "url"
+      end
+    end
+  end
+
   describe "creating a page" do
 
     let(:valid_page_params) do
@@ -44,7 +65,6 @@ describe "Pages API" do
         get page_url
 
         expect(response).to be_success
-        expect(response.body).to eq page.to_builder.target!
         expect(json["page"]["revisionId"]).to eq page.current_revision.id
       end
     end

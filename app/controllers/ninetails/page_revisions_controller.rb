@@ -4,16 +4,15 @@ module Ninetails
     before_action :find_page
 
     def index
-      render json: { revisions: @page.revisions }
     end
 
     def create
       @page.build_revision_from_params revision_params
 
       if @page.revision.save
-        render json: @page.to_builder.target!, status: :created
+        render "/ninetails/pages/show", status: :created
       else
-        render json: @page.to_builder.target!, status: :bad_request
+        render "/ninetails/pages/show", status: :bad_request
       end
     end
 
