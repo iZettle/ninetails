@@ -28,7 +28,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "pry", "~> 0.10"
   s.add_development_dependency "web-console", "~> 2.2"
-  s.add_development_dependency "spring", "~> 1.4"
+  s.add_development_dependency "spring", "~> 1.6"
+  s.add_development_dependency "spring-commands-rspec", "~> 1.0"
   s.add_development_dependency "rspec-rails", "~> 3.3"
   s.add_development_dependency "guard-rspec", "~> 4.6"
   s.add_development_dependency "factory_girl", "~> 4.5"
