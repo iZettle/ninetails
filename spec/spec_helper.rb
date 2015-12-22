@@ -98,4 +98,5 @@ RSpec.configure do |config|
 =end
 
   config.include Requests::JsonHelpers, type: :request
+  config.include SectionHelpers
 end

@@ -4,6 +4,8 @@ module Ninetails
     has_many :page_revision_sections
     has_many :page_revisions, through: :page_revision_sections
 
+    validate :validate_elements
+
     def section
       @section ||= "Section::#{type}".safe_constantize.new
     end
@@ -18,6 +20,20 @@ module Ninetails
       end
 
       section
+    end
+
+    private
+
+    def validate_elements
+      deserialized_section = deserialize
+
+      deserialized_section.elements_instances.each do |element_definition|
+        unless element_definition.all_elements_valid?
+          errors.add :base, "Element #{element_definition.name} is not valid"
+        end
+      end
+
+      self.elements = deserialized_section.serialize[:elements]
     end
 
   end

@@ -12,15 +12,9 @@ module Ninetails
     # contain error messages
     def sections_are_all_valid
       sections.each do |section|
-        deserialized_section = section.deserialize
-
-        deserialized_section.elements_instances.each do |element_definition|
-          unless element_definition.all_elements_valid?
-            errors.add :base, "Element #{element_definition.name} is not valid"
-          end
+        unless section.valid?
+          errors.add :base, section.errors.messages[:base]
         end
-
-        section.elements = deserialized_section.serialize[:elements]
       end
     end
 

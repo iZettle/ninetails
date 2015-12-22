@@ -25,27 +25,7 @@ describe "Page Revisions API" do
         "page_revision": {
           "message": "",
           "sections":[
-            {
-              "name": "",
-              "type": "DocumentHead",
-              "tags": {
-                "position": "head"
-              },
-              "elements": {
-                "title": {
-                  "type": "Text",
-                  "content": {
-                    "text": "iZettle – Accept credit card payments with your iPhone, iPad or Android"
-                  }
-                },
-                "description": {
-                  "type": "Meta",
-                  "content": {
-                    "text": "Accept credit card payments on the go with iZettle. All you need is a smartphone or a tablet and our free app."
-                  }
-                }
-              }
-            }
+            document_head_section
           ]
         }
       }
@@ -56,27 +36,7 @@ describe "Page Revisions API" do
         "page_revision": {
           "message": "",
           "sections":[
-            {
-              "name": "",
-              "type": "DocumentHead",
-              "tags": {
-                "position": "head"
-              },
-              "elements": {
-                "title": {
-                  "type": "Text",
-                  "content": {
-                    "text": ""
-                  }
-                },
-                "description": {
-                  "type": "Meta",
-                  "content": {
-                    "text": ""
-                  }
-                }
-              }
-            }
+            document_head_section(title: "", description: "")
           ]
         }
       }

@@ -6,6 +6,8 @@ Ninetails::Engine.routes.draw do
       resources :page_revisions, only: [:create, :show, :index], path: "revisions"
     end
 
-    resources :sections, only: [:show, :index]
+    resources :sections, only: [:show, :index] do
+      post :validate, on: :collection
+    end
   end
 end
