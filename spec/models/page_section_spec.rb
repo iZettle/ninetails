@@ -48,45 +48,83 @@ RSpec.describe Ninetails::PageSection, type: :model do
       }
     end
 
+    let(:json_with_missing_element) do
+      {
+        "name" => "",
+        "type" => "TestSection",
+        "tags" => { "position" => "body" },
+        "elements" => {
+          "unknown" => {
+            "type" => "ThisDoesntExist",
+            "foo" => "Bar"
+          },
+          "headline" => {
+            "type" => "Text",
+            "content" => { "text" => headline }
+          }
+        }
+      }
+    end
+
     let(:section) { Ninetails::PageSection.new(json) }
+    let(:section_with_missing_element) { Ninetails::PageSection.new(json_with_missing_element) }
 
-    it "should create a Section instance" do
-      section.deserialize
-      expect(section.section).to be_a Section::TestSection
+    describe "when all elements exist" do
+      it "should create a Section instance" do
+        section.deserialize
+        expect(section.section).to be_a Section::TestSection
+      end
+
+      it "should have an array of elements_instances" do
+        section.deserialize
+        expect(section.section.elements_instances.size).to eq 3
+      end
+
+      it "should include an element for 'text', 'button', and 'link'" do
+        section.deserialize
+        expect(section.section.elements_instances[0].name).to eq :headline
+        expect(section.section.elements_instances[1].name).to eq :button
+        expect(section.section.elements_instances[2].name).to eq :messages
+      end
+
+      it "should be the correct type for 'text', 'button', and 'link'" do
+        section.deserialize
+        expect(section.section.elements_instances[0].type).to eq Element::Text
+        expect(section.section.elements_instances[1].type).to eq Element::Button
+        expect(section.section.elements_instances[2].type).to eq Element::Text
+      end
+
+      it "should call deserialize on each element" do
+        expect(Section::TestSection.find_element("headline")).to receive(:deserialize).with(json["elements"]["headline"])
+        expect(Section::TestSection.find_element("button")).to receive(:deserialize).with(json["elements"]["button"])
+        expect(Section::TestSection.find_element("messages")).to receive(:deserialize).with(json["elements"]["messages"])
+        section.deserialize
+      end
+
+      it "should be possible to reserialize into json" do
+        section.deserialize
+        serialized = section.section.serialize.with_indifferent_access
+        expect(serialized[:elements][:headline][:content][:text]).to eq headline
+        expect(serialized[:elements][:messages][0][:content][:text]).to eq first_message
+        expect(serialized[:elements][:messages][1][:content][:text]).to eq second_message
+      end
     end
 
-    it "should have an array of elements_instances" do
-      section.deserialize
-      expect(section.section.elements_instances.size).to eq 3
-    end
+    describe "when some elements don't exist" do
+      it "should create a Section instance" do
+        section_with_missing_element.deserialize
+        expect(section_with_missing_element.section).to be_a Section::TestSection
+      end
 
-    it "should include an element for 'text', 'button', and 'link'" do
-      section.deserialize
-      expect(section.section.elements_instances[0].name).to eq :headline
-      expect(section.section.elements_instances[1].name).to eq :button
-      expect(section.section.elements_instances[2].name).to eq :messages
-    end
+      it "should not include the broken element in the section elements" do
+        section_with_missing_element.deserialize
+        expect(section_with_missing_element.section.elements_instances.size).to eq 1
+      end
 
-    it "should be the correct type for 'text', 'button', and 'link'" do
-      section.deserialize
-      expect(section.section.elements_instances[0].type).to eq Element::Text
-      expect(section.section.elements_instances[1].type).to eq Element::Button
-      expect(section.section.elements_instances[2].type).to eq Element::Text
-    end
-
-    it "should call deserialize on each element" do
-      expect(Section::TestSection.find_element("headline")).to receive(:deserialize).with(json["elements"]["headline"])
-      expect(Section::TestSection.find_element("button")).to receive(:deserialize).with(json["elements"]["button"])
-      expect(Section::TestSection.find_element("messages")).to receive(:deserialize).with(json["elements"]["messages"])
-      section.deserialize
-    end
-
-    it "should be possible to reserialize into json" do
-      section.deserialize
-      serialized = section.section.serialize.with_indifferent_access
-      expect(serialized[:elements][:headline][:content][:text]).to eq headline
-      expect(serialized[:elements][:messages][0][:content][:text]).to eq first_message
-      expect(serialized[:elements][:messages][1][:content][:text]).to eq second_message
+      it "should log an error that the element did not exist" do
+        expect(Rails.logger).to receive(:error).with("[Ninetails] TestSection does not have an element named 'unknown'. Skipping.")
+        section_with_missing_element.deserialize
+      end
     end
 
   end

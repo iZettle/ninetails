@@ -15,8 +15,13 @@ module Ninetails
 
       elements.each do |name, element_json|
         element = section.class.find_element name
-        element.deserialize element_json
-        section.elements_instances << element
+
+        if element.present?
+          element.deserialize element_json
+          section.elements_instances << element
+        else
+          Rails.logger.error "[Ninetails] #{section.class.name.demodulize} does not have an element named '#{name}'. Skipping."
+        end
       end
 
       section
