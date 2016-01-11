@@ -52,7 +52,7 @@ describe Ninetails::PropertyType do
     it "should raise a ArgumentError if you try to set the wrong type" do
       expect {
         string_property.serialized_values = { foo: "bar" }
-      }.to raise_error(ArgumentError)
+      }.to raise_error
     end
 
     it "should be possible to set with a hash if the property conforms to the Ninetails::PropertyStore" do
