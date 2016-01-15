@@ -12,7 +12,7 @@ end
 
 describe Ninetails::ElementDefinition do
 
-  let(:text_element) { Ninetails::ElementDefinition.new(:foo, Element::Text, :single) }
+  let(:text_element) { Ninetails::ElementDefinition.new(:foo, Element::Text, :single, note: "Foo bar note") }
 
   it "should store the name of the element" do
     expect(text_element.name).to eq :foo
@@ -24,6 +24,10 @@ describe Ninetails::ElementDefinition do
 
   it "should store the count of the element" do
     expect(text_element.count).to eq :single
+  end
+
+  it "should store the note in the options attribute" do
+    expect(text_element.options[:note]).to eq "Foo bar note"
   end
 
   describe "adding type structure with singles" do
@@ -70,6 +74,17 @@ describe Ninetails::ElementDefinition do
 
         definition.deserialize hash
       end
+
+      it "should not set the note on the element if it is not in the definition" do
+        definition.deserialize hash
+        expect(definition.elements.first.note).to be_nil
+      end
+
+      it "should set the note on the element if it is in the definition" do
+        definition.options[:note] = "This is a note"
+        definition.deserialize hash
+        expect(definition.elements.first.note).to eq "This is a note"
+      end
     end
 
     describe "multiple elements" do
@@ -96,6 +111,14 @@ describe Ninetails::ElementDefinition do
         expect(second_element_instance).to receive(:deserialize).with(hash[1])
 
         definition.deserialize hash
+      end
+
+      it "should set the note on each element if it is in the definition" do
+        definition.options[:note] = "Some note"
+        definition.deserialize hash
+        definition.elements.each do |element|
+          expect(element.note).to eq "Some note"
+        end
       end
 
     end

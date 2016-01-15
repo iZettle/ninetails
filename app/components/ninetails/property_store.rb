@@ -5,6 +5,8 @@ module Ninetails
     included do
       include Virtus.model
       include ActiveModel::Validations
+
+      attribute :note, String
     end
 
     class_methods do

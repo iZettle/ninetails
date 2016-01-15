@@ -11,6 +11,7 @@ module Ninetails
     end
 
     def deserialize(input)
+      # self.note = input["note"] if input["note"].present?
       properties_instances.collect do |property|
         property.serialized_values = input[property.name.to_s]
       end
@@ -47,6 +48,7 @@ module Ninetails
       properties_instances.each_with_object({}) do |property_type, hash|
         hash[:type] = name
         hash[:reference] = reference
+        hash[:note] = note if note.present?
         hash[property_type.name] = property_type.serialize
 
         if property_type.property.try(:errors).try(:present?)
