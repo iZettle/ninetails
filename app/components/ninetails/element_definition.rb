@@ -1,13 +1,14 @@
 module Ninetails
   class ElementDefinition
-    attr_accessor :name, :type, :count, :elements
+    attr_accessor :name, :type, :count, :elements, :options
 
     delegate :properties, to: :type
 
-    def initialize(name, type, count)
+    def initialize(name, type, count, options={})
       @name = name
       @type = type
       @count = count
+      @options = options
       @elements = []
     end
 
@@ -32,7 +33,7 @@ module Ninetails
     end
 
     def properties_structure
-      @properties_structure ||= type.new.properties_structure
+      @properties_structure ||= type.new(options).properties_structure
     end
 
     def all_elements_valid?
@@ -59,6 +60,7 @@ module Ninetails
 
     def add_element(input)
       element = type.new
+      element.note = options[:note] if options[:note].present?
       element.deserialize input
       elements << element
     end

@@ -47,6 +47,7 @@ module Ninetails
       properties_instances.each_with_object({}) do |property_type, hash|
         hash[:type] = name
         hash[:reference] = reference
+        hash[:note] = note if note.present?
         hash[property_type.name] = property_type.serialize
 
         if property_type.property.try(:errors).try(:present?)

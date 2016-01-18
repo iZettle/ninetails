@@ -3,7 +3,7 @@ module Section
 
     located_in :body
 
-    has_element :title, Element::Text
+    has_element :title, Element::Text, note: "This should be kept short"
     has_element :background_image, Element::Figure
     has_element :signup_button, Element::Button
 

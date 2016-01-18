@@ -19,6 +19,10 @@ class ElementForValidating < Ninetails::Element
   property :something, CustomProperty
 end
 
+class ElementWithNote < Ninetails::Element
+  property :title, CustomProperty
+end
+
 RSpec.describe Ninetails::Element do
 
   describe "properties" do
@@ -44,8 +48,8 @@ RSpec.describe Ninetails::Element do
     end
   end
 
-  describe "serialization" do
-    let(:element) { ExampleElement.new }
+  describe "properties_structure" do
+    let(:element) { ExampleElement.new note: "Foo bar" }
     let(:structure) { element.properties_structure }
 
     it "should be a hash" do
@@ -64,6 +68,10 @@ RSpec.describe Ninetails::Element do
       expect(structure[:foo]).to eq nil
       expect(structure[:bar]).to eq nil
     end
+
+    it "should include the note" do
+      expect(structure[:note]).to eq "Foo bar"
+    end
   end
 
   describe "deserialization" do
@@ -76,6 +84,23 @@ RSpec.describe Ninetails::Element do
       expect(element.send(:properties_instances).first).to receive(:serialized_values=).with("text"=>"hello")
       expect(element.send(:properties_instances).last).to receive(:serialized_values=).with("text"=>"world")
       element.deserialize hash
+    end
+  end
+
+  describe "notes" do
+    let(:element) { ElementWithNote.new note: "Foo bar" }
+    let(:hash) do
+      {"type"=>"ElementWithNote","note"=>"shouldn't change","title"=>{"text"=>"hello"}}
+    end
+
+    it "should store the note on the Element" do
+      expect(element.note).to eq "Foo bar"
+    end
+
+    it "deserialization should not modify the note" do
+      expect {
+        element.deserialize hash
+      }.to_not change { element.note }
     end
   end
 

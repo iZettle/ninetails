@@ -16,17 +16,17 @@ module Ninetails
       @position
     end
 
-    def self.define_element(name, type, count)
+    def self.define_element(name, type, count, options={})
       @elements ||= []
-      @elements << Ninetails::ElementDefinition.new(name, type, count)
+      @elements << Ninetails::ElementDefinition.new(name, type, count, options)
     end
 
-    def self.has_element(name, type)
-      define_element name, type, :single
+    def self.has_element(name, type, options={})
+      define_element name, type, :single, options
     end
 
-    def self.has_many_elements(name, type)
-      define_element name, type, :multiple
+    def self.has_many_elements(name, type, options={})
+      define_element name, type, :multiple, options
     end
 
     def self.elements

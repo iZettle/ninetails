@@ -38,7 +38,7 @@ describe Ninetails::PropertyStore do
   end
 
   it "should store the property as a virtus attribute" do
-    virtus_attr = SomeProperties.attribute_set.first
+    virtus_attr = SomeProperties.attribute_set.find { |a| a.name == :text}
     expect(virtus_attr.name).to eq :text
     expect(virtus_attr.primitive).to eq Property::Text
   end
