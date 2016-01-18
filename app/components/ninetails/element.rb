@@ -11,7 +11,6 @@ module Ninetails
     end
 
     def deserialize(input)
-      # self.note = input["note"] if input["note"].present?
       properties_instances.collect do |property|
         property.serialized_values = input[property.name.to_s]
       end
