@@ -1,6 +1,8 @@
 module Ninetails
   class PageRevision < ActiveRecord::Base
+
     belongs_to :page
+    belongs_to :project
     has_many :page_revision_sections
     has_many :sections, through: :page_revision_sections
 
