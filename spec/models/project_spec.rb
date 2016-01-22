@@ -16,4 +16,10 @@ describe Ninetails::Project do
     expect(project.pages.count).to eq 3
   end
 
+  it "should require a name" do
+    invalid_project = build :project, name: nil
+    expect(invalid_project.valid?).to be false
+    expect(invalid_project.errors[:name]).to include "can't be blank"
+  end
+
 end
