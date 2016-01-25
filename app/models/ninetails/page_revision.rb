@@ -8,6 +8,8 @@ module Ninetails
 
     validate :sections_are_all_valid
 
+    after_create :update_project_page, if: -> { project.present? }
+
     private
 
     # Validate all sections and rebuild the sections array with the instances which now
@@ -18,6 +20,12 @@ module Ninetails
           errors.add :base, section.errors.messages[:base]
         end
       end
+    end
+
+    def update_project_page
+      project_page = ProjectPage.find_or_initialize_by project_id: project.id, page_id: page.id
+      project_page.page_revision = self
+      project_page.save
     end
 
   end

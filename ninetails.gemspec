@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl", "~> 4.5"
   s.add_development_dependency "factory_girl_rails", "~> 4.5"
   s.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
+  s.add_development_dependency "shoulda-matchers", "~> 3.1"
 
   s.test_files = Dir["spec/**/*"]
 end
