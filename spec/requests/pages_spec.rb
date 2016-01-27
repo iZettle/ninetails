@@ -57,6 +57,16 @@ describe "Pages API" do
       expect(json["page"]["errors"]["url"]).not_to be_empty
     end
 
+    it "should have a blank revision id" do
+      post "/pages", valid_page_params
+      expect(json["page"]["revisionId"]).to be_nil
+    end
+
+    it "should have an empty sections array" do
+      post "/pages", valid_page_params
+      expect(json["page"]["sections"]).to eq []
+    end
+
   end
 
   describe "when not specifying revision" do

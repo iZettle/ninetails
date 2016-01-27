@@ -1,10 +1,11 @@
 json.page do
   json.call page, :id, :name, :url
+  json.revision_id page.try(:revision).try(:id)
 
   if page.revision.present?
-    json.revision_id page.revision.id
-
     json.sections page.revision.sections, partial: "/ninetails/sections/section", as: :section
+  else
+    json.sections []
   end
 
   if page.errors.present?
