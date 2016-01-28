@@ -42,6 +42,56 @@ describe "Page Revisions API" do
       }
     end
 
+    let(:project) { create :project }
+    let(:valid_revision_params_with_project) do
+      {
+        "page_revision": {
+          "message": "",
+          "sections":[
+            document_head_section
+          ],
+          "project_id": project.id
+        }
+      }
+    end
+
+    describe "with valid sections and a project id" do
+      it "should create a revision with the project id" do
+        expect {
+          post "/pages/#{page.id}/revisions", valid_revision_params_with_project
+        }.to change { page.revisions.count }.by(1)
+
+        expect(response).to be_success
+        expect(Ninetails::PageRevision.find(json["page"]["revisionId"]).project).to eq project
+      end
+
+      it "should create a new ProjectPage entry if one doesn't exist for this page in the project" do
+        expect {
+          post "/pages/#{page.id}/revisions", valid_revision_params_with_project
+        }.to change { Ninetails::ProjectPage.count }.by(1)
+
+        revision = Ninetails::PageRevision.find json["page"]["revisionId"]
+        project_page = Ninetails::ProjectPage.last
+        expect(project_page.page).to eq page
+        expect(project_page.project).to eq project
+        expect(project_page.page_revision).to eq revision
+      end
+
+      it "should modify an existing ProjectPage entry if one exists for this page in the project" do
+        project_page = create :project_page, page: page, project: project
+
+        expect {
+          post "/pages/#{page.id}/revisions", valid_revision_params_with_project
+        }.to_not change { Ninetails::ProjectPage.count }
+
+        revision = Ninetails::PageRevision.find json["page"]["revisionId"]
+        project_page = Ninetails::ProjectPage.last
+        expect(project_page.page).to eq page
+        expect(project_page.project).to eq project
+        expect(project_page.page_revision).to eq revision
+      end
+    end
+
     describe "with valid sections" do
       it "should create a revision" do
         expect {
