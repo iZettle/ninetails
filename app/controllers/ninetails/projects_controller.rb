@@ -1,6 +1,8 @@
 module Ninetails
   class ProjectsController < ApplicationController
 
+    before_action :find_project, only: [:update, :destroy]
+
     def index
       @projects = Project.all
     end
@@ -16,8 +18,6 @@ module Ninetails
     end
 
     def update
-      @project = Project.find params[:id]
-
       if @project.update_attributes project_params
         render :show, status: :ok
       else
@@ -25,7 +25,16 @@ module Ninetails
       end
     end
 
+    def destroy
+      @project.destroy
+      head :no_content
+    end
+
     private
+
+    def find_project
+      @project = Project.find params[:id]
+    end
 
     def project_params
       params.require(:project).permit(:name, :description)

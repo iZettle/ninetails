@@ -78,4 +78,13 @@ describe "Projects API" do
     end
   end
 
+  describe "destroying projects" do
+    it "should delete the project" do
+      project = create :project
+      expect {
+        delete "/projects/#{project.id}"
+      }.to change{ Ninetails::Project.count }.by(-1)
+    end
+  end
+
 end
