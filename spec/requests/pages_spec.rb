@@ -26,6 +26,39 @@ describe "Pages API" do
     end
   end
 
+  describe "listing pages in a project" do
+    let(:project) { create :project }
+
+    before do
+      @project_pages = create_list :page, 5
+      @other_page = create :page
+
+      @project_pages.each do |page|
+        create :page_revision, page: page, project: project
+      end
+    end
+
+    it "should return the number of pages which belong to the project" do
+      get "/projects/#{project.id}/pages"
+      expect(json["pages"].length).to eq @project_pages.length
+    end
+
+    it "should not include pages which have not been changed in this project" do
+      get "/projects/#{project.id}/pages"
+      expect(json["pages"].collect { |p| p["id"] }).not_to include @other_page.id
+    end
+
+    it "should be successfull if the project exists" do
+      get "/projects/#{project.id}/pages"
+      expect(response).to be_success
+    end
+
+    it "should raise an error if the project does not exist" do
+      get "/projects/foo/pages"
+      expect(response).to_not be_success
+    end
+  end
+
   describe "creating a page" do
 
     let(:valid_page_params) do

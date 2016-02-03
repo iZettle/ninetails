@@ -7,6 +7,10 @@ module Ninetails
 
     attr_writer :revision
 
+    scope :in_project, -> (project) do
+      includes(:revisions).where(PageRevision.arel_table.name => { project_id: project.id })
+    end
+
     def revision
       @revision || current_revision
     end

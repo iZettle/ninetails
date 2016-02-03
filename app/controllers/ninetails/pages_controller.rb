@@ -1,8 +1,14 @@
 module Ninetails
   class PagesController < ApplicationController
 
+    before_action :find_project_scope, only: :index
+
     def index
-      @pages = Page.all
+      if @project.present?
+        @pages = Page.in_project(@project).all
+      else
+        @pages = Page.all
+      end
     end
 
     def show
@@ -27,6 +33,12 @@ module Ninetails
 
     def page_params
       params.require(:page).permit(:url, :name)
+    end
+
+    def find_project_scope
+      @project = Project.find params[:project_id] if params[:project_id]
+    rescue ActiveRecord::RecordNotFound
+      render json: {}, status: :not_found
     end
 
   end
