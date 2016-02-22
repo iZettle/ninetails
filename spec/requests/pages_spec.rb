@@ -4,6 +4,7 @@ describe "Pages API" do
 
   let(:page) { create :page }
   let(:page_url) { "/pages/#{CGI.escape(page.url)}" }
+  let(:page_url_from_id) { "/pages/#{page.id}" }
 
   describe "listing pages" do
     before do
@@ -104,8 +105,15 @@ describe "Pages API" do
 
   describe "when not specifying revision" do
     describe "when the page exists" do
-      it "should return the current revision of a page" do
+      it "should return the current revision of a page when using the url to fetch the page" do
         get page_url
+
+        expect(response).to be_success
+        expect(json["page"]["revisionId"]).to eq page.current_revision.id
+      end
+
+      it "should return the current revision of a page when using the id to fetch the page" do
+        get page_url_from_id
 
         expect(response).to be_success
         expect(json["page"]["revisionId"]).to eq page.current_revision.id
@@ -113,9 +121,13 @@ describe "Pages API" do
     end
 
     describe "when the page does not exist" do
-      it "should return a 404" do
+      it "should return a 404 if the url doesn't exist" do
         get "/pages/nil"
+        expect(response).to be_not_found
+      end
 
+      it "should return a 404 if the id doesn't exist" do
+        get "/pages/0"
         expect(response).to be_not_found
       end
     end
@@ -123,11 +135,22 @@ describe "Pages API" do
 
   describe "when specifying a revision" do
     describe "when the page and revision exist" do
-      it "should return the specified revision of the page" do
+      it "should return the specified revision of the page when using the url to fetch the page" do
         new_revision = create :page_revision
         page.revisions << new_revision
 
         get "#{page_url}?revision_id=#{new_revision.id}"
+
+        expect(response).to be_success
+        expect(json["page"]["revisionId"]).to eq new_revision.id
+        expect(json["page"]["revisionId"]).not_to eq page.current_revision.id
+      end
+
+      it "should return the specified revision of the page when using the id to fetch the page" do
+        new_revision = create :page_revision
+        page.revisions << new_revision
+
+        get "#{page_url_from_id}?revision_id=#{new_revision.id}"
 
         expect(response).to be_success
         expect(json["page"]["revisionId"]).to eq new_revision.id
