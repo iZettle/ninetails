@@ -23,8 +23,8 @@ module Ninetails
 
     private
 
-    def empty_section_from_name(id)
-      "Section::#{id.camelize}".safe_constantize.new.serialize
+    def empty_section_from_name(name)
+      "Section::#{name.camelize}".safe_constantize.new.serialize
     end
 
     def section_params
