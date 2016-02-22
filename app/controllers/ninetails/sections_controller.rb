@@ -2,8 +2,8 @@ module Ninetails
   class SectionsController < ApplicationController
 
     def index
-      sections = Dir.glob(Rails.root.join("app", "components", "section", "*.rb")).collect do |entry|
-        empty_section_from_name File.basename(entry, ".rb")
+      sections = Dir.glob(Rails.root.join("app", "components", "section", "*.rb")).collect do |filename|
+        Section.new_from_filename(filename).serialize
       end
 
       render json: { sections: sections }
@@ -22,10 +22,6 @@ module Ninetails
     end
 
     private
-
-    def empty_section_from_name(name)
-      "Section::#{name.camelize}".safe_constantize.new.serialize
-    end
 
     def section_params
       params.require(:section).permit!
