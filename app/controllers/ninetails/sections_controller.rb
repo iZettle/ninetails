@@ -24,7 +24,7 @@ module Ninetails
     private
 
     def empty_section_from_name(id)
-      "Section::#{id.classify}".safe_constantize.new.serialize
+      "Section::#{id.camelize}".safe_constantize.new.serialize
     end
 
     def section_params
