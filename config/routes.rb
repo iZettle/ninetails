@@ -3,7 +3,7 @@ Ninetails::Engine.routes.draw do
     root 'pages#index'
 
     resources :projects, only: [:create, :update, :index, :destroy] do
-      resources :pages, only: [:index]
+      resources :pages, only: [:index, :show]
     end
 
     resources :pages, only: [:show, :create, :index] do

@@ -27,7 +27,7 @@ describe "Pages API" do
     end
   end
 
-  describe "listing pages in a project" do
+  describe "projects" do
     let(:project) { create :project }
 
     before do
@@ -39,24 +39,35 @@ describe "Pages API" do
       end
     end
 
-    it "should return the number of pages which belong to the project" do
-      get "/projects/#{project.id}/pages"
-      expect(json["pages"].length).to eq @project_pages.length
+    describe "when listing pages" do
+      it "should return the number of pages which belong to the project" do
+        get "/projects/#{project.id}/pages"
+        expect(json["pages"].length).to eq @project_pages.length
+      end
+
+      it "should not include pages which have not been changed in this project" do
+        get "/projects/#{project.id}/pages"
+        expect(json["pages"].collect { |p| p["id"] }).not_to include @other_page.id
+      end
+
+      it "should be successfull if the project exists" do
+        get "/projects/#{project.id}/pages"
+        expect(response).to be_success
+      end
+
+      it "should raise an error if the project does not exist" do
+        get "/projects/foo/pages"
+        expect(response).to_not be_success
+      end
     end
 
-    it "should not include pages which have not been changed in this project" do
-      get "/projects/#{project.id}/pages"
-      expect(json["pages"].collect { |p| p["id"] }).not_to include @other_page.id
-    end
+    describe "when showing a page" do
+      let(:project_page) { project.project_pages.first }
 
-    it "should be successfull if the project exists" do
-      get "/projects/#{project.id}/pages"
-      expect(response).to be_success
-    end
-
-    it "should raise an error if the project does not exist" do
-      get "/projects/foo/pages"
-      expect(response).to_not be_success
+      it "should use the current project page to fetch the latest revision" do
+        get "/projects/#{project.id}/pages/#{project_page.page_id}"
+        expect(json["page"]["revisionId"]).to eq project_page.page_revision_id
+      end
     end
   end
 
