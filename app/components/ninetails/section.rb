@@ -5,7 +5,10 @@ module Ninetails
     attr_accessor :elements_instances
 
     def self.new_from_filename(filename)
-      name = File.basename(filename, ".rb")
+      new_from_name File.basename(filename, ".rb")
+    end
+
+    def self.new_from_name(name)
       "Section::#{name.camelize}".safe_constantize.new
     end
 

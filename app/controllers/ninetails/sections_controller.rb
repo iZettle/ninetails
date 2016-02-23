@@ -10,7 +10,7 @@ module Ninetails
     end
 
     def show
-      render json: empty_section_from_name(params[:id])
+      render json: Section.new_from_name(params[:id]).serialize
     end
 
     def validate
