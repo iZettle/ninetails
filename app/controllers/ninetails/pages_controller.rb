@@ -1,11 +1,11 @@
 module Ninetails
   class PagesController < ApplicationController
 
-    before_action :find_project_scope, only: [:index, :show]
+    before_action :find_project_scope
 
     def index
       if @project.present?
-        @pages = Page.in_project(@project).all
+        @pages = @project.pages
       else
         @pages = Page.all
       end
@@ -32,6 +32,8 @@ module Ninetails
       @page = Page.new page_params
 
       if @page.save
+        @project.project_pages.create page: @page if @project.present?
+
         render :show, status: :created
       else
         render :show, status: :bad_request

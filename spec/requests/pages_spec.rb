@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe "Pages API" do
 
+  let(:project) { create :project }
   let(:page) { create :page }
   let(:page_url) { "/pages/#{CGI.escape(page.url)}" }
   let(:page_url_from_id) { "/pages/#{page.id}" }
@@ -28,8 +29,6 @@ describe "Pages API" do
   end
 
   describe "projects" do
-    let(:project) { create :project }
-
     before do
       @project_pages = create_list :page, 5
       @other_page = create :page
@@ -76,6 +75,7 @@ describe "Pages API" do
     let(:valid_page_params) do
       {
         page: {
+          name: "A new page",
           url: "/foobar"
         }
       }
@@ -84,6 +84,7 @@ describe "Pages API" do
     let(:existing_page_url_params) do
       {
         page: {
+          name: "An existing page",
           url: page.url
         }
       }
@@ -110,6 +111,12 @@ describe "Pages API" do
     it "should have an empty sections array" do
       post "/pages", valid_page_params
       expect(json["page"]["sections"]).to eq []
+    end
+
+    it "should create a project page if in the project scope" do
+      expect {
+        post "/projects/#{project.id}/pages", valid_page_params
+      }.to change{ project.pages.count }.by(1)
     end
 
   end
