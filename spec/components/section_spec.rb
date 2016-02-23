@@ -8,6 +8,24 @@ end
 
 RSpec.describe Ninetails::Section do
 
+  describe "creating a section from a file name" do
+    it "should handle plural names" do
+      expect(Ninetails::Section.new_from_filename("points")).to be_a Section::Points
+    end
+
+    it "should handle singular names" do
+      expect(Ninetails::Section.new_from_filename("billboard")).to be_a Section::Billboard
+    end
+
+    it "should handle names with suffices" do
+      expect(Ninetails::Section.new_from_filename("billboard.rb")).to be_a Section::Billboard
+    end
+
+    it "should handle absolute paths" do
+      expect(Ninetails::Section.new_from_filename("/foo/bar/billboard.rb")).to be_a Section::Billboard
+    end
+  end
+
   describe "position" do
     it "should be possible to set" do
       expect(ExampleSection.position).to eq :body

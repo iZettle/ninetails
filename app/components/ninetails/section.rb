@@ -4,6 +4,14 @@ module Ninetails
 
     attr_accessor :elements_instances
 
+    def self.new_from_filename(filename)
+      new_from_name File.basename(filename, ".rb")
+    end
+
+    def self.new_from_name(name)
+      "Section::#{name.camelize}".safe_constantize.new
+    end
+
     def self.located_in(position)
       unless ALLOWED_POSITIONS.include?(position)
         fail SectionConfigurationError, "position must be in #{ALLOWED_POSITIONS}"
