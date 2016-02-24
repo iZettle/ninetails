@@ -16,6 +16,9 @@ describe "Page Revisions API" do
         expect(json["revisions"].size).to eq 5
       end
 
+      it "should include sections in the revision" do
+        expect(json["revisions"][0]).to have_key "sections"
+      end
     end
   end
 
