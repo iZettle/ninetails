@@ -20,6 +20,12 @@ FactoryGirl.define do
         create_list :page_revision, evaluator.revisions_count - 1, page: page
       end
     end
+
+    factory :page_with_revision do
+      after :create do |page, _|
+        create :page_revision, page: page
+      end
+    end
   end
 
 end

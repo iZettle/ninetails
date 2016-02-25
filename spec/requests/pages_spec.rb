@@ -67,6 +67,12 @@ describe "Pages API" do
         get "/projects/#{project.id}/pages/#{project_page.page_id}"
         expect(json["page"]["revisionId"]).to eq project_page.page_revision_id
       end
+
+      it "should use the 'live' page when the page doesn't exist in the project scope" do
+        new_page = create :page_with_revision
+        get "/projects/#{project.id}/pages/#{new_page.id}"
+        expect(json["page"]["revisionId"]).to eq new_page.revision.id
+      end
     end
   end
 

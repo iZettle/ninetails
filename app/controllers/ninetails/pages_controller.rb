@@ -21,7 +21,8 @@ module Ninetails
       if params[:revision_id].present?
         @page.revision = @page.revisions.find params[:revision_id]
       elsif @project.present?
-        @page.revision = @project.project_pages.find_by(page_id: params[:id]).page_revision
+        project_page = @project.project_pages.find_by page_id: params[:id]
+        @page.revision = project_page.page_revision if project_page.present?
       end
 
     rescue ActiveRecord::RecordNotFound
