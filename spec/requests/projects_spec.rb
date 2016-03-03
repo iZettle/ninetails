@@ -2,6 +2,19 @@ require 'rails_helper'
 
 describe "Projects API" do
 
+  describe "showing project" do
+    let(:project) { create :project }
+
+    it "should include the id, name, published, and description for the project" do
+      get "/projects/#{project.id}"
+
+      expect(json["project"]).to have_key "id"
+      expect(json["project"]).to have_key "name"
+      expect(json["project"]).to have_key "description"
+      expect(json["project"]).to have_key "published"
+    end
+  end
+
   describe "listing projects" do
     before do
       create_list :project, 5

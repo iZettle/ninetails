@@ -2,7 +2,7 @@ Ninetails::Engine.routes.draw do
   with_options defaults: { format: :json } do
     root 'pages#index'
 
-    resources :projects, only: [:create, :update, :index, :destroy] do
+    resources :projects, except: [:new, :edit] do
       post :publish, on: :member
       resources :pages, only: [:show, :create, :index]
     end
