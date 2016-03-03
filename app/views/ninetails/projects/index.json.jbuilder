@@ -1,1 +1,1 @@
-json.projects @projects, :id, :name, :description
+json.projects @projects, :id, :name, :description, :published

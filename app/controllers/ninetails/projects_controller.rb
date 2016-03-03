@@ -1,7 +1,7 @@
 module Ninetails
   class ProjectsController < ApplicationController
 
-    before_action :find_project, only: [:update, :destroy]
+    before_action :find_project, only: [:update, :destroy, :publish]
 
     def index
       @projects = Project.all
@@ -28,6 +28,11 @@ module Ninetails
     def destroy
       @project.destroy
       head :no_content
+    end
+
+    def publish
+      @project.publish!
+      render :show
     end
 
     private
