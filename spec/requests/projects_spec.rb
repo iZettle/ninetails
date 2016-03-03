@@ -13,13 +13,14 @@ describe "Projects API" do
       expect(json["projects"].size).to eq 5
     end
 
-    it "should include the id, name, and description for each project" do
+    it "should include the id, name, published, and description for each project" do
       get "/projects"
 
       json["projects"].each do |project|
         expect(project).to have_key "id"
         expect(project).to have_key "name"
         expect(project).to have_key "description"
+        expect(project).to have_key "published"
       end
     end
   end
@@ -84,6 +85,17 @@ describe "Projects API" do
       expect {
         delete "/projects/#{project.id}"
       }.to change{ Ninetails::Project.count }.by(-1)
+    end
+  end
+
+  describe "publishing projects" do
+    let(:project) { create :project }
+
+    it "should show that the project is published in the json" do
+      post "/projects/#{project.id}/publish"
+
+      expect(response).to be_success
+      expect(json["project"]["published"]).to be true
     end
   end
 

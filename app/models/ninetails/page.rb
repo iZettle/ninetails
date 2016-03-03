@@ -20,5 +20,10 @@ module Ninetails
       end
     end
 
+    def set_current_revision(revision)
+      update_attributes current_revision: revision
+      self.revision = revision
+    end
+
   end
 end

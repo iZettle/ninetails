@@ -3,6 +3,7 @@ Ninetails::Engine.routes.draw do
     root 'pages#index'
 
     resources :projects, only: [:create, :update, :index, :destroy] do
+      post :publish, on: :member
       resources :pages, only: [:show, :create, :index]
     end
 

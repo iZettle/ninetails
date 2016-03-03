@@ -22,4 +22,24 @@ describe Ninetails::Project do
     expect(invalid_project.errors[:name]).to include "can't be blank"
   end
 
+  describe "publishing" do
+    it "should be unpublished by default" do
+      expect(project.published?).to be false
+    end
+
+    it "should call #set_current_revision on each page with the correct revision" do
+      project.project_pages.each do |project_page|
+        expect(project_page.page).to receive(:set_current_revision).with(project_page.page_revision)
+      end
+
+      project.publish!
+    end
+
+    it "should be published after calling #publish!" do
+      expect {
+        project.publish!
+      }.to change{ project.published? }.from(false).to(true)
+    end
+  end
+
 end
