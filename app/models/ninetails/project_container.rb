@@ -1,22 +1,22 @@
 module Ninetails
-  class ProjectPage < ActiveRecord::Base
+  class ProjectContainer < ActiveRecord::Base
 
-    belongs_to :page
-    belongs_to :page_revision
+    belongs_to :container
+    belongs_to :revision
     belongs_to :project
 
     validates :project, {
       presence: true
     }
 
-    validates :page_revision, {
+    validates :revision, {
       uniqueness: {
         scope: :project,
-        message: "has already been set for this page in the project"
+        message: "has already been set for this container in the project"
       }
     }
 
-    validates :page, {
+    validates :container, {
       presence: true,
       uniqueness: {
         scope: :project,

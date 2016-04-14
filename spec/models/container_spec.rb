@@ -1,0 +1,21 @@
+require 'rails_helper'
+
+RSpec.describe Ninetails::Container, type: :model do
+
+  describe "validations" do
+
+    it "should require a url" do
+      new_container = Ninetails::Container.new url: nil
+      expect(new_container.valid?).to be false
+      expect(new_container.errors[:url]).to eq ["can't be blank"]
+    end
+
+    it "should require a unique url" do
+      new_container = Ninetails::Container.new url: create(:container).url
+      expect(new_container.valid?).to be false
+      expect(new_container.errors[:url]).to eq ["has already been taken"]
+    end
+
+  end
+
+end

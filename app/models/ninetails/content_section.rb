@@ -1,8 +1,8 @@
 module Ninetails
-  class PageSection < ActiveRecord::Base
+  class ContentSection < ActiveRecord::Base
     self.inheritance_column = nil
-    has_many :page_revision_sections
-    has_many :page_revisions, through: :page_revision_sections
+    has_many :revision_sections
+    has_many :revisions, through: :revision_sections
 
     validate :validate_elements
 

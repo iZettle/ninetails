@@ -9,7 +9,7 @@ module Section
   end
 end
 
-RSpec.describe Ninetails::PageSection, type: :model do
+RSpec.describe Ninetails::ContentSection, type: :model do
 
   describe "deserializing a json blob" do
     let(:headline) { "Hello world!" }
@@ -66,8 +66,8 @@ RSpec.describe Ninetails::PageSection, type: :model do
       }
     end
 
-    let(:section) { Ninetails::PageSection.new(json) }
-    let(:section_with_missing_element) { Ninetails::PageSection.new(json_with_missing_element) }
+    let(:section) { Ninetails::ContentSection.new(json) }
+    let(:section_with_missing_element) { Ninetails::ContentSection.new(json_with_missing_element) }
 
     describe "when all elements exist" do
       it "should create a Section instance" do
