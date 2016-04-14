@@ -3,19 +3,11 @@ require 'rails_helper'
 RSpec.describe Ninetails::Container, type: :model do
 
   describe "validations" do
+    subject { create :container }
 
-    it "should require a url" do
-      new_container = Ninetails::Container.new url: nil
-      expect(new_container.valid?).to be false
-      expect(new_container.errors[:url]).to eq ["can't be blank"]
-    end
-
-    it "should require a unique url" do
-      new_container = Ninetails::Container.new url: create(:container).url
-      expect(new_container.valid?).to be false
-      expect(new_container.errors[:url]).to eq ["has already been taken"]
-    end
-
+    it { should validate_presence_of(:url) }
+    it { should validate_uniqueness_of(:url).case_insensitive }
+    it { should validate_presence_of(:type) }
   end
 
 end

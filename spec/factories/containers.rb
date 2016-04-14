@@ -8,6 +8,7 @@ FactoryGirl.define do
     association :current_revision, factory: :revision
     name "Home"
     url
+    type :page
 
     factory :container_with_revisions do
       transient do

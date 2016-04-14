@@ -1,9 +1,14 @@
 module Ninetails
   class Container < ActiveRecord::Base
+    self.inheritance_column = nil
+
     has_many :revisions
     has_one :current_revision, class_name: "Revision"
 
-    validates :url, presence: true, uniqueness: true
+    enum type: [:page, :layout]
+
+    validates :url, presence: true, uniqueness: { case_sensitive: false }
+    validates :type, presence: true
 
     attr_writer :revision
 
