@@ -3,6 +3,7 @@ module Ninetails
     self.inheritance_column = nil
 
     has_many :revisions
+    has_many :project_containers
     has_one :current_revision, class_name: "Revision"
 
     enum type: [:page, :layout]
@@ -28,6 +29,11 @@ module Ninetails
     def set_current_revision(revision)
       update_attributes current_revision: revision
       self.revision = revision
+    end
+
+    def load_revision_from_project(project)
+      project_container = project_containers.where(project: project, container: self).first
+      self.revision = project_container.revision if project_container.present?
     end
 
   end

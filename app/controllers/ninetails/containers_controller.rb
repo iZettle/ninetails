@@ -21,8 +21,7 @@ module Ninetails
       if params[:revision_id].present?
         @container.revision = @container.revisions.find params[:revision_id]
       elsif @project.present?
-        project_container = @project.project_containers.find_by container_id: params[:id]
-        @container.revision = project_container.revision if project_container.present?
+        @container.load_revision_from_project @project
       end
 
     rescue ActiveRecord::RecordNotFound
