@@ -1,1 +1,1 @@
-json.call section, :id, :name, :type, :tags, :elements
+json.call section, :id, :name, :type, :located_in, :elements

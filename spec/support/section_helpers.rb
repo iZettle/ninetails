@@ -4,9 +4,6 @@ module SectionHelpers
     {
       "name": "",
       "type": "DocumentHead",
-      "tags": {
-        "position": "head"
-      },
       "elements": {
         "title": {
           "type": "Text",

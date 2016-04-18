@@ -137,9 +137,6 @@ describe "Revisions API" do
             {
               "name": "",
               "type": "MinimalBillboard",
-              "tags": {
-                "position": "body"
-              },
               "elements": {
                 "backgroundImage": {
                   "type": "Figure",

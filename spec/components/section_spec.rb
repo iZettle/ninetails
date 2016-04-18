@@ -6,6 +6,11 @@ class ExampleSection < Ninetails::Section
   has_element :bar, Element::Button
 end
 
+class ExamplePlaceholderSection < Ninetails::Section
+  name_as_location :body
+  has_element :foo, Element::Text
+end
+
 RSpec.describe Ninetails::Section do
 
   describe "creating a section from a file name" do
@@ -26,13 +31,13 @@ RSpec.describe Ninetails::Section do
     end
   end
 
-  describe "position" do
-    it "should be possible to set" do
+  describe "locations" do
+    it "should be possible to set the location a section is part of" do
       expect(ExampleSection.position).to eq :body
     end
 
-    it "should raise an exception if the position is not one of head or body" do
-      expect{ ExampleSection.located_in(:a_cave) }.to raise_error(Ninetails::SectionConfigurationError)
+    it "be possible to set a section as a location for other sections to be set in" do
+      expect(ExamplePlaceholderSection.location_name).to eq :body
     end
   end
 
@@ -73,13 +78,18 @@ RSpec.describe Ninetails::Section do
 
   describe "structure" do
     let(:structure) { ExampleSection.new.serialize }
+    let(:placeholder_structure) { ExamplePlaceholderSection.new.serialize }
 
     it "should have a type key which is the section class name" do
       expect(structure[:type]).to eq "ExampleSection"
     end
 
-    it "should include the position in tags" do
-      expect(structure[:tags][:position]).to eq ExampleSection.position
+    it "should include the position in locatedIn" do
+      expect(structure[:located_in]).to eq ExampleSection.position
+    end
+
+    it "should include the location name if it is defined" do
+      expect(placeholder_structure[:location_name]).to eq ExamplePlaceholderSection.location_name
     end
 
     it "should have an elements key which contains the section's elements" do

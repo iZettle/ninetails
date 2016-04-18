@@ -20,7 +20,6 @@ RSpec.describe Ninetails::ContentSection, type: :model do
       {
         "name" => "",
         "type" => "TestSection",
-        "tags" => { "position" => "body" },
         "elements" => {
           "headline" => {
             "type" => "Text",
@@ -52,7 +51,6 @@ RSpec.describe Ninetails::ContentSection, type: :model do
       {
         "name" => "",
         "type" => "TestSection",
-        "tags" => { "position" => "body" },
         "elements" => {
           "unknown" => {
             "type" => "ThisDoesntExist",
