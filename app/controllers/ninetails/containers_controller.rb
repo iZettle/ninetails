@@ -43,7 +43,7 @@ module Ninetails
     private
 
     def container_params
-      params.require(:container).permit(:url, :name)
+      params.require(:container).permit(:url, :name, :type)
     end
 
     def find_project_scope

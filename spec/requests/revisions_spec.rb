@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "Revisions API" do
 
-  let(:container) { create :container_with_revisions, revisions_count: 5 }
+  let(:container) { create :page, :with_revisions, revisions_count: 5 }
 
   describe "listing revisions" do
     describe "with a valid container_id" do

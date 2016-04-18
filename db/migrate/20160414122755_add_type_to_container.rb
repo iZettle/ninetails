@@ -1,5 +1,5 @@
 class AddTypeToContainer < ActiveRecord::Migration
   def change
-    add_column :ninetails_containers, :type, :integer, default: 0
+    add_column :ninetails_containers, :type, :string, default: "Ninetails::Page"
   end
 end

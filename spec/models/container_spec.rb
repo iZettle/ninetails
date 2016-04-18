@@ -4,14 +4,6 @@ RSpec.describe Ninetails::Container, type: :model do
 
   let(:container) { create :container }
 
-  describe "validations" do
-    subject { container }
-
-    it { should validate_presence_of(:url) }
-    it { should validate_uniqueness_of(:url).case_insensitive }
-    it { should validate_presence_of(:type) }
-  end
-
   describe "#load_revision_from_project" do
 
     before do

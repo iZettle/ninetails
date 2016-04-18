@@ -3,7 +3,7 @@ require 'rails_helper'
 describe "Containers API" do
 
   let(:project) { create :project }
-  let(:container) { create :container }
+  let(:container) { create :page }
   let(:container_url) { "/containers/#{CGI.escape(container.url)}" }
   let(:container_url_from_id) { "/containers/#{container.id}" }
 
@@ -30,8 +30,8 @@ describe "Containers API" do
 
   describe "projects" do
     before do
-      @project_containers = create_list :container, 5
-      @other_container = create :container
+      @project_containers = create_list :page, 5
+      @other_container = create :page
 
       @project_containers.each do |container|
         create :revision, container: container, project: project
@@ -69,7 +69,7 @@ describe "Containers API" do
       end
 
       it "should use the 'live' container when the container doesn't exist in the project scope" do
-        new_container = create :container_with_revision
+        new_container = create :container, :with_a_revision
         get "/projects/#{project.id}/containers/#{new_container.id}"
         expect(json["container"]["revisionId"]).to eq new_container.revision.id
       end
@@ -91,7 +91,8 @@ describe "Containers API" do
       {
         container: {
           name: "An existing container",
-          url: container.url
+          url: container.url,
+          type: "Ninetails::Page"
         }
       }
     end
