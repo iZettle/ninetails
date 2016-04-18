@@ -10,6 +10,14 @@ module Ninetails
       @section ||= "Section::#{type}".safe_constantize.new
     end
 
+    def located_in
+      section.class.position
+    end
+
+    def location_name
+      section.class.location_name
+    end
+
     def deserialize
       section.elements_instances = []
 

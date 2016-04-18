@@ -7,9 +7,30 @@ module Section
     has_element :button, Element::Button
     has_many_elements :messages, Element::Text
   end
+
+  class TestPlaceholderSection < Ninetails::Section
+    name_as_location :body
+  end
 end
 
 RSpec.describe Ninetails::ContentSection, type: :model do
+
+  let(:content_section) { Ninetails::ContentSection.new type: "TestSection" }
+  let(:content_placeholder_section) { Ninetails::ContentSection.new type: "TestPlaceholderSection" }
+
+  it "should initialize an instance of the section type" do
+    expect(content_section.section).to be_a Section::TestSection
+  end
+
+  it "should use the #section for getting the content_section's located_in attribute" do
+    expect(content_section.located_in).to eq :body
+    expect(content_section.location_name).to be nil
+  end
+
+  it "should use the #section for getting the content_section's location_name attribute" do
+    expect(content_placeholder_section.location_name).to eq :body
+    expect(content_placeholder_section.located_in).to be nil
+  end
 
   describe "deserializing a json blob" do
     let(:headline) { "Hello world!" }
