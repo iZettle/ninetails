@@ -12,20 +12,13 @@ module Ninetails
     end
 
     def show
-      if params[:id] =~ /^\d+$/
-        @container = Container.find params[:id]
-      else
-        @container = Container.find_by! url: params[:id]
-      end
+      @container = Container.find params[:id]
 
       if params[:revision_id].present?
         @container.revision = @container.revisions.find params[:revision_id]
       elsif @project.present?
         @container.load_revision_from_project @project
       end
-
-    rescue ActiveRecord::RecordNotFound
-      render json: {}, status: :not_found
     end
 
     def create
@@ -48,8 +41,6 @@ module Ninetails
 
     def find_project_scope
       @project = Project.find params[:project_id] if params[:project_id]
-    rescue ActiveRecord::RecordNotFound
-      render json: {}, status: :not_found
     end
 
   end

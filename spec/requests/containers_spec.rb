@@ -4,8 +4,7 @@ describe "Containers API" do
 
   let(:project) { create :project }
   let(:container) { create :page }
-  let(:container_url) { "/containers/#{CGI.escape(container.url)}" }
-  let(:container_url_from_id) { "/containers/#{container.id}" }
+  let(:container_url) { "/containers/#{container.id}" }
 
   describe "listing containers" do
     before do
@@ -130,15 +129,8 @@ describe "Containers API" do
 
   describe "when not specifying revision" do
     describe "when the container exists" do
-      it "should return the current revision of a container when using the url to fetch the container" do
+      it "should return the current revision of a container" do
         get container_url
-
-        expect(response).to be_success
-        expect(json["container"]["revisionId"]).to eq container.current_revision.id
-      end
-
-      it "should return the current revision of a container when using the id to fetch the container" do
-        get container_url_from_id
 
         expect(response).to be_success
         expect(json["container"]["revisionId"]).to eq container.current_revision.id
@@ -146,11 +138,6 @@ describe "Containers API" do
     end
 
     describe "when the container does not exist" do
-      it "should return a 404 if the url doesn't exist" do
-        get "/containers/nil"
-        expect(response).to be_not_found
-      end
-
       it "should return a 404 if the id doesn't exist" do
         get "/containers/0"
         expect(response).to be_not_found
@@ -175,7 +162,7 @@ describe "Containers API" do
         new_revision = create :revision
         container.revisions << new_revision
 
-        get "#{container_url_from_id}?revision_id=#{new_revision.id}"
+        get "#{container_url}?revision_id=#{new_revision.id}"
 
         expect(response).to be_success
         expect(json["container"]["revisionId"]).to eq new_revision.id
