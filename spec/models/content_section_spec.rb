@@ -148,4 +148,20 @@ RSpec.describe Ninetails::ContentSection, type: :model do
 
   end
 
+  describe "deserializing an empty section" do
+    let(:json) do
+      {
+        "name" => "",
+        "type" => "TestPlaceholderSection"
+      }
+    end
+
+    let(:section) { Ninetails::ContentSection.new(json) }
+
+    it "should create a section instance" do
+      section.deserialize
+      expect(section.section).to be_a Section::TestPlaceholderSection 
+    end
+  end
+
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160415122453) do
+ActiveRecord::Schema.define(version: 20160418091133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,9 +31,9 @@ ActiveRecord::Schema.define(version: 20160415122453) do
   create_table "ninetails_content_sections", force: :cascade do |t|
     t.string   "name"
     t.string   "type"
-    t.json     "elements"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.json     "elements",   default: {}
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.json     "tags"
   end
 
