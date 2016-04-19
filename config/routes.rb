@@ -1,14 +1,18 @@
 Ninetails::Engine.routes.draw do
+
+  concern :revisable do
+    resources :revisions, only: [:create, :show, :index]
+  end
+
   with_options defaults: { format: :json } do
     root 'containers#index'
 
     resources :projects, except: [:new, :edit] do
       post :publish, on: :member
-      resources :pages, only: [:show, :create, :index]
     end
 
-    resources :pages, only: [:show, :create, :index] do
-      resources :revisions, only: [:create, :show, :index]
+    scope "(/projects/:project_id)/:type", constraints: { type: /(pages|layouts)/ } do
+      resources :containers, only: [:show, :create, :index], concerns: :revisable, path: "/"
     end
 
     resources :sections, only: [:show, :index] do

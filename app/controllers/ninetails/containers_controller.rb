@@ -1,5 +1,5 @@
 module Ninetails
-  class PagesController < ApplicationController
+  class ContainersController < ApplicationController
 
     def index
       if @project.present?
@@ -7,14 +7,10 @@ module Ninetails
       else
         @containers = Page.all
       end
-
-      render "/ninetails/containers/index"
     end
 
     def show
       @container = Page.find_and_load_revision params, @project
-
-      render "/ninetails/containers/show"
     end
 
     def create
@@ -23,9 +19,9 @@ module Ninetails
       if @container.save
         @project.project_containers.create container: @container if @project.present?
 
-        render "/ninetails/containers/show", status: :created
+        render :show, status: :created
       else
-        render "/ninetails/containers/show", status: :bad_request
+        render :show, status: :bad_request
       end
     end
 
