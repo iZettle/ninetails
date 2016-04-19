@@ -1,8 +1,6 @@
 module Ninetails
   class ContainersController < ApplicationController
 
-    before_action :find_project_scope
-
     def index
       if @project.present?
         @containers = @project.containers
@@ -12,13 +10,7 @@ module Ninetails
     end
 
     def show
-      @container = Container.find params[:id]
-
-      if params[:revision_id].present?
-        @container.revision = @container.revisions.find params[:revision_id]
-      elsif @project.present?
-        @container.load_revision_from_project @project
-      end
+      @container = Container.find_and_load_revision params, @project
     end
 
     def create
@@ -37,10 +29,6 @@ module Ninetails
 
     def container_params
       params.require(:container).permit(:url, :name, :type)
-    end
-
-    def find_project_scope
-      @project = Project.find params[:project_id] if params[:project_id]
     end
 
   end

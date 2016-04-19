@@ -7,6 +7,17 @@ module Ninetails
 
     attr_writer :revision
 
+    def self.find_and_load_revision(params, project = nil)
+      if params[:id].to_s =~ /^\d+$/
+        container = find params[:id]
+      else
+        container = find_by_url! params[:id]
+      end
+
+      container.load_revision_directly_or_from_project params[:revision_id], project
+      container
+    end
+
     def revision
       @revision || current_revision
     end
@@ -25,9 +36,13 @@ module Ninetails
       self.revision = revision
     end
 
-    def load_revision_from_project(project)
-      project_container = project_containers.where(project: project, container: self).first
-      self.revision = project_container.revision if project_container.present?
+    def load_revision_directly_or_from_project(revision_id, project)
+      if revision_id.present?
+        self.revision = revisions.find revision_id
+      elsif project.present?
+        project_container = project_containers.where(project: project, container: self).first
+        self.revision = project_container.revision if project_container.present?
+      end
     end
 
   end
