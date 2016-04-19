@@ -5,6 +5,9 @@ module Ninetails
     has_many :project_containers
     has_one :current_revision, class_name: "Revision"
 
+    scope :pages, -> { where type: 'Ninetails::Page' }
+    scope :layouts, -> { where type: 'Ninetails::Layout' }
+
     attr_writer :revision
 
     def self.find_and_load_revision(params, project = nil)

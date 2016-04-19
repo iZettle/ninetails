@@ -19,7 +19,7 @@ module Ninetails
     private
 
     def find_container
-      @container = Container.find params[:container_id]
+      @container = Container.find params[:page_id]
     end
 
     def revision_params

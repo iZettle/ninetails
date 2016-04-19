@@ -4,6 +4,8 @@ module Ninetails
     has_many :project_containers
     has_many :containers, through: :project_containers
 
+    delegate :pages, :layouts, to: :containers
+
     validates :name, presence: true
 
     def publish!

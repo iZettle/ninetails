@@ -1,6 +1,7 @@
 json.container do
-  json.call container, :id, :name, :type
+  json.call container, :id, :name
   json.revision_id container.try(:revision).try(:id)
+  json.type container.type.demodulize
 
   if container.is_a? Ninetails::Page
     json.url container.url
