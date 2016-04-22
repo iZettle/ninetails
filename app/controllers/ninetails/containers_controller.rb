@@ -3,18 +3,18 @@ module Ninetails
 
     def index
       if @project.present?
-        @containers = @project.pages
+        @containers = @project.public_send params[:type]
       else
-        @containers = Page.all
+        @containers = container_class.all
       end
     end
 
     def show
-      @container = Page.find_and_load_revision params, @project
+      @container = container_class.find_and_load_revision params, @project
     end
 
     def create
-      @container = Page.new container_params
+      @container = container_class.new container_params
 
       if @container.save
         @project.project_containers.create container: @container if @project.present?
@@ -29,6 +29,14 @@ module Ninetails
 
     def container_params
       params.require(:container).permit(:url, :name, :type)
+    end
+
+    def container_class
+      if params[:type] == "layouts"
+        Layout
+      else
+        Page
+      end
     end
 
   end
