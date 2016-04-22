@@ -1,6 +1,5 @@
 module Ninetails
   class Section
-    ALLOWED_POSITIONS = [:head, :body]
 
     attr_accessor :elements_instances
 
@@ -13,15 +12,19 @@ module Ninetails
     end
 
     def self.located_in(position)
-      unless ALLOWED_POSITIONS.include?(position)
-        fail SectionConfigurationError, "position must be in #{ALLOWED_POSITIONS}"
-      end
-
       @position = position
     end
 
     def self.position
       @position
+    end
+
+    def self.name_as_location(location_name)
+      @location_name = location_name
+    end
+
+    def self.location_name
+      @location_name
     end
 
     def self.define_element(name, type, count)
@@ -49,14 +52,9 @@ module Ninetails
       {
         name: "",
         type: self.class.name.demodulize,
-        tags: tags,
+        located_in: self.class.position,
+        location_name: self.class.location_name,
         elements: serialize_elements
-      }
-    end
-
-    def tags
-      {
-        position: self.class.position
       }
     end
 

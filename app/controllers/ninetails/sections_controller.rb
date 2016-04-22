@@ -14,7 +14,7 @@ module Ninetails
     end
 
     def validate
-      @section = Ninetails::PageSection.new section_params
+      @section = Ninetails::ContentSection.new section_params
 
       unless @section.valid?
         render status: :bad_request

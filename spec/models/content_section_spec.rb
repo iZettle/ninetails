@@ -7,9 +7,30 @@ module Section
     has_element :button, Element::Button
     has_many_elements :messages, Element::Text
   end
+
+  class TestPlaceholderSection < Ninetails::Section
+    name_as_location :body
+  end
 end
 
-RSpec.describe Ninetails::PageSection, type: :model do
+RSpec.describe Ninetails::ContentSection, type: :model do
+
+  let(:content_section) { Ninetails::ContentSection.new type: "TestSection" }
+  let(:content_placeholder_section) { Ninetails::ContentSection.new type: "TestPlaceholderSection" }
+
+  it "should initialize an instance of the section type" do
+    expect(content_section.section).to be_a Section::TestSection
+  end
+
+  it "should use the #section for getting the content_section's located_in attribute" do
+    expect(content_section.located_in).to eq :body
+    expect(content_section.location_name).to be nil
+  end
+
+  it "should use the #section for getting the content_section's location_name attribute" do
+    expect(content_placeholder_section.location_name).to eq :body
+    expect(content_placeholder_section.located_in).to be nil
+  end
 
   describe "deserializing a json blob" do
     let(:headline) { "Hello world!" }
@@ -20,7 +41,6 @@ RSpec.describe Ninetails::PageSection, type: :model do
       {
         "name" => "",
         "type" => "TestSection",
-        "tags" => { "position" => "body" },
         "elements" => {
           "headline" => {
             "type" => "Text",
@@ -52,7 +72,6 @@ RSpec.describe Ninetails::PageSection, type: :model do
       {
         "name" => "",
         "type" => "TestSection",
-        "tags" => { "position" => "body" },
         "elements" => {
           "unknown" => {
             "type" => "ThisDoesntExist",
@@ -66,8 +85,8 @@ RSpec.describe Ninetails::PageSection, type: :model do
       }
     end
 
-    let(:section) { Ninetails::PageSection.new(json) }
-    let(:section_with_missing_element) { Ninetails::PageSection.new(json_with_missing_element) }
+    let(:section) { Ninetails::ContentSection.new(json) }
+    let(:section_with_missing_element) { Ninetails::ContentSection.new(json_with_missing_element) }
 
     describe "when all elements exist" do
       it "should create a Section instance" do
@@ -127,6 +146,22 @@ RSpec.describe Ninetails::PageSection, type: :model do
       end
     end
 
+  end
+
+  describe "deserializing an empty section" do
+    let(:json) do
+      {
+        "name" => "",
+        "type" => "TestPlaceholderSection"
+      }
+    end
+
+    let(:section) { Ninetails::ContentSection.new(json) }
+
+    it "should create a section instance" do
+      section.deserialize
+      expect(section.section).to be_a Section::TestPlaceholderSection 
+    end
   end
 
 end

@@ -1,13 +1,21 @@
 module Ninetails
-  class PageSection < ActiveRecord::Base
+  class ContentSection < ActiveRecord::Base
     self.inheritance_column = nil
-    has_many :page_revision_sections
-    has_many :page_revisions, through: :page_revision_sections
+    has_many :revision_sections
+    has_many :revisions, through: :revision_sections
 
     validate :validate_elements
 
     def section
       @section ||= "Section::#{type}".safe_constantize.new
+    end
+
+    def located_in
+      section.class.position
+    end
+
+    def location_name
+      section.class.location_name
     end
 
     def deserialize

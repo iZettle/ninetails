@@ -5,15 +5,15 @@ describe Ninetails::Project do
   let(:project) { create :project }
 
   before do
-    create_list :project_page, 3, project: project
+    create_list :project_container, 3, project: project
   end
 
-  it "should have many project pages" do
-    expect(project.project_pages.count).to eq 3
+  it "should have many project containers" do
+    expect(project.project_containers.count).to eq 3
   end
 
-  it "should have many pages through project pages" do
-    expect(project.pages.count).to eq 3
+  it "should have many containers through project containers" do
+    expect(project.containers.count).to eq 3
   end
 
   it "should require a name" do
@@ -27,9 +27,9 @@ describe Ninetails::Project do
       expect(project.published?).to be false
     end
 
-    it "should call #set_current_revision on each page with the correct revision" do
-      project.project_pages.each do |project_page|
-        expect(project_page.page).to receive(:set_current_revision).with(project_page.page_revision)
+    it "should call #set_current_revision on each container with the correct revision" do
+      project.project_containers.each do |project_container|
+        expect(project_container.container).to receive(:set_current_revision).with(project_container.revision)
       end
 
       project.publish!

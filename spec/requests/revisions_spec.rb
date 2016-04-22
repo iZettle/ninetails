@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe "Page Revisions API" do
+describe "Revisions API" do
 
-  let(:page) { create :page_with_revisions, revisions_count: 5 }
+  let(:page) { create :page, :with_revisions, revisions_count: 5 }
 
   describe "listing revisions" do
     describe "with a valid page_id" do
@@ -25,7 +25,7 @@ describe "Page Revisions API" do
   describe "creating a revision" do
     let(:valid_revision_params) do
       {
-        "page_revision": {
+        "revision": {
           "message": "",
           "sections":[
             document_head_section
@@ -36,7 +36,7 @@ describe "Page Revisions API" do
 
     let(:invalid_revision_params) do
       {
-        "page_revision": {
+        "revision": {
           "message": "",
           "sections":[
             document_head_section(title: "", description: "")
@@ -48,7 +48,7 @@ describe "Page Revisions API" do
     let(:project) { create :project }
     let(:valid_revision_params_with_project) do
       {
-        "page_revision": {
+        "revision": {
           "message": "",
           "sections":[
             document_head_section
@@ -65,33 +65,33 @@ describe "Page Revisions API" do
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
-        expect(Ninetails::PageRevision.find(json["page"]["revisionId"]).project).to eq project
+        expect(Ninetails::Revision.find(json["container"]["revisionId"]).project).to eq project
       end
 
-      it "should create a new ProjectPage entry if one doesn't exist for this page in the project" do
+      it "should create a new Project Revision entry if one doesn't exist for this page in the project" do
         expect {
           post "/pages/#{page.id}/revisions", valid_revision_params_with_project
-        }.to change { Ninetails::ProjectPage.count }.by(1)
+        }.to change { Ninetails::ProjectContainer.count }.by(1)
 
-        revision = Ninetails::PageRevision.find json["page"]["revisionId"]
-        project_page = Ninetails::ProjectPage.last
-        expect(project_page.page).to eq page
-        expect(project_page.project).to eq project
-        expect(project_page.page_revision).to eq revision
+        revision = Ninetails::Revision.find json["container"]["revisionId"]
+        project_container = Ninetails::ProjectContainer.last
+        expect(project_container.container).to eq page
+        expect(project_container.project).to eq project
+        expect(project_container.revision).to eq revision
       end
 
-      it "should modify an existing ProjectPage entry if one exists for this page in the project" do
-        project_page = create :project_page, page: page, project: project
+      it "should modify an existing ProjectContainer entry if one exists for this page in the project" do
+        project_container = create :project_container, container: page, project: project
 
         expect {
           post "/pages/#{page.id}/revisions", valid_revision_params_with_project
-        }.to_not change { Ninetails::ProjectPage.count }
+        }.to_not change { Ninetails::ProjectContainer.count }
 
-        revision = Ninetails::PageRevision.find json["page"]["revisionId"]
-        project_page = Ninetails::ProjectPage.last
-        expect(project_page.page).to eq page
-        expect(project_page.project).to eq project
-        expect(project_page.page_revision).to eq revision
+        revision = Ninetails::Revision.find json["container"]["revisionId"]
+        project_container = Ninetails::ProjectContainer.last
+        expect(project_container.container).to eq page
+        expect(project_container.project).to eq project
+        expect(project_container.revision).to eq revision
       end
     end
 
@@ -102,7 +102,7 @@ describe "Page Revisions API" do
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
-        expect(json["page"]["revisionId"]).to_not be_nil
+        expect(json["container"]["revisionId"]).to_not be_nil
       end
 
       it "should have created the correct number of sections" do
@@ -121,7 +121,7 @@ describe "Page Revisions API" do
       it "should show error messages in the revision params" do
         post "/pages/#{page.id}/revisions", invalid_revision_params
 
-        errors = json["page"]["sections"][0]["elements"]["title"]["content"]["errors"]
+        errors = json["container"]["sections"][0]["elements"]["title"]["content"]["errors"]
         expect(errors).to eq({ "text"=>["can't be blank"] })
       end
     end
@@ -131,15 +131,12 @@ describe "Page Revisions API" do
 
     let(:camelcased_revision) do
       {
-        page_revision: {
+        revision: {
           message: "",
           sections: [
             {
               "name": "",
               "type": "MinimalBillboard",
-              "tags": {
-                "position": "body"
-              },
               "elements": {
                 "backgroundImage": {
                   "type": "Figure",
@@ -161,7 +158,7 @@ describe "Page Revisions API" do
       }.to change { page.revisions.count }.by(1)
 
       expect(response).to be_success
-      expect(json["page"]["revisionId"]).to_not be_nil
+      expect(json["container"]["revisionId"]).to_not be_nil
     end
 
   end
