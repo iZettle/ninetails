@@ -41,7 +41,7 @@ module Ninetails
     end
 
     def self.elements
-      @elements
+      @elements || []
     end
 
     def self.find_element(name)

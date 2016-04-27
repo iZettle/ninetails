@@ -11,6 +11,10 @@ class ExamplePlaceholderSection < Ninetails::Section
   has_element :foo, Element::Text
 end
 
+class ExampleSectionWithNoElements < Ninetails::Section
+  name_as_location :example
+end
+
 RSpec.describe Ninetails::Section do
 
   describe "creating a section from a file name" do
@@ -94,6 +98,16 @@ RSpec.describe Ninetails::Section do
 
     it "should have an elements key which contains the section's elements" do
       expect(structure[:elements]).to eq ExampleSection.new.serialize_elements
+    end
+
+    it "should serialize a section which has no elements" do
+      expect {
+        ExampleSectionWithNoElements.new.serialize
+      }.not_to raise_error
+    end
+
+    it "should still have an elements key if the section has no elements" do
+      expect(ExampleSectionWithNoElements.new.serialize[:elements]).to eq Hash.new
     end
   end
 
