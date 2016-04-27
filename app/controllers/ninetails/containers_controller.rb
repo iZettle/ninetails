@@ -28,7 +28,7 @@ module Ninetails
     private
 
     def container_params
-      params.require(:container).permit(:url, :name, :type)
+      params.require(:container).permit(:url, :name)
     end
 
     def container_class
