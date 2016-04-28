@@ -30,7 +30,7 @@ module Ninetails
       self.revision = revisions.build message: params[:message], project_id: params[:project_id]
 
       params[:sections].each do |section_json|
-        revision.sections.build section_json.except(:id)
+        revision.sections.build section_json.only(:name, :type, :elements)
       end
     end
 

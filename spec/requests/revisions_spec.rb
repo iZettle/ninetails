@@ -34,6 +34,17 @@ describe "Revisions API" do
       }
     end
 
+    let(:valid_revision_params_with_extra_keys) do
+      {
+        "revision": {
+          "message": "",
+          "sections":[
+            document_head_section.merge({ "located_in" => "body", "location_name" => "foobar" })
+          ]
+        }
+      }
+    end
+
     let(:invalid_revision_params) do
       {
         "revision": {
@@ -123,6 +134,14 @@ describe "Revisions API" do
 
         errors = json["container"]["sections"][0]["elements"]["title"]["content"]["errors"]
         expect(errors).to eq({ "text"=>["can't be blank"] })
+      end
+    end
+
+    describe "when providing extra keys in the json" do
+      it "should not blow up" do
+        expect {
+          post "/pages/#{page.id}/revisions", valid_revision_params_with_extra_keys
+        }.not_to raise_error
       end
     end
   end
