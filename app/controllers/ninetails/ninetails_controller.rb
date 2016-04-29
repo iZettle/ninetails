@@ -1,5 +1,5 @@
 module Ninetails
-  class ApplicationController < ActionController::API
+  class NinetailsController < ActionController::API
     include ActionController::ImplicitRender
 
     rescue_from ActiveRecord::RecordNotFound, with: :not_found

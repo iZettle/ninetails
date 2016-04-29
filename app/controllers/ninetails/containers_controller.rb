@@ -1,5 +1,5 @@
 module Ninetails
-  class ContainersController < ApplicationController
+  class ContainersController < NinetailsController
 
     def index
       if project.present?

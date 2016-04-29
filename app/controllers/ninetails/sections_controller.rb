@@ -1,5 +1,5 @@
 module Ninetails
-  class SectionsController < ApplicationController
+  class SectionsController < NinetailsController
 
     def index
       sections = Dir.glob(Rails.root.join("app", "components", "section", "*.rb")).collect do |filename|

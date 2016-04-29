@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module Ninetails
-  class TestController < ApplicationController
+  class TestController < NinetailsController
     def index
       render json: {
         foo_bar: "baz_box",

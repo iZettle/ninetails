@@ -1,5 +1,5 @@
 module Ninetails
-  class RevisionsController < ApplicationController
+  class RevisionsController < NinetailsController
 
     before_action :find_container
 

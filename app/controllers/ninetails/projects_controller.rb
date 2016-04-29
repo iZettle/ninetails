@@ -1,5 +1,5 @@
 module Ninetails
-  class ProjectsController < ApplicationController
+  class ProjectsController < NinetailsController
 
     before_action :find_project, only: [:update, :destroy, :publish]
 
