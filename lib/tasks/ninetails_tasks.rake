@@ -6,7 +6,7 @@ namespace :ninetails do
   end
 
   task seed: :environment do
-    Ninetails::Seeds.run
+    Ninetails::Seeds::Generator.run
   end
 
 end

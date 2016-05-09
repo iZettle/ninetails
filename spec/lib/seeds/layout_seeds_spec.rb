@@ -1,21 +1,17 @@
 require 'rails_helper'
 
-describe Ninetails::Seeds do
-
-  class Section::BodySection < Ninetails::Section
-    name_as_location :body
-  end
+describe Ninetails::Seeds::Generator, "layouts" do
 
   let(:empty_layout_seed) do
-    Ninetails::Seeds.generate_layout :main_layout do
+    Ninetails::Seeds::Generator.generate_layout :main_layout do
       name "Main layout"
     end
   end
 
   let(:layout_seed_with_sections) do
-    Ninetails::Seeds.generate_layout :with_sections do
+    Ninetails::Seeds::Generator.generate_layout :with_sections do
       name "Another layout"
-      add_content_section Section::BodySection
+      content_section Section::EmptyBody
     end
   end
 
@@ -49,7 +45,7 @@ describe Ninetails::Seeds do
     end
 
     it "should create the correct type of section" do
-      expect(layout_seed_with_sections.current_revision.sections.first.type).to eq "BodySection"
+      expect(layout_seed_with_sections.current_revision.sections.first.type).to eq "EmptyBody"
     end
   end
 

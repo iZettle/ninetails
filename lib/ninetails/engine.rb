@@ -11,7 +11,8 @@ require "virtus"
 
 require "ninetails/config"
 require "ninetails/key_conversion"
-require "ninetails/seeds"
+require "ninetails/seeds/section_builder"
+require "ninetails/seeds/generator"
 
 begin
   require "pry"
