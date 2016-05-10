@@ -4,6 +4,10 @@ module Ninetails
 
       attr_accessor :container_type
 
+      def self.layouts
+        @layouts ||= {}
+      end
+
       # Run all seeds, but call layouts first so they can be used in pages
       def self.run
         Dir.glob(Rails.root.join("seeds", "layouts", "**", "*.rb")).each do |file|
@@ -16,7 +20,9 @@ module Ninetails
       end
 
       def self.generate_layout(name, &block)
-        generate_container name, Ninetails::Layout, &block
+        generate_container(name, Ninetails::Layout, &block).tap do |layout|
+          layouts[name] = layout
+        end
       end
 
       def self.generate_page(&block)
@@ -26,7 +32,7 @@ module Ninetails
       def self.generate_container(name, container_type, &block)
         c = new container_type: container_type
         c.container.create_current_revision
-        c.instance_eval &block
+        block.call c
         c.container.save!
         c.container
       end
@@ -41,6 +47,14 @@ module Ninetails
 
       def content_section(section_class, &block)
         SectionBuilder.build container.current_revision, section_class, &block
+      end
+
+      def layout(layout)
+        if layout.is_a? Symbol
+          container.layout = self.class.layouts[layout]
+        else
+          container.layout = Ninetails::Layout.find layout
+        end
       end
 
       def method_missing(name, *args, &block)

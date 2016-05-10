@@ -11,7 +11,7 @@ module Ninetails
 
       def initialize(section, &block)
         @section = section
-        instance_eval &block if block_given?
+        block.call self if block_given?
         section.save!
       end
 
