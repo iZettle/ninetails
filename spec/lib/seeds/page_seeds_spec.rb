@@ -20,7 +20,22 @@ describe Ninetails::Seeds::Generator, "pages" do
     end
   end
 
+  let(:page_with_sections_with_array) do
+    Ninetails::Seeds::Generator.generate_page do |page|
+      page.name "A page with a complex section"
+      page.url "/foobar"
+
+      page.content_section Section::MinimalPoints do |section|
+        section.icons [
+          { image: { src: "/one.jpg", alt: "One" } },
+          { image: { src: "/two.jpg", alt: "Two" } }
+        ]
+      end
+    end
+  end
+
   let(:section) { page_with_sections.current_revision.sections.first }
+  let(:section_array) { page_with_sections_with_array.current_revision.sections.first }
 
   describe "Creating a page with no sections" do
     it "should create a page container" do
@@ -39,7 +54,7 @@ describe Ninetails::Seeds::Generator, "pages" do
   end
 
   describe "Creating a page with sections" do
-    it "should create a layout container" do
+    it "should create a page container" do
       expect {
         page_with_sections
       }.to change{ Ninetails::Page.count }.by(1)
@@ -58,6 +73,33 @@ describe Ninetails::Seeds::Generator, "pages" do
     it "should set the properties in the section" do
       expect(section.elements["background_image"]["image"]["src"]).to eq "/foo.jpg"
       expect(section.elements["background_image"]["image"]["alt"]).to eq "Bar"
+    end
+  end
+
+  describe "Creating a page with complex sections" do
+    it "should create a page container" do
+      expect {
+        page_with_sections_with_array
+      }.to change{ Ninetails::Page.count }.by(1)
+    end
+
+    it "should create a section" do
+      expect {
+        page_with_sections_with_array
+      }.to change{ Ninetails::ContentSection.count }.by(1)
+    end
+
+    it "should build 2 icon elements in the section" do
+      expect(section_array.elements["icons"].length).to eq 2
+    end
+
+    it "should create the correct type of section" do
+      expect(section_array.type).to eq "MinimalPoints"
+    end
+
+    it "should create the correct elements" do
+      expect(section_array.elements["icons"][0]["image"]["src"]).to eq "/one.jpg"
+      expect(section_array.elements["icons"][1]["image"]["src"]).to eq "/two.jpg"
     end
   end
 
