@@ -46,7 +46,7 @@ module Ninetails
       end
 
       def content_section(section_class, &block)
-        SectionBuilder.build container.current_revision, section_class, &block
+        SectionBuilder.new(container.current_revision, section_class).build &block
       end
 
       def layout(layout)
