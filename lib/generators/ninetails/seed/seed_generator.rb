@@ -1,12 +1,14 @@
 class Ninetails::SeedGenerator < Rails::Generators::Base
   source_root File.expand_path('../templates', __FILE__)
   argument :type, type: :string
-  argument :url, type: :string
-  argument :sections, type: :array, required: false
+  argument :name, type: :string, require: false
+  argument :sections, type: :array, required: false, default: []
 
   def create_seed
     if type == "Page"
-      template "page_seed.rb", "seeds/pages/#{url}.rb"
+      template "page_seed.rb", "seeds/pages/#{name}.rb"
+    else
+      template "layout_seed.rb", "seeds/layouts/#{name}.rb"
     end
   end
 
@@ -27,8 +29,9 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
   EOF
   end
 
-  def section_elements(section_class)
-    section_class = "Section::#{section_class}".safe_constantize
+  def section_elements(section_class_name)
+    section_class = "Section::#{section_class_name}".safe_constantize
+    puts "Unknown section '#{section_class_name}'!" unless section_class.present?
 
     generated_elements = []
 
