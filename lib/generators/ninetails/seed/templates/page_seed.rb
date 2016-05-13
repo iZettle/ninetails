@@ -1,7 +1,7 @@
 Ninetails::Seeds::Generator.generate_page do |page|
-  name "Name this page"
-  url "<%= name %>"
-  # layout :layout_name
+  page.name "Name this page"
+  page.url "<%= name %>"
+  # page.layout :layout_name
 
 <%- content_sections("page").each do |section| -%>
 <%= section -%>

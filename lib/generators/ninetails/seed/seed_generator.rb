@@ -33,14 +33,14 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
 
   def print_empty_section(prefix, section_class)
   <<-EOF
-  #{prefix}.content_section Section::#{section_class.name}
+  #{prefix}.content_section #{section_class.name}
 
   EOF
   end
 
   def print_section(prefix, section_class)
   <<-EOF
-  #{prefix}.content_section Section::#{section_class.name} do |section|
+  #{prefix}.content_section #{section_class.name} do |section|
 #{section_elements(section_class)}
   end
 
