@@ -6,7 +6,7 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
 
   def create_seed
     if type == "Page"
-      template "page_seed.rb", "seeds/pages/#{name}.rb"
+      template "page_seed.rb", "seeds/pages/#{name == '/' ? 'index' : name}.rb"
     else
       template "layout_seed.rb", "seeds/layouts/#{name}.rb"
     end
@@ -20,19 +20,34 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
     end
   end
 
-  def section_template(section_class, prefix)
+  def section_template(section_class_name, prefix)
+    section_class = "Section::#{section_class_name}".safe_constantize
+    puts "Unknown section '#{section_class_name}'!" unless section_class.present?
+
+    if section_class.elements.empty?
+      print_empty_section prefix, section_class
+    else
+      print_section prefix, section_class
+    end
+  end
+
+  def print_empty_section(prefix, section_class)
   <<-EOF
-  #{prefix}.content_section Section::#{section_class} do |section|
+  #{prefix}.content_section Section::#{section_class.name}
+
+  EOF
+  end
+
+  def print_section(prefix, section_class)
+  <<-EOF
+  #{prefix}.content_section Section::#{section_class.name} do |section|
 #{section_elements(section_class)}
   end
 
   EOF
   end
 
-  def section_elements(section_class_name)
-    section_class = "Section::#{section_class_name}".safe_constantize
-    puts "Unknown section '#{section_class_name}'!" unless section_class.present?
-
+  def section_elements(section_class)
     generated_elements = []
 
     section_class.elements.collect do |element|
@@ -55,7 +70,7 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
   def print_props(props)
     props.collect do |key, value|
       %{#{key}: { #{print_element(value)} }}
-    end.join("\n")
+    end.join(",\n      ")
   end
 
   def print_element(element)
