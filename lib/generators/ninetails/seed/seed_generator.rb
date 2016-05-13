@@ -19,33 +19,34 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
   end
 
   def section_template(section_class, prefix)
-  <<-RUBY
+  <<-EOF
   #{prefix}.content_section Section::#{section_class} do |section|
-    #{section_elements(section_class)}
+#{section_elements(section_class)}
   end
-  RUBY
+
+  EOF
   end
 
   def section_elements(section_class)
-    section = "Section::#{section_class}".safe_constantize.new
+    section_class = "Section::#{section_class}".safe_constantize
 
-    elements = section.serialize[:elements].collect do |element_name, element|
-      if element.is_a? Array
-        binding.pry
-      else
-        props = element.except(:type, :reference)
+    generated_elements = []
+
+    section_class.elements.collect do |element|
+      element.properties_structure.except(:type, :reference).tap do |structure|
+        structure.each do |property, values|
+          structure[property] = values.except :reference
+        end
+
+        if element.count == :multiple
+          generated_elements << "    section.#{element.name} [{ #{print_props(structure)} }]"
+        else
+          generated_elements << "    section.#{element.name} #{print_props(structure)}"
+        end
       end
-
-      props.each do |prop_name, values|
-        props[prop_name] = values.except(:reference)
-      end
-
-      <<-RUBY
-section.#{element_name} #{print_props(props)}
-      RUBY
     end
 
-    elements.join("\n")
+    generated_elements.join "\n"
   end
 
   def print_props(props)

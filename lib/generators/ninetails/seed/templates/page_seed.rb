@@ -5,6 +5,5 @@ Ninetails::Seeds::Generator.generate_page do |page|
 
 <%- content_sections("page").each do |section| -%>
 <%= section -%>
-<%- end %>
-
+<%- end -%>
 end
