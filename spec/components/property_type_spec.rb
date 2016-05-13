@@ -30,6 +30,19 @@ describe Ninetails::PropertyType do
       string_property.serialized_values = "123"
       expect(string_property.serialize).to eq "123"
     end
+
+    describe "when the serialized_values is a hash" do
+      it "should not modify a reference if it exists" do
+        text_property.serialized_values = { text: "bar", reference: "123" }
+        expect(text_property.serialize).to eq({ text: "bar", reference: "123" })
+      end
+
+      it "should generate a reference if the hash doesn't have one" do
+        allow(SecureRandom).to receive(:uuid) { "ABC" }
+        text_property.serialized_values = { text: "bar" }
+        expect(text_property.serialize).to eq({ text: "bar", reference: "ABC" })
+      end
+    end
   end
 
   describe "property" do
@@ -57,7 +70,7 @@ describe Ninetails::PropertyType do
 
     it "should be possible to set with a hash if the property conforms to the Ninetails::PropertyStore" do
       text_property.serialized_values = { text: "hello" }
-      expect(text_property.serialized_values).to eq({ text: "hello" })
+      expect(text_property.serialized_values[:text]).to eq "hello"
     end
 
     it "should use the serialized_values to reinitialize the property" do

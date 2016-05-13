@@ -8,8 +8,12 @@ module Ninetails
       @property = type.new
     end
 
-    def serialized_values=(hash)
-      @serialized_values = hash
+    def serialized_values=(values)
+      if values.is_a?(Hash) && !values.has_key?(:reference)
+        values[:reference] = SecureRandom.uuid
+      end
+
+      @serialized_values = values
       @property = type.new serialized_values
     end
 
