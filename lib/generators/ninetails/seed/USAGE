@@ -1,8 +1,12 @@
 Description:
-    Explain the generator
+  Generates seed files to make it simpler to create Ninetails Pages and Layouts.
 
 Example:
-    rails generate page Thing
+  rails generate Page /gb/card-readers
 
-    This will create:
-        what/will/it/create
+  This will create:
+    seeds/pages/gb/card-readers.rb
+
+  You can also pass an array of Sections which you want to include in the seed. For example, if you've defined Billboard and SellingPoints sections, you could run:
+
+  rails generate Page /gb/card-readers Billboard SellingPoints
