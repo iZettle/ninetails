@@ -34,6 +34,7 @@ module Ninetails
         c.container.create_current_revision
         block.call c
         c.container.save!
+        c.container.current_revision.update_attributes container_id: c.container.id
         c.container
       end
 
