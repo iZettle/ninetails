@@ -6,12 +6,13 @@ module Ninetails
       def initialize(revision, section_class)
         @revision = revision
         @section_class = section_class
-        @content_section = revision.sections.new type: section_class.to_s.demodulize
+        @content_section = Ninetails::ContentSection.new type: section_class.to_s.demodulize
       end
 
       def build(&block)
         block.call self if block_given?
         content_section.save!
+        revision.sections << content_section
       end
 
       def method_missing(method, *args, &block)
