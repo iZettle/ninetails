@@ -5,6 +5,7 @@ describe Ninetails::Seeds::Generator, "pages" do
   let(:empty_page) do
     Ninetails::Seeds::Generator.generate_page do |page|
       page.name "An empty page"
+      page.locale "en_US"
       page.url "/empty"
     end
   end
@@ -12,6 +13,7 @@ describe Ninetails::Seeds::Generator, "pages" do
   let(:page_with_sections) do
     Ninetails::Seeds::Generator.generate_page do |page|
       page.name "Another page"
+      page.locale "en_US"
       page.url "/another"
 
       page.content_section Section::MinimalBillboard do |section|
@@ -23,6 +25,7 @@ describe Ninetails::Seeds::Generator, "pages" do
   let(:page_with_sections_with_array) do
     Ninetails::Seeds::Generator.generate_page do |page|
       page.name "A page with a complex section"
+      page.locale "en_US"
       page.url "/foobar"
 
       page.content_section Section::MinimalPoints do |section|
@@ -107,6 +110,7 @@ describe Ninetails::Seeds::Generator, "pages" do
     let!(:layout_seed) do
       Ninetails::Seeds::Generator.generate_layout :test_layout do |layout|
         layout.name "Test Layout"
+        layout.locale "en_US"
         layout.content_section Section::EmptyBody
       end
     end
@@ -115,6 +119,7 @@ describe Ninetails::Seeds::Generator, "pages" do
       Ninetails::Seeds::Generator.generate_page do |page|
         page.name "A page with layout"
         page.url "/has-layout"
+        page.locale "en_US"
         page.layout :test_layout
       end
     end
@@ -123,6 +128,7 @@ describe Ninetails::Seeds::Generator, "pages" do
       Ninetails::Seeds::Generator.generate_page do |page|
         page.name "Another page"
         page.url "/has-layout-id"
+        page.locale "en_US"
         page.layout layout_seed.id
       end
     end

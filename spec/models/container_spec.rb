@@ -2,6 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Ninetails::Container, type: :model do
 
+  it { should have_many(:revisions) }
+  it { should have_many(:project_containers) }
+  it { should have_one(:current_revision) }
+
+  it { should validate_presence_of(:locale) }
+
   describe ".find_and_load_revision" do
     before do
       @page = create :page, :with_revisions

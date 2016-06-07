@@ -162,7 +162,8 @@ describe "Pages API" do
         {
           container: {
             name: "A new container",
-            url: "/foobar"
+            url: "/foobar",
+            locale: "en_US"
           }
         }
       end
@@ -171,7 +172,8 @@ describe "Pages API" do
         {
           container: {
             name: "An existing container",
-            url: @page.url
+            url: @page.url,
+            locale: "en_US"
           }
         }
       end

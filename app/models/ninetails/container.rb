@@ -10,6 +10,8 @@ module Ninetails
 
     attr_writer :revision
 
+    validates :locale, presence: true
+
     def self.find_and_load_revision(params, project = nil)
       if params[:id].to_s =~ /^\d+$/
         container = find params[:id]
