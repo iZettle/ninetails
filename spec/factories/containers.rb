@@ -6,6 +6,7 @@ FactoryGirl.define do
 
   factory :container, class: Ninetails::Container do
     association :current_revision, factory: :revision
+    locale "en_US"
 
     trait :with_revisions do
       transient do

@@ -26,11 +26,12 @@ describe "Pages API" do
         expect(json["containers"].size).to eq container_class.count
       end
 
-      it "should include the id and url for each container" do
+      it "should include the id, url and locale for each container" do
         get url
 
         json["containers"].each do |container|
           expect(container).to have_key "id"
+          expect(container).to have_key "locale"
 
           if container_type == :page
             expect(container).to have_key "url"
@@ -162,7 +163,8 @@ describe "Pages API" do
         {
           container: {
             name: "A new container",
-            url: "/foobar"
+            url: "/foobar",
+            locale: "en_US"
           }
         }
       end
@@ -171,7 +173,17 @@ describe "Pages API" do
         {
           container: {
             name: "An existing container",
-            url: @page.url
+            url: @page.url,
+            locale: "en_US"
+          }
+        }
+      end
+
+      let(:page_with_no_locale_params) do
+        {
+          container: {
+            name: "A container",
+            url: "/no-locale"
           }
         }
       end
@@ -189,6 +201,13 @@ describe "Pages API" do
           expect(response).to_not be_success
           expect(json["container"]["errors"]["url"]).not_to be_empty
         end
+      end
+
+      it "should require a locale" do
+        post url, page_with_no_locale_params
+
+        expect(response).to_not be_success
+        expect(json["container"]["errors"]["locale"]).not_to be_empty
       end
 
       it "should have a blank revision id" do
@@ -223,6 +242,13 @@ describe "Pages API" do
 
           expect(response).to be_success
           expect(json["container"]["revisionId"]).to eq container.current_revision.id
+        end
+
+        it "should include the container locale" do
+          get url
+
+          expect(response).to be_success
+          expect(json["container"]["locale"]).to eq container.locale
         end
       end
 

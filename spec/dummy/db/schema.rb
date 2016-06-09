@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160418091133) do
+ActiveRecord::Schema.define(version: 20160607135025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20160418091133) do
     t.datetime "updated_at",                                      null: false
     t.string   "type",                default: "Ninetails::Page"
     t.integer  "layout_id"
+    t.string   "locale"
   end
 
   add_index "ninetails_containers", ["current_revision_id"], name: "ninetails_containers_on_current_revision_id", using: :btree
