@@ -178,6 +178,15 @@ describe "Pages API" do
         }
       end
 
+      let(:page_with_no_locale_params) do
+        {
+          container: {
+            name: "A container",
+            url: "/no-locale"
+          }
+        }
+      end
+
       it "should save the container if it is valid" do
         expect {
           post url, valid_container_params
@@ -191,6 +200,13 @@ describe "Pages API" do
           expect(response).to_not be_success
           expect(json["container"]["errors"]["url"]).not_to be_empty
         end
+      end
+
+      it "should require a locale" do
+        post url, page_with_no_locale_params
+
+        expect(response).to_not be_success
+        expect(json["container"]["errors"]["locale"]).not_to be_empty
       end
 
       it "should have a blank revision id" do
