@@ -242,6 +242,13 @@ describe "Pages API" do
           expect(response).to be_success
           expect(json["container"]["revisionId"]).to eq container.current_revision.id
         end
+
+        it "should include the container locale" do
+          get url
+
+          expect(response).to be_success
+          expect(json["container"]["locale"]).to eq container.locale
+        end
       end
 
       describe "when the container does not exist" do
