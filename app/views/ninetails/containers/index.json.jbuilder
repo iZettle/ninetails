@@ -1,5 +1,5 @@
 json.containers @containers do |container|
-  json.call container, :id, :name
+  json.call container, :id, :name, :locale
 
   if container.is_a? Ninetails::Page
     json.url container.url
