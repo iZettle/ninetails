@@ -1,5 +1,8 @@
 module Ninetails
-  class NinetailsController < ActionController::API
+  class NinetailsController < ::ApplicationController
+
+    # If the parent ApplicationController is an `ActionController::API` controller,
+    # it will not have the renderer, so we include it just to be sure.
     include ActionController::ImplicitRender
 
     rescue_from ActiveRecord::RecordNotFound, with: :not_found
