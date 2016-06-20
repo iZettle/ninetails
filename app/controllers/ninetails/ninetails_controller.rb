@@ -1,5 +1,5 @@
 module Ninetails
-  class NinetailsController < ::ApplicationController
+  class NinetailsController < ActionController::API
 
     # If the parent ApplicationController is an `ActionController::API` controller,
     # it will not have the renderer, so we include it just to be sure.
