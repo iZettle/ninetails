@@ -4,7 +4,7 @@ module Ninetails
     belongs_to :container
     belongs_to :project
     has_many :revision_sections
-    has_many :sections, through: :revision_sections
+    has_many :sections, -> { order :created_at }, through: :revision_sections
 
     validate :sections_are_all_valid
 
