@@ -15,6 +15,17 @@ class ExampleSectionWithNoElements < Ninetails::Section
   name_as_location :example
 end
 
+class ExampleSectionWithVariants < Ninetails::Section
+  located_in :body
+  has_variants :light, :dark, :neon
+end
+
+class ExampleSectionWithMultipleVariants < Ninetails::Section
+  located_in :body
+  has_variants :light, :dark
+  has_variants :good, :evil
+end
+
 RSpec.describe Ninetails::Section do
 
   describe "creating a section from a file name" do
@@ -83,6 +94,7 @@ RSpec.describe Ninetails::Section do
   describe "structure" do
     let(:structure) { ExampleSection.new.serialize }
     let(:placeholder_structure) { ExamplePlaceholderSection.new.serialize }
+    let(:variants_structure) { ExampleSectionWithVariants.new.serialize }
 
     it "should have a type key which is the section class name" do
       expect(structure[:type]).to eq "ExampleSection"
@@ -108,6 +120,28 @@ RSpec.describe Ninetails::Section do
 
     it "should still have an elements key if the section has no elements" do
       expect(ExampleSectionWithNoElements.new.serialize[:elements]).to eq Hash.new
+    end
+
+    it "should include variants when they are defined" do
+      expect(variants_structure[:variants]).to eq [:light, :dark, :neon]
+    end
+
+    it "should include an empty set of variants when none are defined" do
+      expect(structure[:variants]).to eq []
+    end
+  end
+
+  describe "variants" do
+    it "should store a list of variants" do
+      expect(ExampleSectionWithVariants.variants).to eq [:light, :dark, :neon]
+    end
+
+    it "should allow multiple has_variants calls to store a list of variants" do
+      expect(ExampleSectionWithMultipleVariants.variants).to eq [:light, :dark, :good, :evil]
+    end
+
+    it "should have no variants by default" do
+      expect(ExampleSection.variants).to eq []
     end
   end
 

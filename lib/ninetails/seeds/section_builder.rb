@@ -18,6 +18,8 @@ module Ninetails
       def method_missing(method, *args, &block)
         if element_definition(method).present?
           add_element_to_section method, args.first
+        elsif content_section.respond_to? "#{method}="
+          content_section.public_send "#{method}=", *args
         else
           raise "Unknown attribute #{method} on #{section_class}. Check your seeds!"
         end
