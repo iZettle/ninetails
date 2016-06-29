@@ -44,6 +44,15 @@ module Ninetails
       @elements || []
     end
 
+    def self.has_variants(*variants)
+      @variants ||= []
+      @variants << variants
+    end
+
+    def self.variants
+      @variants.try(:flatten) || []
+    end
+
     def self.find_element(name)
       elements.find { |element| element.name == name.to_sym }
     end
@@ -54,6 +63,7 @@ module Ninetails
         type: self.class.name.demodulize,
         located_in: self.class.position,
         location_name: self.class.location_name,
+        variants: self.class.variants,
         elements: serialize_elements
       }
     end

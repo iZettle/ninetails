@@ -69,6 +69,17 @@ describe "Revisions API" do
       }
     end
 
+    let(:valid_revision_params_with_variant) do
+      {
+        "revision": {
+          "message": "",
+          "sections":[
+            document_head_section(variant: "extended")
+          ]
+        }
+      }
+    end
+
     describe "with valid sections and a project id" do
       it "should create a revision with the project id" do
         expect {
@@ -119,6 +130,22 @@ describe "Revisions API" do
       it "should have created the correct number of sections" do
         post "/pages/#{page.id}/revisions", valid_revision_params
         expect(page.revisions.last.sections.size).to eq 1
+      end
+    end
+
+    describe "with valid sections and a variant" do
+      it "should create a revision" do
+        expect {
+          post "/pages/#{page.id}/revisions", valid_revision_params_with_variant
+        }.to change { page.revisions.count }.by(1)
+
+        expect(response).to be_success
+        expect(json["container"]["revisionId"]).to_not be_nil
+      end
+
+      it "should have stored the variant" do
+        post "/pages/#{page.id}/revisions", valid_revision_params_with_variant
+        expect(page.revisions.last.sections.first.variant).to eq "extended"
       end
     end
 

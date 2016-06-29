@@ -11,6 +11,11 @@ module Section
   class TestPlaceholderSection < Ninetails::Section
     name_as_location :body
   end
+
+  class TestSectionWithVariants < Ninetails::Section
+    located_in :body
+    has_variants :light, :dark
+  end
 end
 
 RSpec.describe Ninetails::ContentSection, type: :model do
@@ -160,7 +165,29 @@ RSpec.describe Ninetails::ContentSection, type: :model do
 
     it "should create a section instance" do
       section.deserialize
-      expect(section.section).to be_a Section::TestPlaceholderSection 
+      expect(section.section).to be_a Section::TestPlaceholderSection
+    end
+  end
+
+  describe "deserializing an empty section with a variant name" do
+    let(:valid_json) do
+      {
+        "name" => "",
+        "type" => "TestSectionWithVariants",
+        "variant" => "light"
+      }
+    end
+
+    let(:section) { Ninetails::ContentSection.new(valid_json) }
+
+    it "should create a section instance" do
+      section.deserialize
+      expect(section.section).to be_a Section::TestSectionWithVariants
+    end
+
+    it "should set the variant name" do
+      section.deserialize
+      expect(section.variant).to eq "light"
     end
   end
 
