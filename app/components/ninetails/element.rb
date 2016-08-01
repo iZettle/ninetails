@@ -6,10 +6,6 @@ module Ninetails
       @reference ||= SecureRandom.uuid
     end
 
-    def name
-      @name ||= self.class.name.demodulize
-    end
-
     def deserialize(input)
       properties_instances.collect do |property|
         property.serialized_values = input[property.name.to_s]
@@ -45,7 +41,7 @@ module Ninetails
 
     def generate_structure
       properties_instances.each_with_object({}) do |property_type, hash|
-        hash[:type] = name
+        hash[:type] = self.class.name.demodulize
         hash[:reference] = reference
         hash[property_type.name] = property_type.serialize
 
