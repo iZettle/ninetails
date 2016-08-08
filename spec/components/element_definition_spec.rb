@@ -10,6 +10,11 @@ class BasicElement < Ninetails::Element
   property :bar, String
 end
 
+class EnumerablePropertiesElement < Ninetails::Element
+  property :title, String
+  property :images, [String]
+end
+
 describe Ninetails::ElementDefinition do
 
   let(:text_element) { Ninetails::ElementDefinition.new(:foo, Element::Text, :single) }
