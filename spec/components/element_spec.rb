@@ -19,6 +19,10 @@ class ElementForValidating < Ninetails::Element
   property :something, CustomProperty
 end
 
+class ElementWithEnumerableProperty < Ninetails::Element
+  property :texts, [CustomProperty]
+end
+
 RSpec.describe Ninetails::Element do
 
   describe "properties" do
@@ -44,12 +48,12 @@ RSpec.describe Ninetails::Element do
     end
   end
 
-  describe "serialization" do
+  describe "serialization", "with normal properties" do
     let(:element) { ExampleElement.new }
     let(:structure) { element.properties_structure }
 
     it "should be a hash" do
-      expect(structure).to be_a(Hash)
+      expect(structure).to be_a Hash
     end
 
     it "should contain a unique element id" do
@@ -66,7 +70,29 @@ RSpec.describe Ninetails::Element do
     end
   end
 
-  describe "deserialization" do
+  describe "serialization", "with enumerable properties" do
+    let(:element) { ElementWithEnumerableProperty.new }
+    let(:structure) { element.properties_structure }
+
+    it "should be a hash" do
+      expect(structure).to be_a Hash
+    end
+
+    it "should contain a unique element id" do
+      expect(structure[:reference]).to eq element.reference
+    end
+
+    it "should have a :type key which is the class name" do
+      expect(structure[:type]).to eq "ElementWithEnumerableProperty"
+    end
+
+    it "should have a key for each text property with a new structure in an array" do
+      expect(structure[:texts]).to be_a Array
+      expect(structure[:texts].first[:text]).to eq nil
+    end
+  end
+
+  describe "deserialization", "with normal properties" do
     let(:element) { ExampleElement2.new }
     let(:hash) do
       {"type"=>"ExampleElement2", "reference"=>"6ebf107b-c8e5-48f3-bd65-c6d3f8beba90", "foo"=>{"text"=>"hello"}, "bar"=>{"text"=>"world"}}
@@ -75,6 +101,19 @@ RSpec.describe Ninetails::Element do
     it "should set the serialized_values on each property" do
       expect(element.send(:properties_instances).first).to receive(:serialized_values=).with("text"=>"hello")
       expect(element.send(:properties_instances).last).to receive(:serialized_values=).with("text"=>"world")
+      element.deserialize hash
+    end
+  end
+
+  describe "deserialization", "with enumerable properties" do
+    let(:element) { ElementWithEnumerableProperty.new }
+    let(:array_of_texts) { [{"text"=>"hello"}, {"text"=>"world"}] }
+    let(:hash) do
+      {"type"=>"ElementWithEnumerableProperty", "reference"=>"6ebf107b-c8e5-48f3-bd65-c6d3f8beba90", "texts" => array_of_texts }
+    end
+
+    it "should set the serialized_values using the while array" do
+      expect(element.send(:properties_instances).first).to receive(:serialized_values=).with(array_of_texts)
       element.deserialize hash
     end
   end
