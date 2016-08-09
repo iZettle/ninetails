@@ -5,17 +5,40 @@ class TextProperty
   property :text, String
 end
 
+class EnumerableProperty
+  include Ninetails::PropertyStore
+  property :texts, [String]
+end
+
 describe Ninetails::PropertyType do
 
   let(:string_property) { Ninetails::PropertyType.new :foo, String }
   let(:text_property) { Ninetails::PropertyType.new :foo, TextProperty }
+  let(:enumerable_property) { Ninetails::PropertyType.new :foo, [TextProperty] }
 
-  it "should be initializable with name and type" do
-    expect(string_property.name).to eq :foo
-    expect(string_property.type).to eq String
+  describe "normal properties" do
+    it "should store the name and type" do
+      expect(string_property.name).to eq :foo
+      expect(string_property.type).to eq String
+    end
+
+    it "should not be enumerable" do
+      expect(string_property.enumerable).to be false
+    end
   end
 
-  describe "serializing" do
+  describe "enumerable properties" do
+    it "should store the name and type" do
+      expect(enumerable_property.name).to eq :foo
+      expect(enumerable_property.type).to eq TextProperty
+    end
+
+    it "should be enumerable" do
+      expect(enumerable_property.enumerable).to be true
+    end
+  end
+
+  describe "serializing normal properties" do
     it "should be nil when the type does not respond to #structure" do
       expect(string_property.serialize).to eq nil
     end
@@ -45,10 +68,32 @@ describe Ninetails::PropertyType do
     end
   end
 
+  describe "serialing enumerable properties" do
+    describe "when serialized_values is blank" do
+      it "should be an empty array when the type does not respond to #serialize" do
+        expect(enumerable_property.serialize).to eq []
+      end
+
+      it "should use the structure when the type responds to #serialize" do
+        allow(TextProperty).to receive(:respond_to?) { true }
+        allow(TextProperty).to receive(:serialize) { "HELLO" }
+        expect(enumerable_property.serialize).to eq ["HELLO"]
+      end
+    end
+
+    describe "when serialized_values is not blank" do
+      it "should initialize a new instance of the type with the serialized_values attribute as an argument" do
+        enumerable_property.serialized_values = [{ text: "123" }, { text: "456" }]
+        expect(enumerable_property.serialize).to eq [{ :text => "123"}, { :text => "456"}]
+      end
+    end
+  end
+
   describe "property" do
     it "should be set to a new instance of the property type" do
       expect(string_property.property).to be_a String
       expect(text_property.property).to be_a TextProperty
+      expect(enumerable_property.property).to be_a TextProperty
     end
   end
 
@@ -76,6 +121,12 @@ describe Ninetails::PropertyType do
     it "should use the serialized_values to reinitialize the property" do
       text_property.serialized_values = { text: "hello" }
       expect(text_property.property.text).to eq "hello"
+    end
+
+    it "should be possible to reserialize enumerable properties" do
+      enumerable_property.serialized_values = [{ text: "hello" }, { text: "world" }]
+      expect(enumerable_property.property[0].text).to eq "hello"
+      expect(enumerable_property.property[1].text).to eq "world"
     end
   end
 

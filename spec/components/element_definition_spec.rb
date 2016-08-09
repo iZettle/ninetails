@@ -10,31 +10,33 @@ class BasicElement < Ninetails::Element
   property :bar, String
 end
 
-describe Ninetails::ElementDefinition do
+class EnumerablePropertiesElement < Ninetails::Element
+  property :title, String
+  property :images, [String]
+end
 
-  let(:text_element) { Ninetails::ElementDefinition.new(:foo, Element::Text, :single) }
-
+shared_examples "behaving like an element should" do |element, name, type|
   it "should store the name of the element" do
-    expect(text_element.name).to eq :foo
+    expect(element.name).to eq name
   end
 
   it "should store the type of the element" do
-    expect(text_element.type).to eq Element::Text
+    expect(element.type).to eq type
   end
 
   it "should store the count of the element" do
-    expect(text_element.count).to eq :single
+    expect(element.count).to eq :single
   end
 
   describe "adding type structure with singles" do
     let(:hash) { Hash.new }
 
     before do
-      text_element.add_to_hash hash
+      element.add_to_hash hash
     end
 
     it "should add the type's structure to a hash" do
-      expect(hash[:foo]).to eq text_element.properties_structure
+      expect(hash[name]).to eq element.properties_structure
     end
   end
 
@@ -42,18 +44,26 @@ describe Ninetails::ElementDefinition do
     let(:hash) { Hash.new }
 
     before do
-      text_element.count = :multiple
-      text_element.add_to_hash hash
+      element.count = :multiple
+      element.add_to_hash hash
     end
 
     it "should add the type's structure to a hash as the single item of an array" do
-      expect(hash[:foo]).to eq [text_element.properties_structure]
+      expect(hash[name]).to eq [element.properties_structure]
     end
   end
+end
+
+describe Ninetails::ElementDefinition do
+
+  let(:text_element) { Ninetails::ElementDefinition.new(:foo, Element::Text, :single) }
+  let(:enumerable_element) { Ninetails::ElementDefinition.new(:foo, [Element::Text], :single) }
+
+  include_examples "behaving like an element should", Ninetails::ElementDefinition.new(:foo, Element::Text, :single), :foo, Element::Text
+  include_examples "behaving like an element should", Ninetails::ElementDefinition.new(:foo, [Element::Text], :single), :foo, Element::Text
 
   describe "deserialization" do
-    describe "single elements" do
-
+    describe "single elements", "with normal properties" do
       let(:definition) { Ninetails::ElementDefinition.new(:foo, Element::Text, :single) }
       let(:hash) { {"type"=>"Text", "content"=>{"text"=>"Hello world!"}} }
 
@@ -72,8 +82,7 @@ describe Ninetails::ElementDefinition do
       end
     end
 
-    describe "multiple elements" do
-
+    describe "multiple elements", "with normal properties" do
       let(:definition) { Ninetails::ElementDefinition.new(:foo, Element::ButtonIcon, :multiple) }
       let(:hash) do
         [

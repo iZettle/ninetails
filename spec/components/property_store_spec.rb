@@ -15,6 +15,11 @@ class PropertiesWithValidations
   validates :text, presence: true
 end
 
+class EnumerableProperties
+  include Ninetails::PropertyStore
+  property :texts, [Property::Text]
+end
+
 describe Ninetails::PropertyStore do
 
   it "should expose a list of properties on the class" do
@@ -41,6 +46,16 @@ describe Ninetails::PropertyStore do
     virtus_attr = SomeProperties.attribute_set.find { |a| a.name == :text }
     expect(virtus_attr.name).to eq :text
     expect(virtus_attr.primitive).to eq Property::Text
+  end
+
+  describe "enumerable properties" do
+    it "should store the name of the property correctly" do
+      expect(EnumerableProperties.properties.first.name).to eq :texts
+    end
+
+    it "should store the type of the property correctly" do
+      expect(EnumerableProperties.properties.first.type).to eq Property::Text
+    end
   end
 
   describe "validations" do

@@ -6,7 +6,7 @@ module Ninetails
 
     def initialize(name, type, count)
       @name = name
-      @type = type
+      @type = type.is_a?(Array) ? type.first : type
       @count = count
       @elements = []
     end
