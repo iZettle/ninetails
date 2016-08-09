@@ -53,7 +53,7 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
     section_class.elements.collect do |element|
       element.properties_structure.except(:type, :reference).tap do |structure|
         structure.each do |property, values|
-          structure[property] = values.except :reference
+          structure[property] = clean_values(values)
         end
 
         if element.count == :multiple
@@ -65,6 +65,14 @@ class Ninetails::SeedGenerator < Rails::Generators::Base
     end
 
     generated_elements.join "\n"
+  end
+
+  def clean_values(values)
+    if values.is_a? Array
+      values.collect { |v| clean_values v }
+    else
+      values.except :reference
+    end
   end
 
   def print_props(props)
