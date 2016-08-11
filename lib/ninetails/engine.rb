@@ -3,7 +3,6 @@ require "active_model/railtie"
 require "active_record/railtie"
 require "action_controller/railtie"
 
-require "rails-api"
 require "pg"
 require "jbuilder"
 require "hash-pipe"
@@ -23,7 +22,7 @@ module Ninetails
   class Engine < ::Rails::Engine
     isolate_namespace Ninetails
 
-    middleware.use "Ninetails::KeyConversion"
+    middleware.use Ninetails::KeyConversion
 
     config.to_prepare do
       Dir.glob(Rails.root + "app/decorators/**/*_decorator*.rb").each do |c|

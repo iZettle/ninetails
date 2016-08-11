@@ -44,12 +44,12 @@ describe "Projects API" do
 
     it "should save the project if it is valid" do
       expect {
-        post "/projects", project: valid_project_params
+        post "/projects", params: { project: valid_project_params }
       }.to change{ Ninetails::Project.count }.by(1)
     end
 
     it "should show errors if the name is blank" do
-      post "/projects", project: invalid_project_params
+      post "/projects", params: { project: invalid_project_params }
 
       expect(response).to_not be_success
       expect(json["project"]["errors"]["name"]).not_to be_empty
@@ -67,19 +67,19 @@ describe "Projects API" do
     end
 
     it "should update the project if it is valid" do
-      put "/projects/#{project.id}", project: new_valid_attributes
+      put "/projects/#{project.id}", params: { project: new_valid_attributes }
 
       expect(response).to be_success
       expect(Ninetails::Project.find(project.id).name).not_to eq project.name
     end
 
     it "should not update the project if it is invalid" do
-      put "/projects/#{project.id}", project: new_invalid_attributes
+      put "/projects/#{project.id}", params: { project: new_invalid_attributes }
       expect(Ninetails::Project.find(project.id).name).to eq project.name
     end
 
     it "should show errors if the new params are invalid" do
-      put "/projects/#{project.id}", project: new_invalid_attributes
+      put "/projects/#{project.id}", params: { project: new_invalid_attributes }
 
       expect(response).to_not be_success
       expect(json["project"]["errors"]["name"]).not_to be_empty
@@ -87,7 +87,7 @@ describe "Projects API" do
 
     it "should not create a new project" do
       expect {
-        put "/projects/#{project.id}", project: new_valid_attributes
+        put "/projects/#{project.id}", params: { project: new_valid_attributes }
       }.not_to change{ Ninetails::Project.count }
     end
   end
