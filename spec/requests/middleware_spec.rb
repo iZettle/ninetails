@@ -12,7 +12,7 @@ module Ninetails
     end
 
     def show
-      render text: "foo_bar"
+      render plain: "foo_bar"
     end
   end
 end

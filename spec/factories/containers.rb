@@ -7,6 +7,7 @@ FactoryGirl.define do
   factory :container, class: Ninetails::Container do
     association :current_revision, factory: :revision
     locale "en_US"
+    url
 
     trait :with_revisions do
       transient do
@@ -29,7 +30,6 @@ FactoryGirl.define do
 
   factory :page, parent: :container, class: Ninetails::Page do
     name "A page"
-    url
   end
 
   factory :layout, parent: :container, class: Ninetails::Layout do

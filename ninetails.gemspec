@@ -19,23 +19,22 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", "~> 4.2"
-  s.add_dependency "rails-api", "~> 0.4"
+  s.add_dependency "rails", "~> 5.0"
+  # s.add_dependency "rails-api", "~> 0.4"
   s.add_dependency "pg", "~> 0.18"
-  s.add_dependency "jbuilder", "~> 2.3"
-  s.add_dependency "hash-pipe", "~> 0.3"
-  s.add_dependency "virtus", "~> 1.0"
+  s.add_dependency "jbuilder", ">= 2.6"
+  s.add_dependency "hash-pipe", ">= 0.4"
+  s.add_dependency "virtus", ">= 1.0"
 
-  s.add_development_dependency "pry", "~> 0.10"
-  s.add_development_dependency "web-console", "~> 2.2"
-  s.add_development_dependency "spring", "~> 1.6"
-  s.add_development_dependency "spring-commands-rspec", "~> 1.0"
-  s.add_development_dependency "rspec-rails", "~> 3.3"
-  s.add_development_dependency "guard-rspec", "~> 4.6"
-  s.add_development_dependency "factory_girl", "~> 4.5"
-  s.add_development_dependency "factory_girl_rails", "~> 4.5"
-  s.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
-  s.add_development_dependency "shoulda-matchers", "~> 3.1"
+  s.add_development_dependency "pry", ">= 0.10"
+  s.add_development_dependency "spring", ">= 1.7"
+  s.add_development_dependency "spring-commands-rspec", ">= 1.0"
+  s.add_development_dependency "rspec-rails", ">= 3.5"
+  s.add_development_dependency "guard-rspec", ">= 4.6"
+  s.add_development_dependency "factory_girl", ">= 4.7"
+  s.add_development_dependency "factory_girl_rails", ">= 4.7"
+  s.add_development_dependency "codeclimate-test-reporter", ">= 0.6"
+  s.add_development_dependency "shoulda-matchers", ">= 3.1"
 
   s.test_files = Dir["spec/**/*"]
 end

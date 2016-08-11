@@ -190,13 +190,13 @@ describe "Pages API" do
 
       it "should save the container if it is valid" do
         expect {
-          post url, valid_container_params
+          post url, params: valid_container_params
         }.to change{ container_class.count }.by(1)
       end
 
       if container_type == :page
         it "should show errors if the url is taken" do
-          post url, existing_page_url_params
+          post url, params: existing_page_url_params
 
           expect(response).to_not be_success
           expect(json["container"]["errors"]["url"]).not_to be_empty
@@ -204,25 +204,25 @@ describe "Pages API" do
       end
 
       it "should require a locale" do
-        post url, page_with_no_locale_params
+        post url, params: page_with_no_locale_params
 
         expect(response).to_not be_success
         expect(json["container"]["errors"]["locale"]).not_to be_empty
       end
 
       it "should have a blank revision id" do
-        post url, valid_container_params
+        post url, params: valid_container_params
         expect(json["container"]["revisionId"]).to be_nil
       end
 
       it "should have an empty sections array" do
-        post url, valid_container_params
+        post url, params: valid_container_params
         expect(json["container"]["sections"]).to eq []
       end
 
       it "should create a project container if in the project scope" do
         expect {
-          post "/projects/#{@project.id}#{url}", valid_container_params
+          post "/projects/#{@project.id}#{url}", params: valid_container_params
         }.to change{ @project.containers.count }.by(1)
       end
     end

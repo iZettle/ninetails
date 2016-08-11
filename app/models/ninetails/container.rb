@@ -28,11 +28,11 @@ module Ninetails
     end
 
     def build_revision_from_params(params)
-      params = params.convert_keys(:underscore).with_indifferent_access
+      params = params.transform_keys { |k| k.underscore }
       self.revision = revisions.build message: params[:message], project_id: params[:project_id]
 
       params[:sections].each do |section_json|
-        revision.sections.build section_json.only(:name, :type, :elements, :variant)
+        revision.sections.build section_json.slice(:name, :type, :elements, :variant)
       end
     end
 

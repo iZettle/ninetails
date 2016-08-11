@@ -83,7 +83,7 @@ describe "Revisions API" do
     describe "with valid sections and a project id" do
       it "should create a revision with the project id" do
         expect {
-          post "/pages/#{page.id}/revisions", valid_revision_params_with_project
+          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_project
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
@@ -92,7 +92,7 @@ describe "Revisions API" do
 
       it "should create a new Project Revision entry if one doesn't exist for this page in the project" do
         expect {
-          post "/pages/#{page.id}/revisions", valid_revision_params_with_project
+          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_project
         }.to change { Ninetails::ProjectContainer.count }.by(1)
 
         revision = Ninetails::Revision.find json["container"]["revisionId"]
@@ -106,7 +106,7 @@ describe "Revisions API" do
         project_container = create :project_container, container: page, project: project
 
         expect {
-          post "/pages/#{page.id}/revisions", valid_revision_params_with_project
+          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_project
         }.to_not change { Ninetails::ProjectContainer.count }
 
         revision = Ninetails::Revision.find json["container"]["revisionId"]
@@ -120,7 +120,7 @@ describe "Revisions API" do
     describe "with valid sections" do
       it "should create a revision" do
         expect {
-          post "/pages/#{page.id}/revisions", valid_revision_params
+          post "/pages/#{page.id}/revisions", params: valid_revision_params
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
@@ -128,7 +128,7 @@ describe "Revisions API" do
       end
 
       it "should have created the correct number of sections" do
-        post "/pages/#{page.id}/revisions", valid_revision_params
+        post "/pages/#{page.id}/revisions", params: valid_revision_params
         expect(page.revisions.last.sections.size).to eq 1
       end
     end
@@ -136,7 +136,7 @@ describe "Revisions API" do
     describe "with valid sections and a variant" do
       it "should create a revision" do
         expect {
-          post "/pages/#{page.id}/revisions", valid_revision_params_with_variant
+          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_variant
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
@@ -144,7 +144,7 @@ describe "Revisions API" do
       end
 
       it "should have stored the variant" do
-        post "/pages/#{page.id}/revisions", valid_revision_params_with_variant
+        post "/pages/#{page.id}/revisions", params: valid_revision_params_with_variant
         expect(page.revisions.last.sections.first.variant).to eq "extended"
       end
     end
@@ -152,12 +152,12 @@ describe "Revisions API" do
     describe "with invalid sections" do
       it "should not create a revision" do
         expect {
-          post "/pages/#{page.id}/revisions", invalid_revision_params
+          post "/pages/#{page.id}/revisions", params: invalid_revision_params
         }.not_to change { page.revisions.count }
       end
 
       it "should show error messages in the revision params" do
-        post "/pages/#{page.id}/revisions", invalid_revision_params
+        post "/pages/#{page.id}/revisions", params: invalid_revision_params
 
         errors = json["container"]["sections"][0]["elements"]["title"]["content"]["errors"]
         expect(errors).to eq({ "text"=>["can't be blank"] })
@@ -167,7 +167,7 @@ describe "Revisions API" do
     describe "when providing extra keys in the json" do
       it "should not blow up" do
         expect {
-          post "/pages/#{page.id}/revisions", valid_revision_params_with_extra_keys
+          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_extra_keys
         }.not_to raise_error
       end
     end
@@ -200,7 +200,7 @@ describe "Revisions API" do
 
     it "should not cause problems" do
       expect {
-        post "/pages/#{page.id}/revisions", camelcased_revision
+        post "/pages/#{page.id}/revisions", params: camelcased_revision
       }.to change { page.revisions.count }.by(1)
 
       expect(response).to be_success

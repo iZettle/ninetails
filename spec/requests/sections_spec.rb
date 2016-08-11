@@ -17,13 +17,13 @@ describe "Sections API" do
 
   describe "validating" do
     it "should return no errors when the section is valid" do
-      post "/sections/validate", section: document_head_section
+      post "/sections/validate", params: { section: document_head_section }
       expect(response).to be_success
       expect(json["section"]["elements"]["title"]["content"]).not_to have_key "errors"
     end
 
     it "should return errors when the section is invalid" do
-      post "/sections/validate", section: document_head_section(title: "")
+      post "/sections/validate", params: { section: document_head_section(title: "") }
       expect(response).not_to be_success
       expect(json["section"]["elements"]["title"]["content"]).to have_key "errors"
     end
