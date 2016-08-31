@@ -1,7 +1,7 @@
 module Ninetails
   class Project < ActiveRecord::Base
 
-    has_many :project_containers
+    has_many :project_containers, dependent: :destroy
     has_many :containers, through: :project_containers
 
     delegate :pages, :layouts, to: :containers

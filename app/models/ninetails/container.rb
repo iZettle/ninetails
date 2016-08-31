@@ -1,8 +1,8 @@
 module Ninetails
   class Container < ActiveRecord::Base
 
-    has_many :revisions
-    has_many :project_containers
+    has_many :revisions, dependent: :destroy
+    has_many :project_containers, dependent: :destroy
     has_one :current_revision, class_name: "Revision"
 
     scope :pages, -> { where type: 'Ninetails::Page' }

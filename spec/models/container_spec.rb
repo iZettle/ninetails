@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Ninetails::Container, type: :model do
 
-  it { should have_many(:revisions) }
-  it { should have_many(:project_containers) }
+  it { should have_many(:revisions).dependent(:destroy) }
+  it { should have_many(:project_containers).dependent(:destroy) }
   it { should have_one(:current_revision) }
 
   it { should validate_presence_of(:locale) }

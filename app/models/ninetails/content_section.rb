@@ -1,7 +1,7 @@
 module Ninetails
   class ContentSection < ActiveRecord::Base
     self.inheritance_column = nil
-    has_many :revision_sections
+    has_many :revision_sections, dependent: :destroy
     has_many :revisions, through: :revision_sections
 
     validate :validate_elements
