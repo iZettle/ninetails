@@ -11,7 +11,6 @@ module Ninetails
 
       def build(&block)
         block.call self if block_given?
-        content_section.save!
         revision.sections << content_section
       end
 
