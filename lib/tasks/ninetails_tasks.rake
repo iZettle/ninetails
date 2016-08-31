@@ -9,17 +9,4 @@ namespace :ninetails do
     Ninetails::Seeds::Generator.run
   end
 
-  task reseed: :environment do
-    [
-      Ninetails::Container,
-      Ninetails::ContentSection,
-      Ninetails::RevisionSection,
-      Ninetails::Revision
-    ].each do |model|
-      model.delete_all
-    end
-
-    Ninetails::Seeds::Generator.run
-  end
-
 end
