@@ -7,8 +7,9 @@ module Ninetails
     end
 
     def deserialize(input)
+      snake_case_input = input.convert_keys
       properties_instances.collect do |property|
-        property.serialized_values = input[property.name.to_s]
+        property.serialized_values = snake_case_input[property.name.to_s]
       end
     end
 
