@@ -174,6 +174,13 @@ describe "Revisions API" do
   end
 
   describe "handling hash keys in camelcase" do
+    before do
+      Ninetails::Config.key_style = :camelcase
+    end
+
+    after do
+      Ninetails::Config.key_style = :underscore
+    end
 
     let(:camelcased_revision) do
       {
