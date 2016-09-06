@@ -205,6 +205,7 @@ describe "Revisions API" do
 
       expect(response).to be_success
       expect(json["container"]["revisionId"]).to_not be_nil
+      expect(json["container"]["sections"][0]["elements"]["backgroundImage"]).to_not be_nil
     end
 
   end
