@@ -189,13 +189,12 @@ describe "Revisions API" do
           sections: [
             {
               "name": "",
-              "type": "MinimalBillboard",
+              "type": "LongNameSection",
               "elements": {
-                "backgroundImage": {
-                  "type": "Figure",
-                  "image": {
-                    "src": "/foobar.jpg",
-                    "alt": "Hello world"
+                "longNameElement": {
+                  "type": "LongNameElement",
+                  "longNameProperty": {
+                    "longTextString": "foo"
                   }
                 }
               }
@@ -212,7 +211,7 @@ describe "Revisions API" do
 
       expect(response).to be_success
       expect(json["container"]["revisionId"]).to_not be_nil
-      expect(json["container"]["sections"][0]["elements"]["backgroundImage"]).to_not be_nil
+      expect(json["container"]["sections"][0]["elements"]["longNameElement"]["longNameProperty"]["longTextString"]).to_not be_nil
     end
 
   end
