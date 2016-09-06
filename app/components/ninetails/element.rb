@@ -13,7 +13,7 @@ module Ninetails
     end
 
     def properties_structure
-      generate_structure.convert_keys(:to_api).with_indifferent_access
+      generate_structure.with_indifferent_access
     end
 
     # Validate each property_type's property.
