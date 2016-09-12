@@ -28,7 +28,7 @@ module Ninetails
     end
 
     def build_revision_from_params(params)
-      params = params.transform_keys { |k| k.underscore }
+      params = params.to_h.convert_keys.with_indifferent_access
       self.revision = revisions.build message: params[:message], project_id: params[:project_id]
 
       params[:sections].each do |section_json|

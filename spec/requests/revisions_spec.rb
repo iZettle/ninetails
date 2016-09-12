@@ -174,6 +174,13 @@ describe "Revisions API" do
   end
 
   describe "handling hash keys in camelcase" do
+    before do
+      Ninetails::Config.key_style = :camelcase
+    end
+
+    after do
+      Ninetails::Config.key_style = :underscore
+    end
 
     let(:camelcased_revision) do
       {
@@ -182,13 +189,12 @@ describe "Revisions API" do
           sections: [
             {
               "name": "",
-              "type": "MinimalBillboard",
+              "type": "LongNameSection",
               "elements": {
-                "backgroundImage": {
-                  "type": "Figure",
-                  "image": {
-                    "src": "/foobar.jpg",
-                    "alt": "Hello world"
+                "longNameElement": {
+                  "type": "LongNameElement",
+                  "longNameProperty": {
+                    "longTextString": "foo"
                   }
                 }
               }
@@ -205,6 +211,7 @@ describe "Revisions API" do
 
       expect(response).to be_success
       expect(json["container"]["revisionId"]).to_not be_nil
+      expect(json["container"]["sections"][0]["elements"]["longNameElement"]["longNameProperty"]["longTextString"]).to_not be_nil
     end
 
   end
