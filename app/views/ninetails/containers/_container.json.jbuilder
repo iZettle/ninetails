@@ -1,5 +1,5 @@
 json.container do
-  json.call container, :id, :name, :locale
+  json.call container, :id, :name, :locale, :created_in_project_id
   json.revision_id container.try(:revision).try(:id)
   json.type container.type.demodulize
 
