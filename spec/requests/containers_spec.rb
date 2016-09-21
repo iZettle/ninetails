@@ -149,6 +149,31 @@ describe "Pages API" do
           expect(json["container"]["revisionId"]).to eq new_container.revision.id
         end
       end
+
+      describe "when creating a container" do
+        let(:valid_container_params) do
+          {
+            container: {
+              name: "A new container in a project",
+              url: "/foobar-project",
+              locale: "en_US"
+            }
+          }
+        end
+
+        it "should create a new ProjectContainer" do
+          expect {
+            post url, params: valid_container_params
+          }.to change{ Ninetails::ProjectContainer.count }.by(1)
+        end
+
+        it "should set the ProjectContainer to belong to the project and the container" do
+          post url, params: valid_container_params
+          project_container = Ninetails::ProjectContainer.last
+          expect(project_container.project_id).to eq @project.id
+          expect(project_container.container_id).to eq json["container"]["id"]
+        end
+      end
     end
 
     it_should_behave_like "a container in a project", :page
