@@ -4,7 +4,6 @@ module Ninetails
     has_many :revisions
     has_many :project_containers
     has_one :current_revision, class_name: "Revision"
-    belongs_to :created_in_project, class_name: "Project"
 
     scope :pages, -> { where type: 'Ninetails::Page' }
     scope :layouts, -> { where type: 'Ninetails::Layout' }

@@ -3,9 +3,9 @@ require 'rails_helper'
 describe "Pages API" do
 
   before do
+    @layout = create :layout
+    @page = create :page, layout: @layout
     @project = create :project
-    @layout = create :layout, created_in_project: @project
-    @page = create :page, layout: @layout, created_in_project: @project
   end
 
   let(:page_url) { "/pages/#{@page.id}" }
@@ -69,10 +69,6 @@ describe "Pages API" do
           before do
             get url
             expect(response).to be_success
-          end
-
-          it "should include created_in_project" do
-            expect(json["container"]["createdInProjectId"]).to eq @project.id
           end
 
           it "should return the current revision of a page" do
@@ -196,11 +192,6 @@ describe "Pages API" do
         expect {
           post url, params: valid_container_params
         }.to change{ container_class.count }.by(1)
-      end
-
-      it "should set the created_in_project if a project_id param is set" do
-        post url, params: valid_container_params.merge(project_id: @project.id)
-        expect(Ninetails::Container.find(json["container"]["id"]).created_in_project).to eq @project
       end
 
       if container_type == :page
