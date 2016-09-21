@@ -5,7 +5,6 @@ RSpec.describe Ninetails::Container, type: :model do
   it { should have_many(:revisions) }
   it { should have_many(:project_containers) }
   it { should have_one(:current_revision) }
-  it { should belong_to(:created_in_project) }
 
   it { should validate_presence_of(:locale) }
 

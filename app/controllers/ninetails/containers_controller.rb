@@ -15,7 +15,6 @@ module Ninetails
 
     def create
       @container = container_class.new container_params
-      @container.created_in_project = project if project.present?
 
       if @container.save
         project.project_containers.create container: @container if project.present?
