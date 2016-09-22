@@ -103,7 +103,7 @@ describe "Revisions API" do
       end
 
       it "should modify an existing ProjectContainer entry if one exists for this page in the project" do
-        project_container = create :project_container, container: page, project: project
+        project_container = create :project_container, :with_revision, container: page, project: project
 
         expect {
           post "/pages/#{page.id}/revisions", params: valid_revision_params_with_project

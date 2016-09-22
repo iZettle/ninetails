@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Ninetails::ProjectContainer do
 
-  let(:existing_container) { create :project_container }
+  let(:existing_container) { create :project_container, :with_revision }
 
   it "should require a project" do
     project_container = build :project_container, project: nil
@@ -24,7 +24,6 @@ describe Ninetails::ProjectContainer do
   describe "validating uniqueness of the container revision" do
     let(:duplicate_revision) { build :project_container, revision: existing_container.revision }
     let(:duplicate_container) { build :project_container, container: existing_container.container }
-    let(:duplicate_revsion_in_project) { build :project_container, revision: existing_container.revision, project: existing_container.project }
     let(:duplicate_container_in_project) { build :project_container, container: existing_container.container, project: existing_container.project }
 
     it "should allow the same revision to be referenced in multiple projects" do
@@ -35,14 +34,15 @@ describe Ninetails::ProjectContainer do
       expect(duplicate_container.valid?).to be true
     end
 
-    it "should not allow the same container to have multiple revisions in the project" do
-      expect(duplicate_revsion_in_project.valid?).to be false
-      expect(duplicate_revsion_in_project.errors[:revision]).to include "has already been set for this container in the project"
-    end
-
-    it "should not allow the same container to be used in the same project" do
+    it "should not allow the same container to be used multiple times in the same project" do
       expect(duplicate_container_in_project.valid?).to be false
       expect(duplicate_container_in_project.errors[:container]).to include "is already used in this project"
+    end
+
+    it "should not cause problems when the revision is nil and the project has multiple containers" do
+      first_container = create :project_container, project: existing_container.project, revision: nil
+      second_container = create :project_container, project: existing_container.project, revision: nil
+      expect(second_container.valid?).to be true
     end
   end
 
