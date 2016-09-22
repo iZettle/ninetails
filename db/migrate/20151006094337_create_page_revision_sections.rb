@@ -1,4 +1,4 @@
-class CreatePageRevisionSections < ActiveRecord::Migration
+class CreatePageRevisionSections < ActiveRecord::Migration[5.0]
   def change
     create_table :ninetails_page_revision_sections do |t|
       t.belongs_to :page_revision, index: true

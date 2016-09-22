@@ -1,4 +1,4 @@
-class RenameTablesToRemovePages < ActiveRecord::Migration
+class RenameTablesToRemovePages < ActiveRecord::Migration[5.0]
   def up
     remove_index :ninetails_page_revision_sections, name: :index_ninetails_page_revision_sections_on_page_revision_id
     remove_index :ninetails_page_revision_sections, name: :index_ninetails_page_revision_sections_on_section_id
