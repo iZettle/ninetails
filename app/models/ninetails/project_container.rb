@@ -11,7 +11,7 @@ module Ninetails
 
     validates :revision, {
       uniqueness: {
-        scope: :project,
+        scope: [:project, :container],
         message: "has already been set for this container in the project"
       }
     }

@@ -13,7 +13,7 @@ RSpec.describe Ninetails::Container, type: :model do
       @page = create :page, :with_revisions
       @layout = create :layout
       @project = create :project
-      @project_container = create :project_container, project: @project, container: @page
+      @project_container = create :project_container, :with_revision, project: @project, container: @page
     end
 
     it "should find a page by id" do
