@@ -142,12 +142,6 @@ describe "Pages API" do
           get "#{url}/#{project_container.container_id}"
           expect(json["container"]["revisionId"]).to eq project_container.revision_id
         end
-
-        it "should use the 'live' container when the container doesn't exist in the project scope" do
-          new_container = create container_type, :with_a_revision
-          get "#{url}/#{new_container.id}"
-          expect(json["container"]["revisionId"]).to eq new_container.revision.id
-        end
       end
 
       describe "when creating a container" do
