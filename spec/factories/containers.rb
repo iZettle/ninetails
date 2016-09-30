@@ -15,9 +15,7 @@ FactoryGirl.define do
       end
 
       after :create do |container, evaluator|
-        # -1 because the page is created with a 'current_revision', so when you say revisions_count: 10,
-        # you'll only end up with 10 revisions instead of 11..
-        create_list :revision, evaluator.revisions_count - 1, container: container
+        create_list :revision, evaluator.revisions_count, container: container
       end
     end
 
