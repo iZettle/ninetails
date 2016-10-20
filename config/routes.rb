@@ -15,6 +15,8 @@ Ninetails::Engine.routes.draw do
       resources :containers, only: [:show, :create, :index], concerns: :revisable, path: "/"
     end
 
+    resources :project_containers, only: [:index]
+
     resources :sections, only: [:show, :index] do
       post :validate, on: :collection
     end
