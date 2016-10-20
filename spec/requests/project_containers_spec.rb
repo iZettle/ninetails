@@ -13,7 +13,8 @@ describe "Project Containers API" do
 
     it "includes both projects which the container was modified in" do
       expect(json["projectContainers"].length).to eq 2
-      # expect(json["projectContainers"]).to include ()
+      expect(json["projectContainers"][0]["projectId"]).to eq @project.id
+      expect(json["projectContainers"][1]["projectId"]).to eq @project_container_2.project.id
     end
   end
 
