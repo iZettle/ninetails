@@ -8,7 +8,7 @@ describe "Project Containers API" do
       @project_container = create :project_container, project: @project
       @project_container_2 = create :project_container, container: @project_container.container
 
-      get "/project_containers", params: { container_id: @project_container.container.id }
+      get "/containers/#{@project_container.container.id}/projects"
     end
 
     it "includes both projects which the container was modified in" do
