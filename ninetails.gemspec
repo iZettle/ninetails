@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jbuilder", ">= 2.6"
   s.add_dependency "hash-pipe", ">= 0.4"
   s.add_dependency "virtus", ">= 1.0"
+  s.add_dependency "paranoia", ">= 2.2"
 
   s.add_development_dependency "pry", ">= 0.10"
   s.add_development_dependency "spring", ">= 1.7"
