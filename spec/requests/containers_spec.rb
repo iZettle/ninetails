@@ -339,4 +339,39 @@ describe "Pages API" do
     it_should_behave_like "a container with a specified revision", :page, Ninetails::Page
   end
 
+  describe "destroying a container" do
+    shared_examples "a destroyable container" do |container_type, container_class|      
+      describe "when the container exists" do
+        before do
+          @container = create container_type
+          @url = "/#{container_type.to_s.pluralize}/#{@container.id}"
+        end
+
+        it "should soft delete the container" do
+          expect {
+            delete @url
+          }.not_to change{ container_class.with_deleted.count }
+          
+          expect(@container.reload.deleted_at).not_to be nil
+        end
+        
+        it "should not remove revisions" do
+          expect {
+            delete @url
+          }.not_to change{ Ninetails::Revision.count }
+        end
+      end
+      
+      describe "when the container does not exist" do
+        it "should return a 404" do
+          delete "/pages/0"
+          expect(response).to be_not_found
+        end
+      end
+    end
+
+    it_should_behave_like "a destroyable container", :page, Ninetails::Page
+    it_should_behave_like "a destroyable container", :layout, Ninetails::Layout
+  end
+
 end

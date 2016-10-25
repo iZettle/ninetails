@@ -1,5 +1,6 @@
 module Ninetails
   class Container < ActiveRecord::Base
+    acts_as_paranoid
 
     has_many :revisions
     has_many :project_containers

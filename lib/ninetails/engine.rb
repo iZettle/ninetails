@@ -7,6 +7,7 @@ require "pg"
 require "jbuilder"
 require "hash-pipe"
 require "virtus"
+require "paranoia"
 
 require "ninetails/config"
 require "ninetails/key_conversion"

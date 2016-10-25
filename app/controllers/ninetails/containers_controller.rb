@@ -24,6 +24,12 @@ module Ninetails
         render :show, status: :bad_request
       end
     end
+    
+    def destroy
+      container_class.find(params[:id]).destroy
+
+      head :no_content
+    end
 
     private
 
