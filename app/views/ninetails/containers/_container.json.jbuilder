@@ -3,19 +3,17 @@ json.container do
   json.revision_id container.try(:revision).try(:id)
   json.type container.type.demodulize
 
-  if container.is_a? Ninetails::Page
-    json.url container.url
-
-    if container.layout.present?
-      json.layout do
-        json.partial! "/ninetails/containers/container", container: container.layout
-      end
+  if container.try(:layout).present?
+    json.layout do
+      json.partial! "/ninetails/containers/container", container: container.layout
     end
   end
 
   if container.revision.present?
+    json.published container.revision.published
     json.sections container.revision.sections, partial: "/ninetails/sections/section", as: :section
   else
+    json.published false
     json.sections []
   end
 

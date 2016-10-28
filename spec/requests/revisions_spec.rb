@@ -23,22 +23,25 @@ describe "Revisions API" do
   end
 
   describe "creating a revision" do
+    
     let(:valid_revision_params) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          sections: [
             document_head_section
           ]
         }
       }
     end
 
+    # TODO - test dupe url
+
     let(:valid_revision_params_with_extra_keys) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          sections: [
             document_head_section.merge({ "located_in" => "body", "location_name" => "foobar" })
           ]
         }
@@ -47,9 +50,8 @@ describe "Revisions API" do
 
     let(:invalid_revision_params) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          sections: [
             document_head_section(title: "", description: "")
           ]
         }
@@ -59,21 +61,21 @@ describe "Revisions API" do
     let(:project) { create :project }
     let(:valid_revision_params_with_project) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          project_id: project.id,
+          sections: [
             document_head_section
-          ],
-          "project_id": project.id
+          ]
         }
       }
     end
 
     let(:valid_revision_params_with_variant) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          sections: [
             document_head_section(variant: "extended")
           ]
         }
@@ -185,7 +187,7 @@ describe "Revisions API" do
     let(:camelcased_revision) do
       {
         revision: {
-          message: "",
+          url: build(:revision).url,
           sections: [
             {
               "name": "",

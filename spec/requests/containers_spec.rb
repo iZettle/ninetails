@@ -32,12 +32,6 @@ describe "Pages API" do
         json["containers"].each do |container|
           expect(container).to have_key "id"
           expect(container).to have_key "locale"
-
-          if container_type == :page
-            expect(container).to have_key "url"
-          else
-            expect(container).not_to have_key "url"
-          end
         end
       end
 
@@ -84,6 +78,10 @@ describe "Pages API" do
               expect(json["container"]["layout"]["container"]["id"]).to eq @layout.id
               expect(json["container"]["layout"]["container"]["type"]).to eq "Layout"
             end
+          end
+          
+          it "should include the revision's published attribute" do
+            expect(json["container"]["published"]).to eq container.current_revision.published
           end
         end
 
@@ -182,17 +180,6 @@ describe "Pages API" do
         {
           container: {
             name: "A new container",
-            url: "/foobar",
-            locale: "en_US"
-          }
-        }
-      end
-
-      let(:existing_page_url_params) do
-        {
-          container: {
-            name: "An existing container",
-            url: @page.url,
             locale: "en_US"
           }
         }
@@ -201,8 +188,7 @@ describe "Pages API" do
       let(:page_with_no_locale_params) do
         {
           container: {
-            name: "A container",
-            url: "/no-locale"
+            name: "A container"
           }
         }
       end
@@ -211,15 +197,6 @@ describe "Pages API" do
         expect {
           post url, params: valid_container_params
         }.to change{ container_class.count }.by(1)
-      end
-
-      if container_type == :page
-        it "should show errors if the url is taken" do
-          post url, params: existing_page_url_params
-
-          expect(response).to_not be_success
-          expect(json["container"]["errors"]["url"]).not_to be_empty
-        end
       end
 
       it "should require a locale" do

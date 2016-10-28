@@ -34,7 +34,7 @@ module Ninetails
     private
 
     def container_params
-      params.require(:container).permit(:url, :name, :locale, :layout_id)
+      params.require(:container).permit(:name, :locale, :layout_id)
     end
 
     def container_class

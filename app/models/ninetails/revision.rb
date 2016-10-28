@@ -7,6 +7,7 @@ module Ninetails
     has_many :sections, -> { order :created_at }, through: :revision_sections
 
     validate :sections_are_all_valid
+    validates :url, presence: true, uniqueness: { case_sensitive: false }, if: -> { container.is_a? Ninetails::Page }
 
     after_create :update_project_container, if: -> { project.present? }
 
