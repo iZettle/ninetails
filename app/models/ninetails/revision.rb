@@ -6,13 +6,7 @@ module Ninetails
     has_many :revision_sections
     has_many :sections, -> { order :created_at }, through: :revision_sections
 
-    validate :sections_are_all_valid
-    # validates :url, uniqueness: {
-    #   case_sensitive: false,
-    #   scope: :container,
-    #   conditions: -> { binding.pry }
-    # }, if: :requires_unique_url?
-    validate :url_is_unique
+    validate :sections_are_all_valid, :url_is_unique
 
     after_create :update_project_container, if: -> { project.present? }
 
