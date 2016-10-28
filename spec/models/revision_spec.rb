@@ -35,10 +35,16 @@ RSpec.describe Ninetails::Revision, type: :model do
     end
     
     describe "when the url is present" do
-      it "requires a unique url for Page revisions" do
+      it "doesn't allow the url to be used for different containers" do
+        revision = Ninetails::Revision.new container: create(:page), url: "/foo"
+        revision.valid?
+        expect(revision.errors[:url]).to eq ["is already in use"]
+      end
+      
+      it "allows the same url to be used for the same container multiple times" do
         revision = Ninetails::Revision.new container: @page, url: "/foo"
         revision.valid?
-        expect(revision.errors[:url]).to eq ["has already been taken"]
+        expect(revision.errors[:url]).to eq []
       end
     end
   end

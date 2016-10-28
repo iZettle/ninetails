@@ -7,7 +7,12 @@ module Ninetails
     has_many :sections, -> { order :created_at }, through: :revision_sections
 
     validate :sections_are_all_valid
-    validates :url, uniqueness: { case_sensitive: false, scope: :container }, if: :requires_unique_url?
+    # validates :url, uniqueness: {
+    #   case_sensitive: false,
+    #   scope: :container,
+    #   conditions: -> { binding.pry }
+    # }, if: :requires_unique_url?
+    validate :url_is_unique
 
     after_create :update_project_container, if: -> { project.present? }
 
@@ -30,7 +35,13 @@ module Ninetails
     end
     
     def requires_unique_url?
-      container.is_a?(Ninetails::Page) && url.present?
+      container.is_a?(Page) && url.present?
+    end
+    
+    def url_is_unique
+      if container.is_a?(Page) && url.present? && Revision.where(url: url).where.not(container: container).exists?
+        errors.add :url, "is already in use"
+      end
     end
 
   end
