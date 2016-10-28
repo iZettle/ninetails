@@ -7,7 +7,7 @@ module Ninetails
     has_many :sections, -> { order :created_at }, through: :revision_sections
 
     validate :sections_are_all_valid
-    validates :url, presence: true, uniqueness: { case_sensitive: false }, if: -> { container.is_a? Ninetails::Page }
+    validates :url, uniqueness: { case_sensitive: false, scope: :container }, if: :requires_unique_url?
 
     after_create :update_project_container, if: -> { project.present? }
 
@@ -27,6 +27,10 @@ module Ninetails
       project_container = ProjectContainer.find_or_initialize_by project_id: project.id, container_id: container.id
       project_container.revision = self
       project_container.save
+    end
+    
+    def requires_unique_url?
+      container.is_a?(Ninetails::Page) && url.present?
     end
 
   end
