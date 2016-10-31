@@ -1,17 +1,22 @@
-if @project_containers.present?
-  json.containers @project_containers do |project_container|
-    json.call project_container.container, :id, :name, :locale
-    json.call project_container.revision, :url, :published
-    json.type project_container.container.type.demodulize
+json.containers @containers do |container|
+  if container.is_a? Ninetails::ProjectContainer
+    json.call container.container, :id
+  else
+    json.call container, :id
   end
-else
-  json.containers @containers do |container|
-    json.call container, :id, :name, :locale
-    
-    if container.current_revision.present?
+
+  json.call container, :name, :locale
+  json.type container.type.demodulize
+
+  if container.current_revision.present?
+    json.current_revision do
       json.call container.current_revision, :url, :published
     end
+  end
 
-    json.type container.type.demodulize
+  if container.revision.present?
+    json.revision do
+      json.call container.revision, :url, :published
+    end
   end
 end

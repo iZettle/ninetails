@@ -3,7 +3,7 @@ module Ninetails
 
     def index
       if project.present?
-        @project_containers = project.project_containers.of_type container_class.name
+        @containers = project.project_containers.of_type container_class.name
       else
         @containers = container_class.all.includes :current_revision
       end
@@ -24,7 +24,7 @@ module Ninetails
         render :show, status: :bad_request
       end
     end
-    
+
     def destroy
       container_class.find(params[:id]).destroy
 
