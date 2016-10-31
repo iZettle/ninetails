@@ -24,5 +24,11 @@ module Ninetails
       }
     }
 
+    scope :of_type, -> type do
+      includes(:revision, :container).
+      joins(:container).
+      merge Container.where(type: type)
+    end
+
   end
 end

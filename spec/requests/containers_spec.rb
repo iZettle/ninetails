@@ -32,6 +32,9 @@ describe "Pages API" do
         json["containers"].each do |container|
           expect(container).to have_key "id"
           expect(container).to have_key "locale"
+          expect(container).to have_key "url"
+          expect(container).to have_key "name"
+          expect(container).to have_key "published"
         end
       end
 

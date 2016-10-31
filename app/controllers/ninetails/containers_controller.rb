@@ -3,9 +3,9 @@ module Ninetails
 
     def index
       if project.present?
-        @containers = project.public_send params[:type]
+        @project_containers = project.project_containers.of_type container_class.name
       else
-        @containers = container_class.all
+        @containers = container_class.all.includes :current_revision
       end
     end
 
