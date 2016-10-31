@@ -26,15 +26,22 @@ describe "Pages API" do
         expect(json["containers"].size).to eq container_class.count
       end
 
-      it "should include the id, url and locale for each container" do
+      it "should include the id and locale for each container" do
         get url
 
         json["containers"].each do |container|
           expect(container).to have_key "id"
           expect(container).to have_key "locale"
-          expect(container).to have_key "url"
           expect(container).to have_key "name"
-          expect(container).to have_key "published"
+        end
+      end
+
+      it "should include the url and published from the current_revision" do
+        get url
+
+        json["containers"].each do |container|
+          expect(container["currentRevision"]).to have_key "url"
+          expect(container["currentRevision"]).to have_key "published"
         end
       end
 
@@ -82,7 +89,7 @@ describe "Pages API" do
               expect(json["container"]["layout"]["container"]["type"]).to eq "Layout"
             end
           end
-          
+
           it "should include the revision's published attribute" do
             expect(json["container"]["published"]).to eq container.current_revision.published
           end
@@ -133,6 +140,24 @@ describe "Pages API" do
         it "should raise an error if the project does not exist" do
           get "/projects/foo/#{container_type.to_s.pluralize}"
           expect(response).to_not be_success
+        end
+
+        it "should include the url and published from the current_revision" do
+          get url
+
+          json["containers"].each do |container|
+            expect(container["currentRevision"]).to have_key "url"
+            expect(container["currentRevision"]).to have_key "published"
+          end
+        end
+
+        it "should include the url and published from the project revision" do
+          get url
+
+          json["containers"].each do |container|
+            expect(container["revision"]).to have_key "url"
+            expect(container["revision"]).to have_key "published"
+          end
         end
       end
 
@@ -320,7 +345,7 @@ describe "Pages API" do
   end
 
   describe "destroying a container" do
-    shared_examples "a destroyable container" do |container_type, container_class|      
+    shared_examples "a destroyable container" do |container_type, container_class|
       describe "when the container exists" do
         before do
           @container = create container_type
@@ -331,17 +356,17 @@ describe "Pages API" do
           expect {
             delete @url
           }.not_to change{ container_class.with_deleted.count }
-          
+
           expect(@container.reload.deleted_at).not_to be nil
         end
-        
+
         it "should not remove revisions" do
           expect {
             delete @url
           }.not_to change{ Ninetails::Revision.count }
         end
       end
-      
+
       describe "when the container does not exist" do
         it "should return a 404" do
           delete "/pages/0"
