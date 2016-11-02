@@ -76,7 +76,7 @@ describe "Pages API" do
           end
 
           it "should return the current revision of a page" do
-            expect(json["container"]["revisionId"]).to eq container.current_revision.id
+            expect(json["container"]["currentRevision"]["id"]).to eq container.current_revision.id
           end
 
           it "should return a container with type #{container_class}" do
@@ -88,10 +88,26 @@ describe "Pages API" do
               expect(json["container"]["layout"]["container"]["id"]).to eq @layout.id
               expect(json["container"]["layout"]["container"]["type"]).to eq "Layout"
             end
-          end
 
-          it "should include the revision's published attribute" do
-            expect(json["container"]["published"]).to eq container.current_revision.published
+            it "should include the revision's published attribute" do
+              expect(json["container"]["currentRevision"]["published"]).to eq container.current_revision.published
+            end
+
+            it "should include the revision's url attribute" do
+              expect(json["container"]["currentRevision"]["url"]).to eq container.current_revision.url
+            end
+          else
+            it "should not include a layout key" do
+              expect(json["container"]).not_to have_key "layout"
+            end
+
+            it "should not include a published attribute" do
+              expect(json["container"]["currentRevision"]).not_to have_key "published"
+            end
+
+            it "should not include a url attribute" do
+              expect(json["container"]["currentRevision"]).not_to have_key "url"
+            end
           end
         end
 
@@ -166,7 +182,7 @@ describe "Pages API" do
 
         it "should use the current project container to fetch the latest revision" do
           get "#{url}/#{project_container.container_id}"
-          expect(json["container"]["revisionId"]).to eq project_container.revision_id
+          expect(json["container"]["revision"]["id"]).to eq project_container.revision_id
         end
       end
 
@@ -236,12 +252,12 @@ describe "Pages API" do
 
       it "should have a blank revision id" do
         post url, params: valid_container_params
-        expect(json["container"]["revisionId"]).to be_nil
+        expect(json["container"]["currentRevision"]["id"]).to be_nil
       end
 
       it "should have an empty sections array" do
         post url, params: valid_container_params
-        expect(json["container"]["sections"]).to eq []
+        expect(json["container"]["currentRevision"]["sections"]).to eq []
       end
 
       it "should create a project container if in the project scope" do
@@ -265,7 +281,7 @@ describe "Pages API" do
           get url
 
           expect(response).to be_success
-          expect(json["container"]["revisionId"]).to eq container.current_revision.id
+          expect(json["container"]["currentRevision"]["id"]).to eq container.current_revision.id
         end
 
         it "should include the container locale" do
@@ -299,8 +315,9 @@ describe "Pages API" do
           get "#{url}?revision_id=#{new_revision.id}"
 
           expect(response).to be_success
-          expect(json["container"]["revisionId"]).to eq new_revision.id
-          expect(json["container"]["revisionId"]).not_to eq container.current_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq json["container"]["currentRevision"]["id"]
+          expect(json["container"]["revision"]["id"]).to eq new_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq container.current_revision.id
         end
 
         it "should return the specified revision of the container when using the id to fetch the container" do
@@ -310,8 +327,9 @@ describe "Pages API" do
           get "#{url}?revision_id=#{new_revision.id}"
 
           expect(response).to be_success
-          expect(json["container"]["revisionId"]).to eq new_revision.id
-          expect(json["container"]["revisionId"]).not_to eq container.current_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq json["container"]["currentRevision"]["id"]
+          expect(json["container"]["revision"]["id"]).to eq new_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq container.current_revision.id
         end
       end
 
