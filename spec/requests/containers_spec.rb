@@ -26,18 +26,22 @@ describe "Pages API" do
         expect(json["containers"].size).to eq container_class.count
       end
 
-      it "should include the id, url and locale for each container" do
+      it "should include the id and locale for each container" do
         get url
 
         json["containers"].each do |container|
           expect(container).to have_key "id"
           expect(container).to have_key "locale"
+          expect(container).to have_key "name"
+        end
+      end
 
-          if container_type == :page
-            expect(container).to have_key "url"
-          else
-            expect(container).not_to have_key "url"
-          end
+      it "should include the url and published from the current_revision" do
+        get url
+
+        json["containers"].each do |container|
+          expect(container["currentRevision"]).to have_key "url"
+          expect(container["currentRevision"]).to have_key "published"
         end
       end
 
@@ -72,7 +76,7 @@ describe "Pages API" do
           end
 
           it "should return the current revision of a page" do
-            expect(json["container"]["revisionId"]).to eq container.current_revision.id
+            expect(json["container"]["currentRevision"]["id"]).to eq container.current_revision.id
           end
 
           it "should return a container with type #{container_class}" do
@@ -83,6 +87,26 @@ describe "Pages API" do
             it "should include the page layout nested in a layout key" do
               expect(json["container"]["layout"]["container"]["id"]).to eq @layout.id
               expect(json["container"]["layout"]["container"]["type"]).to eq "Layout"
+            end
+
+            it "should include the revision's published attribute" do
+              expect(json["container"]["currentRevision"]["published"]).to eq container.current_revision.published
+            end
+
+            it "should include the revision's url attribute" do
+              expect(json["container"]["currentRevision"]["url"]).to eq container.current_revision.url
+            end
+          else
+            it "should not include a layout key" do
+              expect(json["container"]).not_to have_key "layout"
+            end
+
+            it "should not include a published attribute" do
+              expect(json["container"]["currentRevision"]).not_to have_key "published"
+            end
+
+            it "should not include a url attribute" do
+              expect(json["container"]["currentRevision"]).not_to have_key "url"
             end
           end
         end
@@ -133,6 +157,24 @@ describe "Pages API" do
           get "/projects/foo/#{container_type.to_s.pluralize}"
           expect(response).to_not be_success
         end
+
+        it "should include the url and published from the current_revision" do
+          get url
+
+          json["containers"].each do |container|
+            expect(container["currentRevision"]).to have_key "url"
+            expect(container["currentRevision"]).to have_key "published"
+          end
+        end
+
+        it "should include the url and published from the project revision" do
+          get url
+
+          json["containers"].each do |container|
+            expect(container["revision"]).to have_key "url"
+            expect(container["revision"]).to have_key "published"
+          end
+        end
       end
 
       describe "when showing a container" do
@@ -140,7 +182,7 @@ describe "Pages API" do
 
         it "should use the current project container to fetch the latest revision" do
           get "#{url}/#{project_container.container_id}"
-          expect(json["container"]["revisionId"]).to eq project_container.revision_id
+          expect(json["container"]["revision"]["id"]).to eq project_container.revision_id
         end
       end
 
@@ -182,17 +224,6 @@ describe "Pages API" do
         {
           container: {
             name: "A new container",
-            url: "/foobar",
-            locale: "en_US"
-          }
-        }
-      end
-
-      let(:existing_page_url_params) do
-        {
-          container: {
-            name: "An existing container",
-            url: @page.url,
             locale: "en_US"
           }
         }
@@ -201,8 +232,7 @@ describe "Pages API" do
       let(:page_with_no_locale_params) do
         {
           container: {
-            name: "A container",
-            url: "/no-locale"
+            name: "A container"
           }
         }
       end
@@ -211,15 +241,6 @@ describe "Pages API" do
         expect {
           post url, params: valid_container_params
         }.to change{ container_class.count }.by(1)
-      end
-
-      if container_type == :page
-        it "should show errors if the url is taken" do
-          post url, params: existing_page_url_params
-
-          expect(response).to_not be_success
-          expect(json["container"]["errors"]["url"]).not_to be_empty
-        end
       end
 
       it "should require a locale" do
@@ -231,12 +252,12 @@ describe "Pages API" do
 
       it "should have a blank revision id" do
         post url, params: valid_container_params
-        expect(json["container"]["revisionId"]).to be_nil
+        expect(json["container"]["currentRevision"]["id"]).to be_nil
       end
 
       it "should have an empty sections array" do
         post url, params: valid_container_params
-        expect(json["container"]["sections"]).to eq []
+        expect(json["container"]["currentRevision"]["sections"]).to eq []
       end
 
       it "should create a project container if in the project scope" do
@@ -260,7 +281,7 @@ describe "Pages API" do
           get url
 
           expect(response).to be_success
-          expect(json["container"]["revisionId"]).to eq container.current_revision.id
+          expect(json["container"]["currentRevision"]["id"]).to eq container.current_revision.id
         end
 
         it "should include the container locale" do
@@ -294,8 +315,9 @@ describe "Pages API" do
           get "#{url}?revision_id=#{new_revision.id}"
 
           expect(response).to be_success
-          expect(json["container"]["revisionId"]).to eq new_revision.id
-          expect(json["container"]["revisionId"]).not_to eq container.current_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq json["container"]["currentRevision"]["id"]
+          expect(json["container"]["revision"]["id"]).to eq new_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq container.current_revision.id
         end
 
         it "should return the specified revision of the container when using the id to fetch the container" do
@@ -305,8 +327,9 @@ describe "Pages API" do
           get "#{url}?revision_id=#{new_revision.id}"
 
           expect(response).to be_success
-          expect(json["container"]["revisionId"]).to eq new_revision.id
-          expect(json["container"]["revisionId"]).not_to eq container.current_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq json["container"]["currentRevision"]["id"]
+          expect(json["container"]["revision"]["id"]).to eq new_revision.id
+          expect(json["container"]["revision"]["id"]).not_to eq container.current_revision.id
         end
       end
 
@@ -340,7 +363,7 @@ describe "Pages API" do
   end
 
   describe "destroying a container" do
-    shared_examples "a destroyable container" do |container_type, container_class|      
+    shared_examples "a destroyable container" do |container_type, container_class|
       describe "when the container exists" do
         before do
           @container = create container_type
@@ -351,17 +374,17 @@ describe "Pages API" do
           expect {
             delete @url
           }.not_to change{ container_class.with_deleted.count }
-          
+
           expect(@container.reload.deleted_at).not_to be nil
         end
-        
+
         it "should not remove revisions" do
           expect {
             delete @url
           }.not_to change{ Ninetails::Revision.count }
         end
       end
-      
+
       describe "when the container does not exist" do
         it "should return a 404" do
           delete "/pages/0"

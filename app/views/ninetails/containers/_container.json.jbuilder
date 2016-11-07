@@ -1,22 +1,21 @@
 json.container do
   json.call container, :id, :name, :locale
-  json.revision_id container.try(:revision).try(:id)
   json.type container.type.demodulize
 
-  if container.is_a? Ninetails::Page
-    json.url container.url
-
-    if container.layout.present?
-      json.layout do
-        json.partial! "/ninetails/containers/container", container: container.layout
-      end
+  if container.try(:layout).present?
+    json.layout do
+      json.partial! "/ninetails/containers/container", container: container.layout
     end
   end
 
-  if container.revision.present?
-    json.sections container.revision.sections, partial: "/ninetails/sections/section", as: :section
-  else
-    json.sections []
+  json.current_revision do
+    json.partial! "/ninetails/revisions/revision", revision: container.current_revision, container_type: container.class
+  end
+
+  if container.revision != container.current_revision
+    json.revision do
+      json.partial! "/ninetails/revisions/revision", revision: container.revision, container_type: container.class
+    end
   end
 
   if container.errors.present?

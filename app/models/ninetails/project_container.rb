@@ -5,6 +5,8 @@ module Ninetails
     belongs_to :revision
     belongs_to :project
 
+    delegate :name, :locale, :type, :current_revision, to: :container
+
     validates :project, {
       presence: true
     }
@@ -23,6 +25,12 @@ module Ninetails
         message: "is already used in this project"
       }
     }
+
+    scope :of_type, -> type do
+      includes(:revision, :container).
+      joins(:container).
+      merge Container.where(type: type)
+    end
 
   end
 end

@@ -23,22 +23,25 @@ describe "Revisions API" do
   end
 
   describe "creating a revision" do
+
     let(:valid_revision_params) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          sections: [
             document_head_section
           ]
         }
       }
     end
 
+    # TODO - test dupe url
+
     let(:valid_revision_params_with_extra_keys) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          sections: [
             document_head_section.merge({ "located_in" => "body", "location_name" => "foobar" })
           ]
         }
@@ -47,9 +50,8 @@ describe "Revisions API" do
 
     let(:invalid_revision_params) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          sections: [
             document_head_section(title: "", description: "")
           ]
         }
@@ -59,21 +61,21 @@ describe "Revisions API" do
     let(:project) { create :project }
     let(:valid_revision_params_with_project) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          project_id: project.id,
+          sections: [
             document_head_section
-          ],
-          "project_id": project.id
+          ]
         }
       }
     end
 
     let(:valid_revision_params_with_variant) do
       {
-        "revision": {
-          "message": "",
-          "sections":[
+        revision: {
+          url: build(:revision).url,
+          sections: [
             document_head_section(variant: "extended")
           ]
         }
@@ -87,7 +89,7 @@ describe "Revisions API" do
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
-        expect(Ninetails::Revision.find(json["container"]["revisionId"]).project).to eq project
+        expect(Ninetails::Revision.find(json["container"]["revision"]["id"]).project).to eq project
       end
 
       it "should create a new Project Revision entry if one doesn't exist for this page in the project" do
@@ -95,7 +97,7 @@ describe "Revisions API" do
           post "/pages/#{page.id}/revisions", params: valid_revision_params_with_project
         }.to change { Ninetails::ProjectContainer.count }.by(1)
 
-        revision = Ninetails::Revision.find json["container"]["revisionId"]
+        revision = Ninetails::Revision.find json["container"]["revision"]["id"]
         project_container = Ninetails::ProjectContainer.last
         expect(project_container.container).to eq page
         expect(project_container.project).to eq project
@@ -109,7 +111,7 @@ describe "Revisions API" do
           post "/pages/#{page.id}/revisions", params: valid_revision_params_with_project
         }.to_not change { Ninetails::ProjectContainer.count }
 
-        revision = Ninetails::Revision.find json["container"]["revisionId"]
+        revision = Ninetails::Revision.find json["container"]["revision"]["id"]
         project_container = Ninetails::ProjectContainer.last
         expect(project_container.container).to eq page
         expect(project_container.project).to eq project
@@ -124,7 +126,7 @@ describe "Revisions API" do
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
-        expect(json["container"]["revisionId"]).to_not be_nil
+        expect(json["container"]["revision"]["id"]).to_not be_nil
       end
 
       it "should have created the correct number of sections" do
@@ -140,7 +142,7 @@ describe "Revisions API" do
         }.to change { page.revisions.count }.by(1)
 
         expect(response).to be_success
-        expect(json["container"]["revisionId"]).to_not be_nil
+        expect(json["container"]["revision"]["id"]).to_not be_nil
       end
 
       it "should have stored the variant" do
@@ -159,7 +161,7 @@ describe "Revisions API" do
       it "should show error messages in the revision params" do
         post "/pages/#{page.id}/revisions", params: invalid_revision_params
 
-        errors = json["container"]["sections"][0]["elements"]["title"]["content"]["errors"]
+        errors = json["container"]["revision"]["sections"][0]["elements"]["title"]["content"]["errors"]
         expect(errors).to eq({ "text"=>["can't be blank"] })
       end
     end
@@ -185,7 +187,7 @@ describe "Revisions API" do
     let(:camelcased_revision) do
       {
         revision: {
-          message: "",
+          url: build(:revision).url,
           sections: [
             {
               "name": "",
@@ -210,8 +212,8 @@ describe "Revisions API" do
       }.to change { page.revisions.count }.by(1)
 
       expect(response).to be_success
-      expect(json["container"]["revisionId"]).to_not be_nil
-      expect(json["container"]["sections"][0]["elements"]["longNameElement"]["longNameProperty"]["longTextString"]).to_not be_nil
+      expect(json["container"]["revision"]["id"]).to_not be_nil
+      expect(json["container"]["revision"]["sections"][0]["elements"]["longNameElement"]["longNameProperty"]["longTextString"]).to_not be_nil
     end
 
   end

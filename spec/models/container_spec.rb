@@ -21,7 +21,7 @@ RSpec.describe Ninetails::Container, type: :model do
     end
 
     it "should find a page by url" do
-      expect(Ninetails::Container.find_and_load_revision(id: @page.url)).to eq @page
+      expect(Ninetails::Container.find_and_load_revision(id: @page.current_revision.url)).to eq @page
     end
 
     it "should find a layout by id" do
@@ -75,6 +75,20 @@ RSpec.describe Ninetails::Container, type: :model do
 
     it "should return the container current_revision if no custom revision is set" do
       expect(@container.revision).to eq @container.revisions.last
+    end
+  end
+
+  describe "#set_current_revision" do
+    before do
+      @old_revision = create :revision
+      @container = create :page, revision: @old_revision
+      @new_revision = create :revision
+    end
+    
+    it "updates the revision id" do
+      expect {
+        @container.set_current_revision(@new_revision)
+      }.to change{ @container.revision }.from(@old_revision).to(@new_revision)
     end
   end
 

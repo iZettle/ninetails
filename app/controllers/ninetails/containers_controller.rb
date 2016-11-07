@@ -3,9 +3,9 @@ module Ninetails
 
     def index
       if project.present?
-        @containers = project.public_send params[:type]
+        @containers = project.project_containers.of_type container_class.name
       else
-        @containers = container_class.all
+        @containers = container_class.all.includes :current_revision
       end
     end
 
@@ -24,7 +24,7 @@ module Ninetails
         render :show, status: :bad_request
       end
     end
-    
+
     def destroy
       container_class.find(params[:id]).destroy
 
@@ -34,7 +34,7 @@ module Ninetails
     private
 
     def container_params
-      params.require(:container).permit(:url, :name, :locale, :layout_id)
+      params.require(:container).permit(:name, :locale, :layout_id)
     end
 
     def container_class

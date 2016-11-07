@@ -15,11 +15,12 @@ module Ninetails
 
     def self.find_and_load_revision(params, project = nil)
       if params[:id].to_s =~ /^\d+$/
-        container = find params[:id]
+        selector = where id: params[:id]
       else
-        container = find_by_url! params[:id]
+        selector = joins(:revisions).merge Ninetails::Revision.where(url: params[:id])
       end
 
+      container = selector.includes(:current_revision).first!
       container.load_revision_directly_or_from_project params[:revision_id], project
       container
     end
@@ -30,7 +31,11 @@ module Ninetails
 
     def build_revision_from_params(params)
       params = params.to_h.convert_keys.with_indifferent_access
-      self.revision = revisions.build message: params[:message], project_id: params[:project_id]
+      self.revision = revisions.build(
+        message: params[:message],
+        project_id: params[:project_id],
+        url: params[:url]
+      )
 
       params[:sections].each do |section_json|
         revision.sections.build section_json.slice(:name, :type, :elements, :variant)
