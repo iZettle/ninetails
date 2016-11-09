@@ -145,4 +145,14 @@ RSpec.describe Ninetails::Section do
     end
   end
 
+  describe "data" do
+    it "should include data in the structure" do
+      expect(Section::SmartSection.new.serialize[:data][:pages]).to eq Car.all
+    end
+
+    it "should default to an empty hash" do
+      expect(ExampleSection.new.serialize[:data]).to eq Hash.new
+    end
+  end
+
 end
