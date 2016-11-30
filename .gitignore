@@ -15,3 +15,5 @@
 !/spec/dummy/log/.keep
 /spec/dummy/tmp
 *.gem
+
+.DS_Store
