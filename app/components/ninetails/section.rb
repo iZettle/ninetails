@@ -57,6 +57,15 @@ module Ninetails
       elements.find { |element| element.name == name.to_sym }
     end
 
+    def self.has_data(name, builder)
+      @data_sources ||= []
+      @data_sources << { name: name, builder: builder }
+    end
+
+    def self.data_sources
+      @data_sources || []
+    end
+
     def serialize
       {
         name: "",
@@ -64,7 +73,8 @@ module Ninetails
         located_in: self.class.position,
         location_name: self.class.location_name,
         variants: self.class.variants,
-        elements: serialize_elements
+        elements: serialize_elements,
+        data: generate_data
       }
     end
 
@@ -73,6 +83,12 @@ module Ninetails
 
       elements.each_with_object({}) do |element, hash|
         element.add_to_hash hash
+      end
+    end
+
+    def generate_data
+      self.class.data_sources.each_with_object({}) do |data_source, hash|
+        hash[data_source[:name]] = data_source[:builder].call
       end
     end
 
