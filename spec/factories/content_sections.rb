@@ -10,4 +10,9 @@ FactoryGirl.define do
     elements Section::Billboard.new.serialize_elements
   end
 
+  factory :cars_section, class: Ninetails::ContentSection do
+    type "CarsSection"
+    elements Section::CarsSection.new.serialize_elements
+  end
+
 end

@@ -4,7 +4,7 @@ describe "Pages API" do
 
   before do
     @layout = create :layout
-    @page = create :page, layout: @layout
+    @page = create :page, layout: @layout, sections: [:billboard_section, :cars_section]
     @project = create :project
   end
 
@@ -84,6 +84,14 @@ describe "Pages API" do
           end
 
           if container_type == :page
+            it "should include the container's sections" do
+              expect(json["container"]["currentRevision"]["sections"].size).to eq 2
+            end
+
+            it "should include section data" do
+              expect(json["container"]["currentRevision"]["sections"][1]["data"]).to have_key "cars"
+            end
+
             it "should include the page layout nested in a layout key" do
               expect(json["container"]["layout"]["container"]["id"]).to eq @layout.id
               expect(json["container"]["layout"]["container"]["type"]).to eq "Layout"
