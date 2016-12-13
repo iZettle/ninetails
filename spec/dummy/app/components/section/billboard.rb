@@ -10,5 +10,7 @@ module Section
     has_many_elements :supported_card_icons, Element::Figure
     has_many_elements :supported_device_icons, Element::Figure
 
+    attribute :show_card_icons, Boolean, default: true
+
   end
 end

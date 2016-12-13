@@ -1,5 +1,6 @@
 module Ninetails
   class Section
+    include Virtus.model
 
     attr_accessor :elements_instances
 
@@ -74,7 +75,8 @@ module Ninetails
         location_name: self.class.location_name,
         variants: self.class.variants,
         elements: serialize_elements,
-        data: generate_data
+        data: generate_data,
+        settings: generate_settings
       }
     end
 
@@ -89,6 +91,12 @@ module Ninetails
     def generate_data
       self.class.data_sources.each_with_object({}) do |data_source, hash|
         hash[data_source[:name]] = data_source[:builder].call
+      end
+    end
+
+    def generate_settings
+      self.class.attribute_set.each_with_object({}) do |attribute, hash|
+        hash[attribute.name] = public_send(attribute.name)
       end
     end
 

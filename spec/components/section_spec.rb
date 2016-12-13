@@ -4,6 +4,7 @@ class ExampleSection < Ninetails::Section
   located_in :body
   has_element :foo, Element::Text
   has_element :bar, Element::Button
+  attribute :hello, String, default: "World"
 end
 
 class ExamplePlaceholderSection < Ninetails::Section
@@ -98,6 +99,10 @@ RSpec.describe Ninetails::Section do
 
     it "should have a type key which is the section class name" do
       expect(structure[:type]).to eq "ExampleSection"
+    end
+
+    it "should include the default settings" do
+      expect(structure[:settings][:hello]).to eq "World"
     end
 
     it "should include the position in locatedIn" do
