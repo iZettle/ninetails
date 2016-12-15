@@ -87,7 +87,7 @@ describe "Revisions API" do
         revision: {
           url: build(:revision).url,
           sections: [
-            document_head_section(settings: { foo: true })
+            document_head_section(settings: { foo: false })
           ]
         }
       }
@@ -188,11 +188,16 @@ describe "Revisions API" do
     describe "with settings" do
       it "should accept settings params and store them" do
         post "/pages/#{page.id}/revisions", params: valid_revision_params_with_settings
-        expect(page.revisions.last.sections.first.settings["foo"]).to eq true
+        expect(page.revisions.last.sections.first.settings["foo"]).to eq false
       end
 
       it "should return the correct settings in the response json" do
         post "/pages/#{page.id}/revisions", params: valid_revision_params_with_settings
+        expect(json["container"]["revision"]["sections"][0]["settings"]["foo"]).to eq false
+      end
+
+      it "should return the default settings in the response json if no custom settings were provided" do
+        post "/pages/#{page.id}/revisions", params: valid_revision_params
         expect(json["container"]["revision"]["sections"][0]["settings"]["foo"]).to eq true
       end
     end
