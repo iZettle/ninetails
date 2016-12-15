@@ -35,6 +35,18 @@ module Ninetails
       section
     end
 
+    # Because the submitted data is always strings, send everything through virtus attrs so it
+    # gets cast to the correct class.
+    #
+    # Then, use the newly cast attributes to store in the settings json blob
+    def store_settings(settings_hash)
+      settings_hash.each do |key, value|
+        section.public_send "#{key}=", value
+      end
+
+      self.settings = section.attributes
+    end
+
     private
 
     def validate_elements

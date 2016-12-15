@@ -75,7 +75,7 @@ module Ninetails
         variants: self.class.variants,
         elements: serialize_elements,
         data: generate_data,
-        settings: settings
+        settings: generate_settings
       }
     end
 
@@ -93,8 +93,10 @@ module Ninetails
       end
     end
 
-    def settings
-      self.class.try :settings
+    def generate_settings
+      self.class.attribute_set.each_with_object({}) do |attribute, hash|
+        hash[attribute.name] = public_send(attribute.name)
+      end
     end
 
   end

@@ -186,13 +186,14 @@ describe "Revisions API" do
     end
 
     describe "with settings" do
-      it "should accept settings params" do
-        expect {
-          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_settings
-        }.to change { page.revisions.count }.by(1)
-
-        binding.pry
+      it "should accept settings params and store them" do
+        post "/pages/#{page.id}/revisions", params: valid_revision_params_with_settings
         expect(page.revisions.last.sections.first.settings["foo"]).to eq true
+      end
+
+      it "should return the correct settings in the response json" do
+        post "/pages/#{page.id}/revisions", params: valid_revision_params_with_settings
+        expect(json["container"]["revision"]["sections"][0]["settings"]["foo"]).to eq true
       end
     end
   end
