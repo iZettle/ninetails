@@ -38,7 +38,7 @@ module Ninetails
       )
 
       params[:sections].each do |section_json|
-        revision.sections.build section_json.slice(:name, :type, :elements, :variant)
+        revision.sections.build section_json.slice(:name, :type, :elements, :variant, :settings)
       end
     end
 

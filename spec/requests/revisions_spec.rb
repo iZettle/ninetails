@@ -82,6 +82,17 @@ describe "Revisions API" do
       }
     end
 
+    let(:valid_revision_params_with_settings) do
+      {
+        revision: {
+          url: build(:revision).url,
+          sections: [
+            document_head_section(settings: { foo: true })
+          ]
+        }
+      }
+    end
+
     describe "with valid sections and a project id" do
       it "should create a revision with the project id" do
         expect {
@@ -173,6 +184,17 @@ describe "Revisions API" do
         }.not_to raise_error
       end
     end
+
+    describe "with settings" do
+      it "should accept settings params" do
+        expect {
+          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_settings
+        }.to change { page.revisions.count }.by(1)
+
+        binding.pry
+        expect(page.revisions.last.sections.first.settings["foo"]).to eq true
+      end
+    end
   end
 
   describe "handling hash keys in camelcase" do
@@ -215,7 +237,5 @@ describe "Revisions API" do
       expect(json["container"]["revision"]["id"]).to_not be_nil
       expect(json["container"]["revision"]["sections"][0]["elements"]["longNameElement"]["longNameProperty"]["longTextString"]).to_not be_nil
     end
-
   end
-
 end
