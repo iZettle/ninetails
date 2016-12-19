@@ -16,6 +16,16 @@ module Section
     located_in :body
     has_variants :light, :dark
   end
+
+  class TestSectionWithSettingsSettings
+    include Virtus.model
+    attribute :hello, String, default: "World"
+  end
+
+  class TestSectionWithSettings < Ninetails::Section
+    located_in :body
+    attribute :settings, TestSectionWithSettingsSettings
+  end
 end
 
 RSpec.describe Ninetails::ContentSection, type: :model do
@@ -188,6 +198,30 @@ RSpec.describe Ninetails::ContentSection, type: :model do
     it "should set the variant name" do
       section.deserialize
       expect(section.variant).to eq "light"
+    end
+  end
+
+  describe "deserializing an empty section with settings" do
+    let(:valid_json) do
+      {
+        "name" => "",
+        "type" => "TestSectionWithSettings",
+        "settings" => {
+          "foo" => true
+        }
+      }
+    end
+
+    let(:section) { Ninetails::ContentSection.new(valid_json) }
+
+    it "should create a section instance" do
+      section.deserialize
+      expect(section.section).to be_a Section::TestSectionWithSettings
+    end
+
+    it "should set settings" do
+      section.deserialize
+      expect(section.settings["foo"]).to eq true
     end
   end
 
