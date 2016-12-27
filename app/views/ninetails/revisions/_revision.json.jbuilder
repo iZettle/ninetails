@@ -5,6 +5,10 @@ if revision.present?
     json.call revision, :id
   end
   json.sections revision.sections, partial: "/ninetails/sections/section", as: :section
+
+  if revision.errors.present?
+    json.errors revision.errors
+  end
 else
   json.sections []
 end
