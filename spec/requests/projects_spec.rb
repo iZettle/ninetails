@@ -93,11 +93,13 @@ describe "Projects API" do
   end
 
   describe "destroying projects" do
-    it "should delete the project" do
+    it "should soft delete the project" do
       project = create :project
       expect {
         delete "/projects/#{project.id}"
-      }.to change{ Ninetails::Project.count }.by(-1)
+      }.not_to change{ Ninetails::Project.with_deleted.count }
+
+      expect(project.reload.deleted_at).not_to be nil
     end
   end
 
