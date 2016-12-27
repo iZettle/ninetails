@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213130257) do
+ActiveRecord::Schema.define(version: 20161227090949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,14 @@ ActiveRecord::Schema.define(version: 20161213130257) do
     t.datetime "updated_at",              null: false
     t.string   "variant"
     t.json     "settings",   default: {}
+  end
+
+  create_table "ninetails_links", force: :cascade do |t|
+    t.integer "container_id"
+    t.integer "linked_container_id"
+    t.string  "relationship"
+    t.index ["container_id"], name: "index_ninetails_links_on_container_id", using: :btree
+    t.index ["linked_container_id"], name: "index_ninetails_links_on_linked_container_id", using: :btree
   end
 
   create_table "ninetails_project_containers", force: :cascade do |t|

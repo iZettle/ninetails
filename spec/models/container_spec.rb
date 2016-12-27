@@ -5,6 +5,8 @@ RSpec.describe Ninetails::Container, type: :model do
   it { should have_many(:revisions) }
   it { should have_many(:project_containers) }
   it { should belong_to(:current_revision) }
+  it { should have_many(:container_relations) }
+  it { should have_many(:related_containers) }
 
   it { should validate_presence_of(:locale) }
 
@@ -84,11 +86,32 @@ RSpec.describe Ninetails::Container, type: :model do
       @container = create :page, revision: @old_revision
       @new_revision = create :revision
     end
-    
+
     it "updates the revision id" do
       expect {
         @container.set_current_revision(@new_revision)
       }.to change{ @container.revision }.from(@old_revision).to(@new_revision)
+    end
+  end
+
+  describe "relations" do
+    before do
+      @first_page = create :page
+      @second_page = create :page
+      @relationship = create :link, container: @first_page, linked_container: @second_page, relationship: "this-test"
+    end
+
+    it "should have the correct number of links" do
+      expect(@first_page.links.size).to eq 1
+    end
+
+    it "should include the second page in the first page's relations" do
+      expect(@first_page.linked_containers).to include @second_page
+    end
+
+    it "should include the first page in the second page's relations" do
+      binding.pry
+      expect(@second_page.inverse_linked_containers).to include @first_page
     end
   end
 

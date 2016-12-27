@@ -4,6 +4,13 @@ module Ninetails
 
     has_many :revisions
     has_many :project_containers
+
+    has_many :links
+    has_many :inverse_links, class_name: "Link", foreign_key: "linked_container_id"
+
+    has_many :linked_containers, through: :links
+    has_many :containers_linking, through: :inverse_links, source: :container
+
     belongs_to :current_revision, class_name: "Revision"
 
     scope :pages, -> { where type: 'Ninetails::Page' }
