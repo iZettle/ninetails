@@ -1,5 +1,6 @@
 module Ninetails
   class Project < ActiveRecord::Base
+    acts_as_paranoid
 
     has_many :project_containers
     has_many :containers, through: :project_containers
