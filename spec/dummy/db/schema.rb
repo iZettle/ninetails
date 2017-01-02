@@ -37,6 +37,11 @@ ActiveRecord::Schema.define(version: 20170104082424) do
     t.json     "settings",   default: {}
   end
 
+  create_table "ninetails_folders", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "deleted_at"
+  end
+
   create_table "ninetails_project_containers", force: :cascade do |t|
     t.integer "project_id"
     t.integer "container_id"
@@ -71,7 +76,9 @@ ActiveRecord::Schema.define(version: 20170104082424) do
     t.boolean  "published",    default: false
     t.string   "name"
     t.string   "locale"
+    t.integer  "folder_id"
     t.index ["container_id"], name: "index_ninetails_revisions_on_container_id", using: :btree
+    t.index ["folder_id"], name: "index_ninetails_revisions_on_folder_id", using: :btree
     t.index ["project_id"], name: "index_ninetails_revisions_on_project_id", using: :btree
   end
 

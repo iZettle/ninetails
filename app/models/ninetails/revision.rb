@@ -3,6 +3,7 @@ module Ninetails
 
     belongs_to :container
     belongs_to :project
+    belongs_to :folder
     has_many :revision_sections
     has_many :sections, -> { order :created_at }, through: :revision_sections
 
