@@ -7,6 +7,8 @@ Ninetails::Engine.routes.draw do
   with_options defaults: { format: :json } do
     root 'containers#index'
 
+    resources :folders, only: [:index]
+
     resources :projects, except: [:new, :edit] do
       post :publish, on: :member
     end
