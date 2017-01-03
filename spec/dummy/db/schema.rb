@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20170104082424) do
   create_table "ninetails_folders", force: :cascade do |t|
     t.string   "name"
     t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "ninetails_project_containers", force: :cascade do |t|

@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Folders API" do
 
-  describe "listing folder" do
+  describe "listing folders" do
     before do
       @folders = create_list :folder, 5
     end
@@ -19,7 +19,59 @@ describe "Folders API" do
       expect(json["folders"].size).to eq 4
       expect(json["folders"].first["name"]).not_to eq @folders.first.name
     end
+  end
 
+  describe "creating a folder" do
+    it "should persist a new folder with valid params" do
+      expect {
+        post "/folders", params: { folder: { name: "A new folder" }}
+      }.to change{ Ninetails::Folder.count }.by(1)
+
+      expect(response).to be_success
+    end
+
+    it "should show errors if the folder was invalid" do
+      expect {
+        post "/folders", params: { folder: { name: "" }}
+      }.not_to change{ Ninetails::Folder.count }
+
+      expect(response).not_to be_success
+      expect(json["folder"]).to have_key "errors"
+    end
+  end
+
+  describe "updating a folder" do
+    before do
+      @folder = create :folder
+    end
+
+    it "should save the changes if they were valid" do
+      expect {
+        put "/folders/#{@folder.id}", params: { folder: { name: "A new name" }}
+      }.to change{ @folder.reload.name }.from(@folder.name).to("A new name")
+
+      expect(response).to be_success
+    end
+
+    it "should not save the changes if they were invalid" do
+      expect {
+        put "/folders/#{@folder.id}", params: { folder: { name: "" }}
+      }.not_to change{ @folder.reload.name }
+
+      expect(response).not_to be_success
+      expect(json["folder"]).to have_key "errors"
+    end
+  end
+
+  describe "destroying folders" do
+    it "should soft delete the folder" do
+      folder = create :folder
+      expect {
+        delete "/folders/#{folder.id}"
+      }.not_to change{ Ninetails::Folder.with_deleted.count }
+
+      expect(folder.reload.deleted_at).not_to be nil
+    end
   end
 
 end

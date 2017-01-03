@@ -3,6 +3,7 @@ class CreateNinetailsFolders < ActiveRecord::Migration[5.0]
     create_table :ninetails_folders do |t|
       t.string :name
       t.timestamp :deleted_at
+      t.timestamps
     end
   end
 end
