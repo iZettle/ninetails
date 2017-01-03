@@ -3,6 +3,7 @@ require 'rails_helper'
 describe "Revisions API" do
 
   let(:page) { create :page, :with_revisions, revisions_count: 5 }
+  let(:folder) { create :folder }
 
   describe "listing revisions" do
     describe "with a valid page_id" do
@@ -98,6 +99,18 @@ describe "Revisions API" do
       }
     end
 
+    let(:valid_revision_params_with_folder) do
+      {
+        revision: {
+          url: build(:revision).url,
+          folder_id: folder.id,
+          sections: [
+            document_head_section
+          ]
+        }
+      }
+    end
+
     describe "with valid sections and a project id" do
       it "should create a revision with the project id" do
         expect {
@@ -179,6 +192,17 @@ describe "Revisions API" do
 
         errors = json["container"]["revision"]["sections"][0]["elements"]["title"]["content"]["errors"]
         expect(errors).to eq({ "text"=>["can't be blank"] })
+      end
+    end
+
+    describe "with valid sections and a folder" do
+      it "should store the folder correctly" do
+        expect {
+          post "/pages/#{page.id}/revisions", params: valid_revision_params_with_folder
+        }.to change { page.revisions.count }.by(1)
+
+        expect(response).to be_success
+        expect(json["container"]["revision"]["folderId"]).to eq folder.id
       end
     end
 

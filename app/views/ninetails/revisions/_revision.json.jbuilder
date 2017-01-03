@@ -1,5 +1,5 @@
 if revision.present?
-  json.call revision, :id, :name, :locale
+  json.call revision, :id, :name, :locale, :folder_id
 
   if container_type.present? && container_type == Ninetails::Page
     json.call revision, :url, :published
