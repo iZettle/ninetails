@@ -8,6 +8,8 @@ FactoryGirl.define do
   # and all the tests which currently use them, build them manually anyway...
   factory :revision, class: Ninetails::Revision do
     url
+    locale "en_US"
+    name "A page"
   end
 
 end
