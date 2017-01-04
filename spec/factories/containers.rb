@@ -3,6 +3,7 @@ FactoryGirl.define do
   factory :container, class: Ninetails::Container do
     transient do
       sections []
+      layout nil
     end
 
     association :current_revision, factory: :revision
@@ -22,6 +23,10 @@ FactoryGirl.define do
           section.save(validate: false)
           container.current_revision.sections << section
         end
+      end
+
+      if evaluator.layout.present? && container.revision.present?
+        container.revision.update_attributes layout: evaluator.layout
       end
     end
 

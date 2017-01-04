@@ -26,22 +26,22 @@ describe "Pages API" do
         expect(json["containers"].size).to eq container_class.count
       end
 
-      it "should include the id and locale for each container" do
+      it "should include the id for each container" do
         get url
 
         json["containers"].each do |container|
           expect(container).to have_key "id"
-          expect(container).to have_key "locale"
-          expect(container).to have_key "name"
         end
       end
 
-      it "should include the url and published from the current_revision" do
+      it "should include the url, locale, name, and published from the current_revision" do
         get url
 
         json["containers"].each do |container|
           expect(container["currentRevision"]).to have_key "url"
           expect(container["currentRevision"]).to have_key "published"
+          expect(container["currentRevision"]).to have_key "name"
+          expect(container["currentRevision"]).to have_key "locale"
         end
       end
 
@@ -93,6 +93,7 @@ describe "Pages API" do
             end
 
             it "should include the page layout nested in a layout key" do
+              binding.pry
               expect(json["container"]["layout"]["container"]["id"]).to eq @layout.id
               expect(json["container"]["layout"]["container"]["type"]).to eq "Layout"
             end

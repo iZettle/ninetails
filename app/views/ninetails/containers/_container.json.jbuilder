@@ -1,12 +1,6 @@
 json.container do
-  json.call container, :id, :name, :locale
+  json.call container, :id
   json.type container.type.demodulize
-
-  if container.try(:layout).present?
-    json.layout do
-      json.partial! "/ninetails/containers/container", container: container.layout
-    end
-  end
 
   json.current_revision do
     json.partial! "/ninetails/revisions/revision", revision: container.current_revision, container_type: container.class

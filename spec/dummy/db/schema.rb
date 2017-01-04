@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103123214) do
+ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,9 @@ ActiveRecord::Schema.define(version: 20170103123214) do
     t.datetime "updated_at",                                      null: false
     t.string   "type",                default: "Ninetails::Page"
     t.datetime "deleted_at"
+    t.string   "name"
+    t.string   "locale"
+    t.integer  "layout_id"
     t.index ["current_revision_id"], name: "index_ninetails_containers_on_current_revision_id", using: :btree
     t.index ["deleted_at"], name: "index_ninetails_containers_on_deleted_at", using: :btree
   end
@@ -67,9 +70,6 @@ ActiveRecord::Schema.define(version: 20170103123214) do
     t.integer  "project_id"
     t.string   "url"
     t.boolean  "published",    default: false
-    t.string   "name"
-    t.string   "locale"
-    t.integer  "layout_id"
     t.index ["container_id"], name: "index_ninetails_revisions_on_container_id", using: :btree
     t.index ["project_id"], name: "index_ninetails_revisions_on_project_id", using: :btree
   end

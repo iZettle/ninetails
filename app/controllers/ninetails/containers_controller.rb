@@ -14,7 +14,7 @@ module Ninetails
     end
 
     def create
-      @container = container_class.new container_params
+      @container = container_class.new
 
       if @container.save
         project.project_containers.create container: @container if project.present?
@@ -33,9 +33,9 @@ module Ninetails
 
     private
 
-    def container_params
-      params.require(:container).permit(:name, :locale, :layout_id)
-    end
+    # def container_params
+    #   params.require(:container).permit(:name, :locale, :layout_id)
+    # end
 
     def container_class
       if params[:type] == "layouts"

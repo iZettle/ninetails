@@ -28,6 +28,7 @@ describe "Revisions API" do
       {
         revision: {
           url: build(:revision).url,
+          locale: "en_GB",
           sections: [
             document_head_section
           ]
@@ -41,6 +42,7 @@ describe "Revisions API" do
       {
         revision: {
           url: build(:revision).url,
+          locale: "en_GB",
           sections: [
             document_head_section.merge({ "located_in" => "body", "location_name" => "foobar" })
           ]
@@ -63,6 +65,7 @@ describe "Revisions API" do
       {
         revision: {
           url: build(:revision).url,
+          locale: "en_GB",
           project_id: project.id,
           sections: [
             document_head_section
@@ -75,6 +78,7 @@ describe "Revisions API" do
       {
         revision: {
           url: build(:revision).url,
+          locale: "en_GB",
           sections: [
             document_head_section(variant: "extended")
           ]
@@ -86,6 +90,7 @@ describe "Revisions API" do
       {
         revision: {
           url: build(:revision).url,
+          locale: "en_GB",
           sections: [
             document_head_section(settings: { foo: false })
           ]
@@ -216,6 +221,7 @@ describe "Revisions API" do
       {
         revision: {
           url: build(:revision).url,
+          locale: "en_GB",
           sections: [
             {
               "name": "",
