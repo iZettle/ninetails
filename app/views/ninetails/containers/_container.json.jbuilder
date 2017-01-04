@@ -1,5 +1,5 @@
 json.container do
-  json.call container, :id, :name, :locale
+  json.call container, :id
   json.type container.type.demodulize
 
   if container.try(:layout).present?

@@ -32,6 +32,8 @@ module Ninetails
       self.revision = revisions.build(
         message: params[:message],
         project_id: params[:project_id],
+        locale: params[:locale],
+        name: params[:name],
         url: params[:url]
       )
 
