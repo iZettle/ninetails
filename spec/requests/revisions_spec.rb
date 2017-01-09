@@ -103,6 +103,7 @@ describe "Revisions API" do
       {
         revision: {
           url: build(:revision).url,
+          locale: "en_GB",
           folder_id: folder.id,
           sections: [
             document_head_section
