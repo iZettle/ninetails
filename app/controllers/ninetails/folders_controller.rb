@@ -1,10 +1,13 @@
 module Ninetails
   class FoldersController < NinetailsController
 
-    before_action :find_folder, only: [:update, :destroy]
+    before_action :find_folder, only: [:update, :destroy, :show]
 
     def index
       @folders = Folder.all
+    end
+
+    def show
     end
 
     def create

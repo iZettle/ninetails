@@ -12,6 +12,8 @@ module Ninetails
 
     after_create :update_project_container, if: -> { project.present? }
 
+    scope :live, -> { joins(:container).where("ninetails_revisions.id = ninetails_containers.current_revision_id") }
+
     private
 
     # Validate all sections and rebuild the sections array with the instances which now

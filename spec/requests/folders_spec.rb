@@ -74,4 +74,18 @@ describe "Folders API" do
     end
   end
 
+  describe "showing a folder" do
+    before do
+      @folder = create :folder
+      @pages = create_list :page, 2, folder: @folder
+      @second_revision = create :revision, container: @pages.first, folder: @folder
+    end
+
+    it "should include the folder name and the url and locale of all pages" do
+      get "/folders/#{@folder.id}"
+
+      binding.pry
+    end
+  end
+
 end
