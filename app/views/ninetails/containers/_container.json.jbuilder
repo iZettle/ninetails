@@ -12,12 +12,16 @@ json.container do
     json.current_revision do
       json.partial! "/ninetails/revisions/revision", revision: container.current_revision, container_type: container.class
     end
+  else
+    json.current_revision({})
   end
 
   if container.try(:revision).present?
     json.revision do
       json.partial! "/ninetails/revisions/revision", revision: container.revision, container_type: container.class
     end
+  else
+    json.revision({})
   end
 
   if container.errors.present?

@@ -236,14 +236,9 @@ describe "Pages API" do
         }.to change{ container_class.count }.by(1)
       end
 
-      it "should have a blank revision id" do
+      it "should have a blank revision" do
         post url, params: valid_container_params
-        expect(json["container"]["currentRevision"]["id"]).to be_nil
-      end
-
-      it "should have an empty sections array" do
-        post url, params: valid_container_params
-        expect(json["container"]["currentRevision"]["sections"]).to eq []
+        expect(json["container"]["currentRevision"]).to eq({})
       end
 
       it "should create a project container if in the project scope" do
