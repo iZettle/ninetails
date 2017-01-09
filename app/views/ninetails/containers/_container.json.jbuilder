@@ -1,5 +1,5 @@
 json.container do
-  json.call container, :id, :name, :locale
+  json.call container, :id
   json.type container.type.demodulize
 
   if container.try(:layout).present?
@@ -8,14 +8,20 @@ json.container do
     end
   end
 
-  json.current_revision do
-    json.partial! "/ninetails/revisions/revision", revision: container.current_revision, container_type: container.class
+  if container.try(:current_revision).present?
+    json.current_revision do
+      json.partial! "/ninetails/revisions/revision", revision: container.current_revision, container_type: container.class
+    end
+  else
+    json.current_revision({})
   end
 
-  if container.revision != container.current_revision
+  if container.try(:revision).present?
     json.revision do
       json.partial! "/ninetails/revisions/revision", revision: container.revision, container_type: container.class
     end
+  else
+    json.revision({})
   end
 
   if container.errors.present?

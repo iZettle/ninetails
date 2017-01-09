@@ -26,22 +26,22 @@ describe "Pages API" do
         expect(json["containers"].size).to eq container_class.count
       end
 
-      it "should include the id and locale for each container" do
+      it "should include the id for each container" do
         get url
 
         json["containers"].each do |container|
           expect(container).to have_key "id"
-          expect(container).to have_key "locale"
-          expect(container).to have_key "name"
         end
       end
 
-      it "should include the url and published from the current_revision" do
+      it "should include the url, name, locale and published from the current_revision" do
         get url
 
         json["containers"].each do |container|
           expect(container["currentRevision"]).to have_key "url"
           expect(container["currentRevision"]).to have_key "published"
+          expect(container["currentRevision"]).to have_key "locale"
+          expect(container["currentRevision"]).to have_key "name"
         end
       end
 
@@ -197,11 +197,7 @@ describe "Pages API" do
       describe "when creating a container" do
         let(:valid_container_params) do
           {
-            container: {
-              name: "A new container in a project",
-              url: "/foobar-project",
-              locale: "en_US"
-            }
+            container: {}
           }
         end
 
@@ -230,18 +226,7 @@ describe "Pages API" do
 
       let(:valid_container_params) do
         {
-          container: {
-            name: "A new container",
-            locale: "en_US"
-          }
-        }
-      end
-
-      let(:page_with_no_locale_params) do
-        {
-          container: {
-            name: "A container"
-          }
+          container: {}
         }
       end
 
@@ -251,21 +236,9 @@ describe "Pages API" do
         }.to change{ container_class.count }.by(1)
       end
 
-      it "should require a locale" do
-        post url, params: page_with_no_locale_params
-
-        expect(response).to_not be_success
-        expect(json["container"]["errors"]["locale"]).not_to be_empty
-      end
-
-      it "should have a blank revision id" do
+      it "should have a blank revision" do
         post url, params: valid_container_params
-        expect(json["container"]["currentRevision"]["id"]).to be_nil
-      end
-
-      it "should have an empty sections array" do
-        post url, params: valid_container_params
-        expect(json["container"]["currentRevision"]["sections"]).to eq []
+        expect(json["container"]["currentRevision"]).to eq({})
       end
 
       it "should create a project container if in the project scope" do
@@ -290,13 +263,6 @@ describe "Pages API" do
 
           expect(response).to be_success
           expect(json["container"]["currentRevision"]["id"]).to eq container.current_revision.id
-        end
-
-        it "should include the container locale" do
-          get url
-
-          expect(response).to be_success
-          expect(json["container"]["locale"]).to eq container.locale
         end
       end
 

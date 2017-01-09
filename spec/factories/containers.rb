@@ -6,7 +6,6 @@ FactoryGirl.define do
     end
 
     association :current_revision, factory: :revision
-    locale "en_US"
 
     # The current_revision association is a slightly strange additon to a
     # has_many relationship in FactoryGirl's world, which seems to be causing issues
@@ -39,11 +38,9 @@ FactoryGirl.define do
   end
 
   factory :page, parent: :container, class: Ninetails::Page do
-    name "A page"
   end
 
   factory :layout, parent: :container, class: Ninetails::Layout do
-    name "A layout"
   end
 
 end

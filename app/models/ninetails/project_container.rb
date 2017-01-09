@@ -5,6 +5,8 @@ module Ninetails
     belongs_to :revision
     belongs_to :project
 
+    accepts_nested_attributes_for :container, :revision
+
     delegate :name, :locale, :type, :current_revision, to: :container
 
     validates :project, {

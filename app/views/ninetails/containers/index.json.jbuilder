@@ -5,18 +5,17 @@ json.containers @containers do |container|
     json.call container, :id
   end
 
-  json.call container, :name, :locale
   json.type container.type.demodulize
 
   if container.current_revision.present?
     json.current_revision do
-      json.call container.current_revision, :url, :published
+      json.call container.current_revision, :id, :locale, :name, :url, :published
     end
   end
 
   if container.revision.present?
     json.revision do
-      json.call container.revision, :url, :published
+      json.call container.revision, :id, :locale, :name, :url, :published
     end
   end
 end

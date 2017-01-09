@@ -47,8 +47,12 @@ describe Ninetails::Seeds::Generator, "pages" do
       }.to change{ Ninetails::Page.count }.by(1)
     end
 
-    it "should set the name of the container" do
-      expect(empty_page.name).to eq "An empty page"
+    it "should set the name of the revision" do
+      expect(empty_page.current_revision.name).to eq "An empty page"
+    end
+
+    it "should set the locale of the revision" do
+      expect(empty_page.current_revision.locale).to eq "en_US"
     end
 
     it "should create a revision" do

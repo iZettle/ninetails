@@ -24,8 +24,12 @@ describe Ninetails::Seeds::Generator, "layouts" do
       }.to change{ Ninetails::Layout.count }.by(1)
     end
 
-    it "should set the name of the container" do
-      expect(empty_layout_seed.name).to eq "Main layout"
+    it "should set the name of the revision" do
+      expect(empty_layout_seed.current_revision.name).to eq "Main layout"
+    end
+
+    it "should set the locale of the revision" do
+      expect(empty_layout_seed.current_revision.locale).to eq "en_US"
     end
 
     it "should create a revision" do

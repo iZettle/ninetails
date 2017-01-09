@@ -57,13 +57,14 @@ module Ninetails
           container.layout = Ninetails::Layout.find layout
         end
       end
-      
-      def url(url)
-        container.current_revision.url = url
-      end
 
       def method_missing(name, *args, &block)
-        container.public_send "#{name}=", *args
+        # Filter methods which should be set on the revision instead of the container
+        if [:url, :locale, :name].include? name.to_sym
+          container.current_revision.public_send "#{name}=", *args
+        else
+          container.public_send "#{name}=", *args
+        end
       end
     end
   end

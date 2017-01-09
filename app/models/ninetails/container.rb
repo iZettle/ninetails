@@ -11,8 +11,6 @@ module Ninetails
 
     attr_writer :revision
 
-    validates :locale, presence: true
-
     def self.find_and_load_revision(params, project = nil)
       if params[:id].to_s =~ /^\d+$/
         selector = where id: params[:id]
@@ -34,6 +32,8 @@ module Ninetails
       self.revision = revisions.build(
         message: params[:message],
         project_id: params[:project_id],
+        locale: params[:locale],
+        name: params[:name],
         url: params[:url]
       )
 

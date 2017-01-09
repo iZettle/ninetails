@@ -6,8 +6,6 @@ RSpec.describe Ninetails::Container, type: :model do
   it { should have_many(:project_containers) }
   it { should belong_to(:current_revision) }
 
-  it { should validate_presence_of(:locale) }
-
   describe ".find_and_load_revision" do
     before do
       @page = create :page, :with_revisions
@@ -84,7 +82,7 @@ RSpec.describe Ninetails::Container, type: :model do
       @container = create :page, revision: @old_revision
       @new_revision = create :revision
     end
-    
+
     it "updates the revision id" do
       expect {
         @container.set_current_revision(@new_revision)

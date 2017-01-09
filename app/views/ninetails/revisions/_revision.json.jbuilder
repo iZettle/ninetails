@@ -1,9 +1,10 @@
 if revision.present?
+  json.call revision, :id, :name, :locale
+
   if container_type.present? && container_type == Ninetails::Page
-    json.call revision, :id, :url, :published
-  else
-    json.call revision, :id
+    json.call revision, :url, :published
   end
+
   json.sections revision.sections, partial: "/ninetails/sections/section", as: :section
 
   if revision.errors.present?
