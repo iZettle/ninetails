@@ -3,6 +3,7 @@ module Ninetails
 
     belongs_to :container
     belongs_to :project
+    belongs_to :folder
     has_many :revision_sections
     has_many :sections, -> { order :created_at }, through: :revision_sections
 
@@ -10,6 +11,8 @@ module Ninetails
     validates :locale, presence: true
 
     after_create :update_project_container, if: -> { project.present? }
+
+    scope :live, -> { joins(:container).where("ninetails_revisions.id = ninetails_containers.current_revision_id") }
 
     private
 

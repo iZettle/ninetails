@@ -4,6 +4,7 @@ RSpec.describe Ninetails::Revision, type: :model do
 
   it { should belong_to(:container) }
   it { should belong_to(:project) }
+  it { should belong_to(:folder) }
   it { should have_many(:revision_sections) }
   it { should have_many(:sections).order(:created_at) }
 

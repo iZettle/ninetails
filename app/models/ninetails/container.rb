@@ -34,6 +34,7 @@ module Ninetails
         project_id: params[:project_id],
         locale: params[:locale],
         name: params[:name],
+        folder_id: params[:folder_id],
         url: params[:url]
       )
 

@@ -3,6 +3,7 @@ FactoryGirl.define do
   factory :container, class: Ninetails::Container do
     transient do
       sections []
+      folder nil
     end
 
     association :current_revision, factory: :revision
@@ -12,9 +13,17 @@ FactoryGirl.define do
     # with newly created "current_revision" revisions not having a container_id. So this
     # manually fixes that.
     after :create do |container, evaluator|
+      revision_attrs = {}
+
       if container.current_revision.present? && container.current_revision.container_id.nil?
-        container.current_revision.update_attributes container_id: container.id
+        revision_attrs[:container_id] = container.id
       end
+
+      if evaluator.folder.present?
+        revision_attrs[:folder_id] = evaluator.folder.id
+      end
+
+      container.current_revision.update_attributes revision_attrs
 
       if evaluator.sections.present?
         evaluator.sections.each do |section_name|
