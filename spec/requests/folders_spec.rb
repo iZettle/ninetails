@@ -81,10 +81,23 @@ describe "Folders API" do
       @second_revision = create :revision, container: @pages.first, folder: @folder
     end
 
-    it "should include the folder name and the url and locale of all pages" do
+    it "should include info about the folder" do
+      get "/folders/#{@folder.id}"
+      expect(response).to be_success
+
+      expect(json["folder"]["id"]).to eq @folder.id
+      expect(json["folder"]["name"]).to eq @folder.name
+    end
+
+    it "should include some info about each revision" do
       get "/folders/#{@folder.id}"
 
-      binding.pry
+      expect(json["folder"]["revisions"].length).to eq 2
+      expect(json["folder"]["revisions"][0]["id"]).to eq @pages[0].current_revision.id
+      expect(json["folder"]["revisions"][0]["url"]).to eq @pages[0].current_revision.url
+
+      expect(json["folder"]["revisions"][1]["id"]).to eq @pages[1].current_revision.id
+      expect(json["folder"]["revisions"][1]["url"]).to eq @pages[1].current_revision.url
     end
   end
 
