@@ -4,7 +4,7 @@ describe "Pages API" do
 
   before do
     @layout = create :layout
-    @page = create :page, layout: @layout, sections: [:billboard_section, :cars_section]
+    @page = create :page, layout: @layout, sections: ["Billboard", "CarsSection"]
     @project = create :project
   end
 

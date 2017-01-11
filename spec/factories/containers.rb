@@ -27,7 +27,8 @@ FactoryGirl.define do
 
       if evaluator.sections.present?
         evaluator.sections.each do |section_name|
-          section = build(:cars_section)
+          section = Ninetails::ContentSection.new type: section_name
+          section.elements = "Section::#{section_name}".safe_constantize.new.serialize
           section.save(validate: false)
           container.current_revision.sections << section
         end
