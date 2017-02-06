@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170104082424) do
+ActiveRecord::Schema.define(version: 20170206161633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,9 +45,11 @@ ActiveRecord::Schema.define(version: 20170104082424) do
   end
 
   create_table "ninetails_project_containers", force: :cascade do |t|
-    t.integer "project_id"
-    t.integer "container_id"
-    t.integer "revision_id"
+    t.integer  "project_id"
+    t.integer  "container_id"
+    t.integer  "revision_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["container_id"], name: "index_ninetails_project_containers_on_container_id", using: :btree
     t.index ["project_id"], name: "index_ninetails_project_containers_on_project_id", using: :btree
     t.index ["revision_id"], name: "index_ninetails_project_containers_on_revision_id", using: :btree
@@ -58,12 +60,16 @@ ActiveRecord::Schema.define(version: 20170104082424) do
     t.string   "description"
     t.boolean  "published",   default: false
     t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["deleted_at"], name: "index_ninetails_projects_on_deleted_at", using: :btree
   end
 
   create_table "ninetails_revision_sections", force: :cascade do |t|
-    t.integer "revision_id"
-    t.integer "section_id"
+    t.integer  "revision_id"
+    t.integer  "section_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["revision_id"], name: "index_ninetails_revision_sections_on_revision_id", using: :btree
     t.index ["section_id"], name: "index_ninetails_revision_sections_on_section_id", using: :btree
   end
@@ -76,9 +82,9 @@ ActiveRecord::Schema.define(version: 20170104082424) do
     t.integer  "project_id"
     t.string   "url"
     t.boolean  "published",    default: false
+    t.integer  "folder_id"
     t.string   "name"
     t.string   "locale"
-    t.integer  "folder_id"
     t.index ["container_id"], name: "index_ninetails_revisions_on_container_id", using: :btree
     t.index ["folder_id"], name: "index_ninetails_revisions_on_folder_id", using: :btree
     t.index ["project_id"], name: "index_ninetails_revisions_on_project_id", using: :btree
