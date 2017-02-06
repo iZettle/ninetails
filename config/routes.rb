@@ -14,7 +14,9 @@ Ninetails::Engine.routes.draw do
     end
 
     scope "(/projects/:project_id)/:type", constraints: { type: /(pages|layouts)/ } do
-      resources :containers, except: [:new, :edit, :update], concerns: :revisable, path: "/"
+      resources :containers, except: [:new, :edit, :update], concerns: :revisable, path: "/" do
+        get :show
+      end
     end
 
     resources :containers, only: [] do

@@ -15,7 +15,7 @@ module Ninetails
       if params[:id].to_s =~ /^\d+$/
         selector = where id: params[:id]
       else
-        selector = joins(:revisions).merge Ninetails::Revision.where(url: params[:id])
+        selector = joins(:revisions).merge Ninetails::Revision.where(url: params[:url] || params[:id])
       end
 
       container = selector.includes(:current_revision).first!
