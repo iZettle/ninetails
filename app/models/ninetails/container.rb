@@ -35,7 +35,8 @@ module Ninetails
         locale: params[:locale],
         name: params[:name],
         folder_id: params[:folder_id],
-        url: params[:url]
+        url: params[:url],
+        published: params[:published]
       )
 
       params[:sections].each do |section_json|
