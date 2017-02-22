@@ -15,8 +15,14 @@ module Ninetails
       end
     end
 
+    def should_modify_keys?
+      @headers["Content-Type"].present? &&
+        @headers["Content-Type"].include?("application/json") &&
+        Ninetails::Config.key_style == :camelcase
+    end
+
     def modify_keys(body)
-      if @headers["Content-Type"].include?("application/json") && Ninetails::Config.key_style == :camelcase
+      if should_modify_keys?
         body = JSON.parse(body).convert_keys -> (key) { key.camelcase :lower }
         body.to_json
       else
