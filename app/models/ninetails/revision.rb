@@ -36,9 +36,18 @@ module Ninetails
       container.is_a?(Page) && url.present?
     end
 
+    # Check the url is unique across revisions, but only if a container has a matching revision
+    # set as its `current_revision`. Otherwise it'd be impossible to change one page's url
+    # to a url which was previously used by another page in the past.
     def url_is_unique
-      if container.is_a?(Page) && url.present? && Revision.where(url: url).where.not(container: container).exists?
-        errors.add :url, "is already in use"
+      if container.is_a?(Page) && url.present?
+        url_exists = Ninetails::Container.
+          where.not(id: container.id).
+          includes(:current_revision).
+          where(ninetails_revisions: { url: url }).
+          exists?
+
+        errors.add :url, "is already in use" if url_exists
       end
     end
 
