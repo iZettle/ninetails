@@ -26,11 +26,12 @@ describe "Pages API" do
         expect(json["containers"].size).to eq container_class.count
       end
 
-      it "should include the id for each container" do
+      it "should include the id and layout id for each container" do
         get url
 
         json["containers"].each do |container|
           expect(container).to have_key "id"
+          expect(container).to have_key "layoutId"
         end
       end
 

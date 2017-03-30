@@ -1,8 +1,8 @@
 json.containers @containers do |container|
   if container.is_a? Ninetails::ProjectContainer
-    json.call container.container, :id
+    json.call container.container, :id, :layout_id
   else
-    json.call container, :id
+    json.call container, :id, :layout_id
   end
 
   json.type container.type.demodulize
