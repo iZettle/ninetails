@@ -17,7 +17,7 @@ module Ninetails
     end
 
     def serialized_values=(values)
-      if values.is_a?(Hash) && !values.has_key?(:reference)
+      if values.is_a?(Hash) && !values.with_indifferent_access.has_key?(:reference)
         values[:reference] = SecureRandom.uuid
       end
 

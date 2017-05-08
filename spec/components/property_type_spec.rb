@@ -57,7 +57,16 @@ describe Ninetails::PropertyType do
     describe "when the serialized_values is a hash" do
       it "should not modify a reference if it exists" do
         text_property.serialized_values = { text: "bar", reference: "123" }
-        expect(text_property.serialize).to eq({ text: "bar", reference: "123" })
+        expect(text_property.serialize[:reference]).to eq("123")
+      end
+
+      it "should not matter if the key is passed as a string or a symbol" do
+        text_property.serialized_values = { "text" => "bar", "reference" => "123" }
+        expect(text_property.serialize["text"]).to eq("bar")
+        expect(text_property.serialize[:text]).to eq(nil)
+
+        expect(text_property.serialize["reference"]).to eq("123")
+        expect(text_property.serialize[:reference]).to eq(nil)
       end
 
       it "should generate a reference if the hash doesn't have one" do
