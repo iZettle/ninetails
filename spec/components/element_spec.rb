@@ -103,6 +103,11 @@ RSpec.describe Ninetails::Element do
       expect(element.send(:properties_instances).last).to receive(:serialized_values=).with("text"=>"world")
       element.deserialize hash
     end
+
+    it "should not change the reference" do
+      element.deserialize hash
+      expect(element.reference).to eq hash["reference"]
+    end
   end
 
   describe "deserialization", "with enumerable properties" do
