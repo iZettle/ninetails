@@ -40,7 +40,7 @@ module Ninetails
       )
 
       params[:sections].each do |section_json|
-        content_section = revision.sections.build section_json.slice(:name, :type, :elements, :variant)
+        content_section = revision.sections.build section_json.slice(:name, :type, :elements, :variant, :reference)
         content_section.store_settings section_json["settings"] if section_json["settings"].present?
       end
     end

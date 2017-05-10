@@ -56,6 +56,7 @@ RSpec.describe Ninetails::ContentSection, type: :model do
       {
         "name" => "",
         "type" => "TestSection",
+        "reference" => "a1",
         "elements" => {
           "headline" => {
             "type" => "Text",
@@ -107,6 +108,11 @@ RSpec.describe Ninetails::ContentSection, type: :model do
       it "should create a Section instance" do
         section.deserialize
         expect(section.section).to be_a Section::TestSection
+      end
+
+      it "should include the reference" do
+        section.deserialize
+        expect(section.reference).to eq "a1"
       end
 
       it "should have an array of elements_instances" do

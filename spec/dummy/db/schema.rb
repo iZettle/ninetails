@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170206161633) do
+ActiveRecord::Schema.define(version: 20170510091102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20170206161633) do
     t.datetime "updated_at",              null: false
     t.string   "variant"
     t.json     "settings",   default: {}
+    t.string   "reference"
   end
 
   create_table "ninetails_folders", force: :cascade do |t|
