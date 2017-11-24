@@ -1,6 +1,7 @@
 json.container do
   json.call container, :id
   json.type container.type.demodulize
+  json.layout_id container.layout_id
 
   if container.try(:layout).present?
     json.layout do
