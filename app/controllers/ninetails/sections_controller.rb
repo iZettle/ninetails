@@ -2,7 +2,8 @@ module Ninetails
   class SectionsController < NinetailsController
 
     def index
-      sections = Dir.glob(Rails.root.join("app", "components", "section", "*.rb")).collect do |filename|
+      sections_path = Rails.root.join(Ninetails::Config.components_directory, "section", "*.rb")
+      sections = Dir.glob(sections_path).collect do |filename|
         Section.new_from_filename(filename).serialize
       end
 
