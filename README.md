@@ -38,3 +38,17 @@ By default, Ninetails will force all keys in JSON responses to be camelcase with
 ```ruby
 Ninetails::Config.key_style = :underscore
 ```
+
+## Testing
+
+You'll need postgresql installed and a test database crated
+
+```bash
+createdb ninetails_dummy_test
+```
+
+Then you can run the test with rspec
+
+```bash
+bundle exec rspec
+```
