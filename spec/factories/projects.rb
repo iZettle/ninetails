@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :project, class: Ninetails::Project do
     sequence(:name) { |n| "Some project #{n}" }
