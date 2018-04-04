@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :container, class: Ninetails::Container do
     transient do
@@ -9,7 +9,7 @@ FactoryGirl.define do
     association :current_revision, factory: :revision
 
     # The current_revision association is a slightly strange additon to a
-    # has_many relationship in FactoryGirl's world, which seems to be causing issues
+    # has_many relationship in FactoryBot's world, which seems to be causing issues
     # with newly created "current_revision" revisions not having a container_id. So this
     # manually fixes that.
     after :create do |container, evaluator|

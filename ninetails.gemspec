@@ -32,10 +32,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency "spring-commands-rspec", ">= 1.0"
   s.add_development_dependency "rspec-rails", ">= 3.5"
   s.add_development_dependency "guard-rspec", ">= 4.6"
-  s.add_development_dependency "factory_girl", ">= 4.7"
-  s.add_development_dependency "factory_girl_rails", ">= 4.7"
-  s.add_development_dependency "codeclimate-test-reporter", ">= 0.6"
+  s.add_development_dependency "factory_bot", ">= 4.8"
+  s.add_development_dependency "factory_bot_rails", ">= 4.8"
   s.add_development_dependency "shoulda-matchers", ">= 3.1"
+  s.add_development_dependency "simplecov", ">= 0.16"
 
   s.test_files = Dir["spec/**/*"]
 end
