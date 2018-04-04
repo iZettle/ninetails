@@ -55,8 +55,6 @@ GEM
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
     builder (3.2.3)
-    codeclimate-test-reporter (1.0.7)
-      simplecov
     coderay (1.1.2)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -216,7 +214,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  codeclimate-test-reporter (>= 0.6)
   factory_bot (>= 4.8)
   factory_bot_rails (>= 4.8)
   guard-rspec (>= 4.6)
