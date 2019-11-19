@@ -4,7 +4,7 @@ version: 2.1
 executors:
   ruby:
     docker:
-      - image: circleci/ruby:2.5.0-jessie-node
+      - image: circleci/ruby:2.5.0
         environment:
           RAILS_ENV: test
           PGHOST: 127.0.0.1
