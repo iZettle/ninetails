@@ -1,0 +1,43 @@
+---
+version: 2.1
+
+executors:
+  ruby:
+    docker:
+      - image: circleci/ruby:2.5.0
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: test
+          BUNDLE_PATH: vendor/bundle
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: test
+          POSTGRES_DB: ninetails_dummy_test
+          POSTGRES_PASSWORD: ""
+
+jobs:
+  build_and_test:
+    executor: ruby
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-bundler-{{ checksum "Gemfile.lock" }}
+            - v1-bundler-
+      - run: bundle install
+      - save_cache:
+          key: v1-bundler-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run: bundle exec rspec --format RspecJunitFormatter --out reports/ninetails/test-results.xml
+      - store_test_results:
+          path: reports
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_and_test
