@@ -23,7 +23,15 @@ jobs:
     executor: ruby
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-bundler-{{ checksum "Gemfile.lock" }}
+            - v1-bundler-
       - run: bundle install
+      - save_cache:
+          key: v1-bundler-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
       - run: bundle exec rspec --format RspecJunitFormatter --out reports/ninetails/test-results.xml
       - store_test_results:
           path: reports
